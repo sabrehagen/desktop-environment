@@ -7,7 +7,8 @@
   "repository": "http://github.com/sabrehagen/development-environment",
   "scripts": {
     "build": "docker build -t sabrehagen/development-environment:latest .",
-    "push": "docker push sabrehagen/development-environment:latest"
+    "push": "docker push sabrehagen/development-environment:latest",
+    "shell": "sh shell.sh"
   },
   "version": "1.0.0"
 }
