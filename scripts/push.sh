@@ -1,0 +1,1 @@
+docker push sabrehagen/development-environment:latest

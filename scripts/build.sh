@@ -1,0 +1,1 @@
+docker build -t sabrehagen/development-environment:latest $(realpath $0)

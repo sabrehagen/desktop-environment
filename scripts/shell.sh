@@ -1,14 +1,25 @@
 docker run \
+  --device /dev/snd \
+  --device /dev/dri \
+  --device /dev/video0 \
+  --device /dev/usb \
+  --device /dev/bus/usb \
   --env DISPLAY=$DISPLAY \
   --env SSH_AUTH_SOCK=/ssh-auth.sock \
   --env STEMN_GIT_EMAIL="$(git config --get user.email)" \
   --env STEMN_GIT_NAME="$(git config --get user.name)" \
+  --group-add audio \
+  --group-add video \
   --interactive \
+	--memory 6gb \
   --name desktop-shell-$(date +%s) \
   --rm \
+	--security-opt seccomp:/etc/docker/seccomp/chrome.json \
   --tty \
+	--volume /dev/shm:/dev/shm \
   --volume /etc/hosts:/etc/hosts \
-  --volume /tmp/.X11-unix:/tmp/.X11-unix \
+  --VOLUME /etc/localtime:/etc/localtime:ro \
+  --VOLUME /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $HOME/.ssh:$STEMN_HOME/.ssh \
   --volume $HOME:/home \

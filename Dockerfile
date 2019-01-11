@@ -39,6 +39,7 @@ RUN apt update && apt install --yes \
   apt purge --auto-remove -y curl && \
   rm -rf /var/lib/apt/lists/* && \
   rm /etc/apt/sources.list.d/google.list 
+ADD chrome/local.conf /etc/fonts/local.conf
 
 # Add user to groups required to run chrome
 RUN groupadd --system chrome && \
