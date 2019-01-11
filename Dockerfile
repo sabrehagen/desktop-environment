@@ -12,7 +12,7 @@ ENV STEMN_GIT_NAME="Jackson Delahunt"
 RUN mkdir /$USER && \
   mv /$BASE_USER/home $HOME
 
-# Name the first non-root user jackson
+# Rename the first non-root user jackson
 RUN sed -i "s/$BASE_USER/$USER/g" /etc/passwd
 RUN sed -i "s/$BASE_USER/$USER/g" /etc/group
 

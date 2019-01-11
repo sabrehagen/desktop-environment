@@ -13,5 +13,6 @@ docker run \
   --volume $HOME/.ssh:$STEMN_HOME/.ssh \
   --volume $HOME:/home \
   --volume $SSH_AUTH_SOCK:/ssh-auth.sock \
+  --volume JACKSON_HOME:/jackson/home \
   --workdir /home \
-  stemn/development-environment:latest "$@"
+  sabrehagen/development-environment:latest "$@"
