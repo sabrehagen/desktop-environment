@@ -1,0 +1,10 @@
+name: dashboard
+pre_window: clear
+root: /jackson/home
+
+windows:
+  - terminal:
+      layout: main-vertical
+      panes:
+        - zsh
+        - zsh

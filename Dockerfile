@@ -58,8 +58,7 @@ RUN rm /usr/local/bin/sudo
 # Install operating system utilities
 RUN apt install --yes \
   sudo \
-  vcsh \
-  wicd-curses
+  vcsh
 
 # Enable password-less sudo for user
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
@@ -73,8 +72,16 @@ RUN git clone https://github.com/sabrehagen/dotfiles-tmux
 RUN git clone https://github.com/sabrehagen/dotfiles-vcsh
 RUN git clone https://github.com/sabrehagen/dotfiles-zsh
 
+# Add program configurations
+COPY config/tmuxinator/.desktop.yaml $HOME/.tmuxinator/desktop.yaml
+
 # Add custom binaries
-COPY bin /usr/local
+COPY bin /usr/local/bin
+
+# Extend existing shell configuration
+RUN echo 'cd $HOME/repositories/stemn/stemn-backend' >> $HOME/.zshenv
+RUN echo 'export $STEMN_TMUX_SESSION=desktop-environment' >> $HOME/.zshenv
+RUN echo 'tmux new-session -d -s $STEMN_TMUX_SESSION tmuxinator desktop' >> $HOME/.zshenv
 
 # Remove root ownership of all files under non-root user directory
 RUN chown -R $USER:$USER $HOME

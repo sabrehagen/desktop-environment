@@ -32,6 +32,7 @@ docker run \
   --volume $HOME/Pictures:$JACKSON_HOME/Pictures \
   --volume $HOME/Videos:$JACKSON_HOME/Videos \
   --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$JACKSON_HOME/.ssh/auth.sock \
+  --volume JACKSON_CHROME:$JACKSON_HOME/.config/google-chrome \
   --volume JACKSON_HOME:$JACKSON_HOME \
   --workdir $JACKSON_HOME \
-  sabrehagen/development-environment:latest
+  sabrehagen/desktop-environment:latest
