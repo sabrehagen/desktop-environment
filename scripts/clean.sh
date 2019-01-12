@@ -1,0 +1,1 @@
+docker volume rm JACKSON_CONFIG_CHROME
