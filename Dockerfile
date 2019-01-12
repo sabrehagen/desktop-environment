@@ -39,7 +39,7 @@ RUN apt update && apt install --yes \
   apt purge --auto-remove -y curl && \
   rm -rf /var/lib/apt/lists/* && \
   rm /etc/apt/sources.list.d/google.list 
-ADD chrome/local.conf /etc/fonts/local.conf
+ADD config/chrome/local.conf /etc/fonts/local.conf
 
 # Add user to groups required to run chrome
 RUN groupadd --system chrome && \
@@ -80,6 +80,9 @@ RUN echo 'wifi=wicd-curses' >> $HOME/.zshenv
 # Manage ssh keys using keychain
 RUN echo 'keychain $HOME/.ssh/id_rsa >/dev/null 2>&1' >> $HOME/.zshenv
 RUN echo 'source $HOME/.keychain/$(hostname)-sh' >> $HOME/.zshenv
+
+# Add custom binaries
+COPY bin /usr/local
 
 # Remove root ownership of all files under non-root user directory
 RUN chown -R $USER:$USER $HOME

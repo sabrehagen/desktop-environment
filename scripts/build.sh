@@ -1,1 +1,3 @@
-docker build -t sabrehagen/development-environment:latest $(realpath $0)
+REPO_ROOT=$(dirname $(realpath $0))/..
+
+docker build -t sabrehagen/development-environment:latest $REPO_ROOT
