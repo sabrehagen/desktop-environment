@@ -73,14 +73,6 @@ RUN git clone https://github.com/sabrehagen/dotfiles-tmux
 RUN git clone https://github.com/sabrehagen/dotfiles-vcsh
 RUN git clone https://github.com/sabrehagen/dotfiles-zsh
 
-# Add zsh aliases
-RUN echo 'tree="tree -a -I .git -I node_modules -L 4"' >> $HOME/.zshenv
-RUN echo 'wifi=wicd-curses' >> $HOME/.zshenv
-
-# Manage ssh keys using keychain
-RUN echo 'keychain $HOME/.ssh/id_rsa >/dev/null 2>&1' >> $HOME/.zshenv
-RUN echo 'source $HOME/.keychain/$(hostname)-sh' >> $HOME/.zshenv
-
 # Add custom binaries
 COPY bin /usr/local
 
