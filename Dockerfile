@@ -1,13 +1,19 @@
 FROM stemn/development-environment:latest
 USER root
 
+ARG CONTAINER_BUILD_DATE
+ARG CONTAINER_GIT_SHA
+
 ENV BASE_USER stemn
+ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
+ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
 ENV USER jackson
 ENV HOME /$USER/home
 ENV SSH_AUTH_SOCK=/ssh-auth.sock
 ENV STEMN_GIT_EMAIL="jackson@stemn.com"
 ENV STEMN_GIT_NAME="Jackson Delahunt"
 
+RUN echo $CONTAINER_BUILD_DATE
 # Keep the existing home directory
 RUN mkdir /$USER && \
   mv /$BASE_USER/home $HOME
@@ -73,15 +79,12 @@ RUN git clone https://github.com/sabrehagen/dotfiles-vcsh
 RUN git clone https://github.com/sabrehagen/dotfiles-zsh
 
 # Add program configurations
-COPY config/tmuxinator/.desktop.yaml $HOME/.tmuxinator/desktop.yaml
+COPY config/tmuxinator $HOME/.config/tmuxinator
+COPY config/zsh/.zshenv $HOME/.zshenv.desktop
+RUN echo 'source .zshenv.desktop' >> $HOME/.zshenv
 
 # Add custom binaries
 COPY bin /usr/local/bin
-
-# Extend existing shell configuration
-RUN echo 'cd $HOME/repositories/stemn/stemn-backend' >> $HOME/.zshenv
-RUN echo 'export $STEMN_TMUX_SESSION=desktop-environment' >> $HOME/.zshenv
-RUN echo 'tmux new-session -d -s $STEMN_TMUX_SESSION tmuxinator desktop' >> $HOME/.zshenv
 
 # Remove root ownership of all files under non-root user directory
 RUN chown -R $USER:$USER $HOME
