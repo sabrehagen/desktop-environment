@@ -39,3 +39,6 @@ docker run \
   --volume JACKSON_HOME:$JACKSON_HOME \
   --workdir $JACKSON_HOME \
   sabrehagen/desktop-environment:latest
+
+# Wait until the container is running before proceeding
+until docker inspect desktop-environment | grep Status | grep -m 1 "running" >/dev/null; do sleep 1 ; done

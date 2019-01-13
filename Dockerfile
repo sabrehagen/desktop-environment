@@ -12,17 +12,18 @@ ENV STEMN_TMUX_SESSION desktop-environment
 # Make the user's workspace directory
 RUN mkdir /$USER
 
-# Rename the first non-root user to jackson
-RUN usermod \
-  --home $HOME \
-  --login $USER \
-  --move-home \
-  $BASE_USER
-
 # Rename the first non-root group to jackson
 RUN groupmod \
   --new-name \
   $USER $BASE_USER
+
+# Rename the first non-root user to jackson
+RUN usermod \
+  --home $HOME \
+  --groups docker \
+  --login $USER \
+  --move-home \
+  $BASE_USER
 
 # Install chrome
 RUN apt update && apt install --yes \
@@ -68,6 +69,9 @@ RUN apt install --yes \
 
 # Enable password-less sudo for user
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Clear and re-cache zsh plugins
+RUN zsh -c "source antigen.zsh; antigen reset; source $HOME/.zshrc"
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
