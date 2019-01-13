@@ -60,15 +60,15 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
 
 # Install operating system utilities
 RUN apt install --yes \
-  sudo \
   vcsh
 
 # Enable password-less sudo for user
-RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN git clone https://github.com/sabrehagen/dotfiles-alacritty
+RUN git clone https://github.com/sabrehagen/dotfiles-code
 RUN git clone https://github.com/sabrehagen/dotfiles-git
 RUN git clone https://github.com/sabrehagen/dotfiles-scripts
 RUN git clone https://github.com/sabrehagen/dotfiles-tmux
@@ -78,13 +78,13 @@ RUN git clone https://github.com/sabrehagen/dotfiles-zsh
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
 COPY config/zsh/.zshenv $HOME/.zshenv.desktop
-RUN echo "source $HOME/.zshenv.desktop" >> $HOME/.zshenv
+RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
 
 # Add custom binaries
 COPY bin /usr/local/bin
 
 # Remove root ownership of all files under non-root user directory
-RUN chown -R $USER:$USER $HOME
+RUN chown -R $USER:$USER /$USER
 
 # Record container build information
 ARG CONTAINER_BUILD_DATE
@@ -98,4 +98,4 @@ USER $USER
 WORKDIR $HOME
 
 # Start the long-lived tmux session
-ENTRYPOINT zsh -c "tmux -S $HOME/.tmux/tmux.sock new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
+ENTRYPOINT zsh -c "tmux new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
