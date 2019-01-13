@@ -1,1 +1,1 @@
-docker volume rm JACKSON_CONFIG_CHROME
+docker volume rm JACKSON_HOME
