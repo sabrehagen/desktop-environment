@@ -1,6 +1,8 @@
 REPO_ROOT=$(dirname $(realpath $0))/..
-
 JACKSON_HOME=/jackson/home
+
+# Ensure the container user has ownership of the volumes before starting
+sh $REPO_ROOT/scripts/bootstrap-volumes.sh
 
 docker run \
   --detach \

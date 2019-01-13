@@ -9,13 +9,20 @@ ENV STEMN_GIT_EMAIL "jackson@stemn.com"
 ENV STEMN_GIT_NAME "Jackson Delahunt"
 ENV STEMN_TMUX_SESSION desktop-environment
 
-# Keep the existing home directory
-RUN mkdir /$USER && \
-  mv /$BASE_USER/home $HOME
+# Make the user's workspace directory
+RUN mkdir /$USER
 
 # Rename the first non-root user jackson
-RUN sed -i "s/$BASE_USER/$USER/g" /etc/passwd
-RUN sed -i "s/$BASE_USER/$USER/g" /etc/group
+RUN usermod \
+  --home $HOME \
+  --login $USER \
+  --move-home \
+  $BASE_USER
+
+# Rename the first non-root group jackson
+RUN groupmod \
+  --new-name \
+  $USER $BASE_USER
 
 # Install chrome
 RUN apt update && apt install --yes \
@@ -98,4 +105,4 @@ USER $USER
 WORKDIR $HOME
 
 # Start the long-lived tmux session
-ENTRYPOINT zsh -c "tmux new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
+CMD zsh -c "tmux new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
