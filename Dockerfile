@@ -58,9 +58,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt --fix-broken --yes install && \
   rm rescuetime.deb
 
-# Remove mock sudo
-RUN rm /usr/local/bin/sudo
-
 # Install operating system utilities
 RUN apt install --yes \
   sudo \
@@ -81,7 +78,7 @@ RUN git clone https://github.com/sabrehagen/dotfiles-zsh
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
 COPY config/zsh/.zshenv $HOME/.zshenv.desktop
-RUN echo 'source .zshenv.desktop' >> $HOME/.zshenv
+RUN echo "source $HOME/.zshenv.desktop" >> $HOME/.zshenv
 
 # Add custom binaries
 COPY bin /usr/local/bin
@@ -94,7 +91,11 @@ ARG CONTAINER_BUILD_DATE
 ARG CONTAINER_GIT_SHA
 ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
+ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
 # Become the desktop user
 USER $USER
 WORKDIR $HOME
+
+# Start the long-lived tmux session
+ENTRYPOINT zsh -c "tmux -S $HOME/.tmux/tmux.sock new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
