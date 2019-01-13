@@ -1,19 +1,14 @@
 FROM stemn/development-environment:latest
 USER root
 
-ARG CONTAINER_BUILD_DATE
-ARG CONTAINER_GIT_SHA
-
 ENV BASE_USER stemn
-ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
-ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
 ENV USER jackson
 ENV HOME /$USER/home
-ENV SSH_AUTH_SOCK=/ssh-auth.sock
-ENV STEMN_GIT_EMAIL="jackson@stemn.com"
-ENV STEMN_GIT_NAME="Jackson Delahunt"
+ENV SSH_AUTH_SOCK /ssh-auth.sock
+ENV STEMN_GIT_EMAIL "jackson@stemn.com"
+ENV STEMN_GIT_NAME "Jackson Delahunt"
+ENV STEMN_TMUX_SESSION desktop-environment
 
-RUN echo $CONTAINER_BUILD_DATE
 # Keep the existing home directory
 RUN mkdir /$USER && \
   mv /$BASE_USER/home $HOME
@@ -52,11 +47,16 @@ RUN groupadd --system chrome && \
   usermod --groups audio,chrome,video $USER
 
 # Install vs code
-RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ bionic main restricted universe' > /etc/apt/sources.list && \
+RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
   apt update && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt install --yes ./code.deb && \
   rm code.deb
+
+# Install resucetime time tracker
+RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
+  dpkg -i rescuetime.deb || apt --fix-broken --yes install && \
+  rm rescuetime.deb
 
 # Remove mock sudo
 RUN rm /usr/local/bin/sudo
@@ -89,5 +89,12 @@ COPY bin /usr/local/bin
 # Remove root ownership of all files under non-root user directory
 RUN chown -R $USER:$USER $HOME
 
+# Record container build information
+ARG CONTAINER_BUILD_DATE
+ARG CONTAINER_GIT_SHA
+ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
+ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
+
+# Become the desktop user
 USER $USER
 WORKDIR $HOME
