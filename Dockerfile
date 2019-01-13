@@ -12,14 +12,14 @@ ENV STEMN_TMUX_SESSION desktop-environment
 # Make the user's workspace directory
 RUN mkdir /$USER
 
-# Rename the first non-root user jackson
+# Rename the first non-root user to jackson
 RUN usermod \
   --home $HOME \
   --login $USER \
   --move-home \
   $BASE_USER
 
-# Rename the first non-root group jackson
+# Rename the first non-root group to jackson
 RUN groupmod \
   --new-name \
   $USER $BASE_USER
@@ -28,7 +28,6 @@ RUN groupmod \
 RUN apt update && apt install --yes \
   apt-transport-https \
   ca-certificates \
-  curl \
   gnupg \
   hicolor-icon-theme \
   libcanberra-gtk* \
@@ -44,10 +43,8 @@ RUN apt update && apt install --yes \
   apt update && apt install --yes \
   google-chrome-stable \
   --no-install-recommends && \
-  apt purge --auto-remove -y curl && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm /etc/apt/sources.list.d/google.list 
-ADD config/chrome/local.conf /etc/fonts/local.conf
+  rm /etc/apt/sources.list.d/google.list && \
+  wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf
 
 # Add user to groups required to run chrome
 RUN groupadd --system chrome && \
@@ -65,7 +62,7 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt --fix-broken --yes install && \
   rm rescuetime.deb
 
-# Install operating system utilities
+# Install user utilities
 RUN apt install --yes \
   vcsh
 
