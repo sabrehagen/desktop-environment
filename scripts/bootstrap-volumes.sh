@@ -1,10 +1,7 @@
-# Jackson container user configuration
+# Jackson container volumes configuration
 CONTAINER_USER=jackson
-CONTAINER_HOME=/$CONTAINER_USER/home
-
-# Jackson container volume configuration
-JACKSON_CONFIG_CHROME=$CONTAINER_HOME/.config/google-chrome
-JACKSON_CONFIG_CODE=$CONTAINER_HOME/.config/Code
+JACKSON_CONFIG_CHROME=/$CONTAINER_USER/home/.config/google-chrome
+JACKSON_CONFIG_CODE=/$CONTAINER_USER/home/.config/Code
 
 # Give the container user ownership of the JACKSON_CONFIG_CHROME volume
 docker run \
