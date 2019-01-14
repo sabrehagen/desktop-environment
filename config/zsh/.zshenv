@@ -4,4 +4,7 @@ touch $CONTAINER_TMUX_SOCKET
 alias tmux="tmux -u -S $CONTAINER_TMUX_SOCKET"
 
 # Change to the most frequently used directory
-cd $HOME/repositories/stemn/stemn-backend
+STARTUP_DIR=$HOME/repositories/stemn/stemn-backend
+if [ -d $STARTUP_DIR ]; then
+  cd $STARTUP_DIR
+fi
