@@ -15,6 +15,7 @@ docker run \
   --env SSH_AUTH_SOCK=$JACKSON_HOME/.ssh/auth.sock \
   --env STEMN_GIT_EMAIL="$(git config --get user.email)" \
   --env STEMN_GIT_NAME="$(git config --get user.name)" \
+  --env STEMN_TMUX_SESSION=desktop-session \
   --group-add audio \
   --group-add video \
   --interactive \
@@ -36,6 +37,7 @@ docker run \
   --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$JACKSON_HOME/.ssh/auth.sock \
   --volume JACKSON_CONFIG_CHROME:$JACKSON_HOME/.config/google-chrome \
   --volume JACKSON_CONFIG_CODE:$JACKSON_HOME/.config/Code \
+  --volume JACKSON_CONFIG_GITHUB:$JACKSON_HOME/.config/hub \
   --volume JACKSON_HOME:$JACKSON_HOME \
   --workdir $JACKSON_HOME \
   sabrehagen/desktop-environment:latest

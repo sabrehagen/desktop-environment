@@ -29,6 +29,11 @@ usermod -aG docker $HOST_USER
 # Allow connections from docker containers to the host's X server
 xhost local:docker
 
+# Install utilities
+apt update && apt install --yes && \
+  docker.io && \
+  vcsh
+
 # Enable password-less sudo for the host user
 echo "$HOST_USER ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
@@ -37,11 +42,10 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Install latest alacritty configuration for host user
-ALACRITTY_CONFIG=$HOST_HOME/.config/alacritty/alacritty.yml
-mkdir -p $(dirname $ALACRITTY_CONFIG) && \
-  wget -q -O $ALACRITTY_CONFIG https://raw.githubusercontent.com/sabrehagen/dotfiles-alacritty/master/.config/alacritty/alacritty.yml && \
-  chown $HOST_USER:$HOST_USER $ALACRITTY_CONFIG
+# Take ownership of all files under the user's directory
+chown $HOST_USER:$HOST_USER /$HOST_USER
 
-# Swap escape and capslock keys
-setxkbmap -option caps:swapescape
+# Install dotfiles configuration for host user
+su $HOST_USER
+vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
+vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
