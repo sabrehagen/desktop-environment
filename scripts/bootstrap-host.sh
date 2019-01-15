@@ -1,28 +1,51 @@
+# Script is run as root to create the host user
+if [ $USER != "root" ]; then
+  echo "Host configuration script must be run as root!"
+  exit 1
+fi
+
 # Host user configuration
-HOST_USER=$(whoami)
-HOST_HOME=$HOME
+HOST_USER=jackson
+HOST_USER_ID=1000
+HOST_HOME=/$HOST_USER/home
 
-# Container user configuration
-CONTAINER_USER=jackson
-CONTAINER_HOME=/$CONTAINER_USER/home
+# Make the host user home directory
+mkdir -p $HOST_HOME
 
-# Install docker on the host
-apt update && apt install --yes \
-  docker.io
+# Create the host user group
+groupadd \
+  --gid $HOST_USER_ID \
+  $HOST_USER
 
-# Add the container user to the docker group on the host
-usermod -aG docker $CONTAINER_USER
+# Create the host user
+useradd \
+  --gid $HOST_USER_ID \
+  --uid $HOST_USER_ID \
+  $HOST_USER
+
+# Add the host user to the docker group
+usermod -aG docker $HOST_USER
 
 # Allow connections from docker containers to the host's X server
 xhost local:docker
 
-# Enable password-less sudo for the container user on the host
-echo "$HOST_USER ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+# Install utilities
+apt update && apt install --yes && \
+  docker.io && \
+  vcsh
+
+# Enable password-less sudo for the host user
+echo "$HOST_USER ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
 # Install alacritty on the host
-wget -q -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.5/Alacritty-v0.2.5_amd64.deb && \
+wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.5/Alacritty-v0.2.5_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Install the latest alacritty config on the host
-wget -q -O $HOST_HOME/.config/alacritty/alacritty.yml https://raw.githubusercontent.com/sabrehagen/dotfiles-alacritty/master/.config/alacritty/alacritty.yml
+# Take ownership of all files under the user's directory
+chown $HOST_USER:$HOST_USER /$HOST_USER
+
+# Install dotfiles configuration for host user
+su $HOST_USER
+vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
+vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git

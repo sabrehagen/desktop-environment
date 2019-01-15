@@ -15,6 +15,7 @@ docker run \
   --env SSH_AUTH_SOCK=$JACKSON_HOME/.ssh/auth.sock \
   --env STEMN_GIT_EMAIL="$(git config --get user.email)" \
   --env STEMN_GIT_NAME="$(git config --get user.name)" \
+  --env STEMN_TMUX_SESSION=desktop-session \
   --group-add audio \
   --group-add video \
   --interactive \
@@ -24,6 +25,7 @@ docker run \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
+  --volume /etc/hosts:/etc/hosts \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/run/docker.sock:/var/run/docker.sock \

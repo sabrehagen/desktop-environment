@@ -20,7 +20,7 @@ RUN groupmod \
 # Rename the first non-root user to jackson
 RUN usermod \
   --home $HOME \
-  --groups docker \
+  --groups $USER,docker \
   --login $USER \
   --move-home \
   $BASE_USER
@@ -49,7 +49,7 @@ RUN apt update && apt install --yes \
 
 # Add user to groups required to run chrome
 RUN groupadd --system chrome && \
-  usermod --groups audio,chrome,video $USER
+  usermod --append --groups audio,chrome,video $USER
 
 # Install vs code
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
@@ -70,24 +70,6 @@ RUN apt install --yes \
 # Enable password-less sudo for user
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Clear and re-cache zsh plugins
-RUN zsh -c "source antigen.zsh; antigen reset; source $HOME/.zshrc"
-
-# Clone dotfiles configuration
-RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
-RUN git clone https://github.com/sabrehagen/dotfiles-alacritty
-RUN git clone https://github.com/sabrehagen/dotfiles-code
-RUN git clone https://github.com/sabrehagen/dotfiles-git
-RUN git clone https://github.com/sabrehagen/dotfiles-scripts
-RUN git clone https://github.com/sabrehagen/dotfiles-tmux
-RUN git clone https://github.com/sabrehagen/dotfiles-vcsh
-RUN git clone https://github.com/sabrehagen/dotfiles-zsh
-
-# Add program configurations
-COPY config/tmuxinator $HOME/.config/tmuxinator
-COPY config/zsh/.zshenv $HOME/.zshenv.desktop
-RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
-
 # Add custom binaries
 COPY bin /usr/local/bin
 
@@ -105,5 +87,19 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 USER $USER
 WORKDIR $HOME
 
+# Remove base container configuration and clone dotfiles configuration
+RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
+RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-code && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-scripts
+
+# Add program configurations
+COPY config/tmuxinator $HOME/.config/tmuxinator
+COPY config/zsh/.zshenv $HOME/.zshenv.desktop
+RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
+
+# Clear and re-cache zsh plugins
+RUN zsh -c "source antigen.zsh; antigen reset; source $HOME/.zshrc"
+
 # Start the long-lived tmux session
-CMD zsh -c "tmux new-session -d -s $STEMN_TMUX_SESSION && sleep infinity"
+CMD zsh
