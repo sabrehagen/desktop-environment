@@ -25,6 +25,7 @@ docker run \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
+  --volume /etc/hosts:/etc/hosts \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/run/docker.sock:/var/run/docker.sock \
@@ -37,7 +38,6 @@ docker run \
   --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$JACKSON_HOME/.ssh/auth.sock \
   --volume JACKSON_CONFIG_CHROME:$JACKSON_HOME/.config/google-chrome \
   --volume JACKSON_CONFIG_CODE:$JACKSON_HOME/.config/Code \
-  --volume JACKSON_CONFIG_GITHUB:$JACKSON_HOME/.config/hub \
   --volume JACKSON_HOME:$JACKSON_HOME \
   --workdir $JACKSON_HOME \
   sabrehagen/desktop-environment:latest
