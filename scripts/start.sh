@@ -38,9 +38,10 @@ docker run \
   --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$JACKSON_HOME/.ssh/auth.sock \
   --volume JACKSON_CONFIG_CHROME:$JACKSON_HOME/.config/google-chrome \
   --volume JACKSON_CONFIG_CODE:$JACKSON_HOME/.config/Code \
+  --volume JACKSON_CONFIG_GITHUB:$JACKSON_HOME/.config/hub \
   --volume JACKSON_HOME:$JACKSON_HOME \
   --workdir $JACKSON_HOME \
   sabrehagen/desktop-environment:latest
 
 # Wait until the container is running before proceeding
-until docker inspect desktop-environment | grep Status | grep -m 1 "running" >/dev/null; do sleep 1 ; done
+until docker inspect desktop-environment | grep Status | grep -m 1 running >/dev/null; do sleep 1; done

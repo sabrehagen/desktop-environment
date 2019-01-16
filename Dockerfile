@@ -10,7 +10,10 @@ ENV STEMN_GIT_NAME "Jackson Delahunt"
 ENV STEMN_TMUX_SESSION desktop-environment
 
 # Make the user's workspace directory
-RUN mkdir /$USER
+RUN mkdir -p $HOME
+
+# Keep existing user configuration files
+RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.tmux.conf,.zshenv,.zshrc} $HOME"
 
 # Rename the first non-root group to jackson
 RUN groupmod \
@@ -22,7 +25,6 @@ RUN usermod \
   --home $HOME \
   --groups $USER,docker \
   --login $USER \
-  --move-home \
   $BASE_USER
 
 # Install chrome
@@ -56,7 +58,8 @@ RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted univer
   apt update && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt install --yes ./code.deb && \
-  rm code.deb
+  rm code.deb && \
+  apt install --yes libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
@@ -65,7 +68,8 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
 
 # Install user utilities
 RUN apt install --yes \
-  vcsh
+  vcsh \
+  xinput
 
 # Enable password-less sudo for user
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -87,7 +91,7 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 USER $USER
 WORKDIR $HOME
 
-# Remove base container configuration and clone dotfiles configuration
+# Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
@@ -98,8 +102,8 @@ COPY config/tmuxinator $HOME/.config/tmuxinator
 COPY config/zsh/.zshenv $HOME/.zshenv.desktop
 RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
 
-# Clear and re-cache zsh plugins
-RUN zsh -c "source antigen.zsh; antigen reset; source $HOME/.zshrc"
+# Cache zsh plugins
+RUN zsh -c "source $HOME/.zshrc"
 
-# Start the long-lived tmux session
+# Start a shell on entry
 CMD zsh
