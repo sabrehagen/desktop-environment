@@ -1,5 +1,5 @@
 # Configure tmux to always use utf8 mode and a fixed socket path
-export CONTAINER_TMUX_SOCKET=$HOME/.tmux/tmux.sock
+export CONTAINER_TMUX_SOCKET=$HOME/.tmux.sock
 touch $CONTAINER_TMUX_SOCKET
 alias tmux="tmux -u -S $CONTAINER_TMUX_SOCKET"
 

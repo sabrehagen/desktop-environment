@@ -12,9 +12,6 @@ ENV STEMN_TMUX_SESSION desktop-environment
 # Make the user's workspace directory
 RUN mkdir -p $HOME
 
-# Keep existing user configuration files
-RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.tmux.conf,.zshenv,.zshrc} $HOME"
-
 # Rename the first non-root group to jackson
 RUN groupmod \
   --new-name \
@@ -90,6 +87,9 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 # Become the desktop user
 USER $USER
 WORKDIR $HOME
+
+# Keep existing user configuration files
+RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.motd,.tmux.conf,.zshenv,.zshrc} $HOME"
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
