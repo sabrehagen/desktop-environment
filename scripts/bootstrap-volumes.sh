@@ -1,29 +1,44 @@
-# Jackson container volumes configuration
-CONTAINER_USER=jackson
-JACKSON_CONFIG_CHROME=/$CONTAINER_USER/home/.config/google-chrome
-JACKSON_CONFIG_CODE=/$CONTAINER_USER/home/.config/Code
-JACKSON_CONFIG_GITHUB=/$CONTAINER_USER/home/.config/hub
+REPO_ROOT=$(dirname $(realpath $0))/..
 
-# Give the container user ownership of the JACKSON_CONFIG_CHROME volume
+# Export development environment shell configuration
+export $(sh $REPO_ROOT/scripts/environment.sh)
+
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_YARN volume
 docker run \
   --rm \
   --user root \
-  --volume JACKSON_CONFIG_CHROME:$JACKSON_CONFIG_CHROME \
+  --volume DESKTOP_ENVIRONMENT_CACHE_YARN:$DESKTOP_ENVIRONMENT_CACHE_YARN \
   sabrehagen/desktop-environment:latest \
-  chown -R $CONTAINER_USER:$CONTAINER_USER $JACKSON_CONFIG_CHROME
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_YARN
 
-# Give the container user ownership of the JACKSON_CONFIG_CODE volume
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_CHROME volume
 docker run \
   --rm \
   --user root \
-  --volume JACKSON_CONFIG_CODE:$JACKSON_CONFIG_CODE \
+  --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   sabrehagen/desktop-environment:latest \
-  chown -R $CONTAINER_USER:$CONTAINER_USER $JACKSON_CONFIG_CODE
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_CHROME
 
-# Give the container user ownership of the JACKSON_CONFIG_GITHUB volume
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CONFIG_CHROME volume
 docker run \
   --rm \
   --user root \
-  --volume JACKSON_CONFIG_GITHUB:$JACKSON_CONFIG_GITHUB \
+  --volume DESKTOP_ENVIRONMENT_CONFIG_CHROME:$DESKTOP_ENVIRONMENT_CONFIG_CHROME \
   sabrehagen/desktop-environment:latest \
-  chown -R $CONTAINER_USER:$CONTAINER_USER $JACKSON_CONFIG_GITHUB
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CONFIG_CHROME
+
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CONFIG_CODE volume
+docker run \
+  --rm \
+  --user root \
+  --volume DESKTOP_ENVIRONMENT_CONFIG_CODE:$DESKTOP_ENVIRONMENT_CONFIG_CODE \
+  sabrehagen/desktop-environment:latest \
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CONFIG_CODE
+
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CONFIG_GITHUB volume
+docker run \
+  --rm \
+  --user root \
+  --volume DESKTOP_ENVIRONMENT_CONFIG_GITHUB:$DESKTOP_ENVIRONMENT_CONFIG_GITHUB \
+  sabrehagen/desktop-environment:latest \
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CONFIG_GITHUB

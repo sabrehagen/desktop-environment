@@ -97,6 +97,10 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts
 
+# Install yarn utilities
+RUN yarn global add \
+  clipboard-cli
+
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
 COPY config/zsh/.zshenv $HOME/.zshenv.desktop

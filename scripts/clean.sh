@@ -4,4 +4,4 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 sh $REPO_ROOT/scripts/stop.sh 2>/dev/null
 
 # Remove volumes that can be recreated from scratch, directly from the container filesystem
-docker volume rm JACKSON_HOME
+docker volume rm DESKTOP_ENVIRONMENT_HOME
