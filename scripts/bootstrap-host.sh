@@ -4,8 +4,13 @@ if [ $USER != "root" ]; then
   exit 1
 fi
 
+REPO_ROOT=$(dirname $(realpath $0))/..
+
+# Export development environment shell configuration
+export $(sh $REPO_ROOT/scripts/environment.sh)
+
 # Host user configuration
-HOST_USER=jackson
+HOST_USER=$DESKTOP_ENVIRONMENT_USER
 HOST_USER_ID=1000
 HOST_HOME=/$HOST_USER/home
 
