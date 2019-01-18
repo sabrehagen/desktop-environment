@@ -47,6 +47,9 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
+# Start the desktop environment on system start
+echo "@reboot $HOST_HOME/repositories/$HOST_USER/desktop-environment/scripts/start.sh" >> /etc/crontab
+
 # Take ownership of all files under the user's directory
 chown $HOST_USER:$HOST_USER /$HOST_USER
 
