@@ -36,7 +36,8 @@ xhost local:docker
 
 # Install utilities
 apt update && apt install --yes && \
-  docker.io && \
+  docker.io \
+  ksshaskpass \
   vcsh
 
 # Enable password-less sudo for the host user

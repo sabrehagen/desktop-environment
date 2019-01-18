@@ -47,7 +47,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CONFIG_GITHUB:$DESKTOP_ENVIRONMENT_CONFIG_GITHUB \
   --volume DESKTOP_ENVIRONMENT_HOME:$DESKTOP_ENVIRONMENT_HOME \
   --workdir $DESKTOP_ENVIRONMENT_HOME \
-  sabrehagen/desktop-environment:latest
+  $DESKTOP_ENVIRONMENT_REGISTRY/desktop-environment:latest
 
 # Wait until the container is running before proceeding
 until docker inspect desktop-environment | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
