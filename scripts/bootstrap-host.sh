@@ -37,6 +37,16 @@ apt update && apt install --yes && \
 # Enable password-less sudo for the host user
 echo "$HOST_USER ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
+# Increase max open files on host
+echo 'fs.file-max=1000000' >> /etc/sysctl.conf
+
+# Increase max open file watchers on host
+echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
+
+# Increase file descriptor limit
+echo '* soft nofile 1000000' >> /etc/security/limits.conf
+echo '* hard nofile 1000000' >> /etc/security/limits.conf
+
 # Install alacritty on the host
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.5/Alacritty-v0.2.5_amd64.deb && \
   dpkg -i alacritty.deb && \

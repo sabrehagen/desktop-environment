@@ -8,5 +8,5 @@ sh $REPO_ROOT/scripts/stop.sh
 sh $REPO_ROOT/scripts/clean.sh
 sh $REPO_ROOT/scripts/start.sh
 
-# Enter the desktop environment
-sh $REPO_ROOT/scripts/shell.sh
+# Start the desktop environment detached from this shell
+nohup alacritty </dev/null >/dev/null 2>&1 &
