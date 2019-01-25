@@ -11,6 +11,14 @@ docker run \
   $DESKTOP_ENVIRONMENT_USER/desktop-environment:latest \
   chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_CHROME
 
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_CODE volume
+docker run \
+  --rm \
+  --user root \
+  --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
+  $DESKTOP_ENVIRONMENT_USER/desktop-environment:latest \
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_CODE
+
 # Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_YARN volume
 docker run \
   --rm \
