@@ -24,6 +24,13 @@ RUN usermod \
   --login $USER \
   $BASE_USER
 
+# Install user utilities
+RUN apt install --yes \
+  software-properties-common \
+  vcsh \
+  vlc \
+  xinput
+
 # Install chrome
 RUN apt update && apt install --yes \
   apt-transport-https \
@@ -63,11 +70,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt --fix-broken --yes install && \
   rm rescuetime.deb
 
-# Install user utilities
-RUN apt install --yes \
-  vcsh \
-  xinput
-
 # Enable password-less sudo for user
 RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
@@ -95,11 +97,8 @@ RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.motd,.tmux.conf,.zshenv,.zshrc} 
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-scripts
-
-# Install yarn utilities
-RUN yarn global add \
-  clipboard-cli
+  vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-vlc
 
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
