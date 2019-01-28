@@ -25,14 +25,16 @@ RUN usermod \
   $BASE_USER
 
 # Install user utilities
-RUN apt install --yes \
+RUN apt-get install -qq \
   software-properties-common \
+  strace \
   vcsh \
   vlc \
-  xinput
+  xinput \
+  youtube-dl
 
 # Install chrome
-RUN apt update && apt install --yes \
+RUN apt-get update -qq && apt-get install -qq \
   apt-transport-https \
   ca-certificates \
   gnupg \
@@ -47,7 +49,7 @@ RUN apt update && apt install --yes \
   --no-install-recommends && \
   curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
   echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-  apt update && apt install --yes \
+  apt-get update -qq && apt-get install -qq \
   google-chrome-stable \
   --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
@@ -59,15 +61,25 @@ RUN groupadd --system chrome && \
 
 # Install vs code
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
-  apt update && \
+  apt-get update -qq && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt install --yes ./code.deb && \
+  apt-get install -qq ./code.deb && \
   rm code.deb && \
-  apt install --yes libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
+  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
+
+# Install musikcube
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
+  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+  rm musikcube.deb
+
+# Install peek screen recorder
+RUN add-apt-repository ppa:peek-developers/daily && \
+  apt-get update -qq && \
+  apt-get install -qq peek
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-  dpkg -i rescuetime.deb || apt --fix-broken --yes install && \
+  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
 # Enable password-less sudo for user
