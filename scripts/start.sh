@@ -33,6 +33,7 @@ docker run \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/run/dbus:/var/run/dbus \
   --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume $HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
   --volume $HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
   --volume $HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
   --volume $HOME/repositories:$DESKTOP_ENVIRONMENT_HOME/repositories \
