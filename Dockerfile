@@ -102,7 +102,7 @@ USER $USER
 WORKDIR $HOME
 
 # Keep existing user configuration files
-RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.motd,.tmux.conf,.zshenv,.zshrc} $HOME"
+RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.motd,.tmux.conf,.zlogin,.zshenv,.zshrc} $HOME"
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
@@ -113,8 +113,6 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
 
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
-COPY config/zsh/.zshenv $HOME/.zshenv.desktop
-RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
