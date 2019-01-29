@@ -102,8 +102,6 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
 
 # Add program configurations
 COPY config/tmuxinator $HOME/.config/tmuxinator
-COPY config/zsh/.zshenv $HOME/.zshenv.desktop
-RUN sed -i '1s;^;source $HOME/.zshenv.desktop\n\n;' $HOME/.zshenv
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
