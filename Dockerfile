@@ -111,9 +111,6 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
   vcsh clone https://github.com/sabrehagen/dotfiles-vlc
 
-# Add program configurations
-COPY config/tmuxinator $HOME/.config/tmuxinator
-
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
 
