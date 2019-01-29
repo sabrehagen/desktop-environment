@@ -26,8 +26,6 @@ RUN usermod \
 
 # Install user utilities
 RUN apt-get install -qq \
-  bind-utils \
-  software-properties-common \
   strace \
   vcsh \
   vlc \

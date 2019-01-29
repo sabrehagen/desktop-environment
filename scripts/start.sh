@@ -7,7 +7,7 @@ export $(sh $REPO_ROOT/scripts/environment.sh)
 sh $REPO_ROOT/scripts/bootstrap-volumes.sh
 
 docker run \
-  --cap-add=SYS_PTRACE
+  --cap-add=SYS_PTRACE \
   --detach \
   --device /dev/snd \
   --device /dev/dri \
