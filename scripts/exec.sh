@@ -1,4 +1,4 @@
 docker exec \
   --interactive \
   --tty \
-  desktop-environment zsh -c "$*"
+  desktop-environment zsh --login -c "$*"
