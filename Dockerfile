@@ -1,4 +1,5 @@
 FROM stemn/development-environment:latest
+USER root
 
 # Install user utilities
 RUN apt-get install -qq \
