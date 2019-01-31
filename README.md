@@ -1,9 +1,3 @@
 # Desktop Environment
 
-A full desktop environment packaged into a Docker container.
-
-## Applications
-
-- Google Chrome
-- RescueTime
-- VS Code
+My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment).
