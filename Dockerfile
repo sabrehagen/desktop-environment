@@ -1,4 +1,4 @@
-FROM ubuntu:18.10 as build
+FROM stemn/development-environment:latest
 
 # Install user utilities
 RUN apt-get install -qq \
@@ -24,9 +24,8 @@ RUN apt-get update -qq && apt-get install -qq \
   --no-install-recommends && \
   curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
   echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-  apt-get update -qq && apt-get install -qq \
-  google-chrome-stable \
-  --no-install-recommends && \
+  apt-get update -qq && \
+  apt-get install -qq google-chrome-stable --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf
 
@@ -53,18 +52,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
-# Enable password-less sudo for user
-RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Add custom binaries
-COPY bin /usr/local/bin
-
-# Remove root ownership of all files under non-root user directory
-RUN chown -R $USER:$USER /$USER
-
-FROM stemn/development-environment:latest
-USER root
-
 # Record container build information
 ARG CONTAINER_BUILD_DATE
 ARG CONTAINER_GIT_SHA
@@ -72,10 +59,12 @@ ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
 ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
+# Container user home directories
 ENV BASE_USER stemn
 ENV USER jackson
 ENV HOME /$USER/home
 
+# User specific configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"
 ENV STEMN_GIT_NAME "Jackson Delahunt"
 ENV STEMN_TMUX_SESSION desktop-environment
@@ -101,21 +90,29 @@ RUN groupadd --system chrome && \
 
 # Become the desktop user
 USER $USER
+WORKDIR $HOME
 
-# Keep existing user configuration files
-WORKDIR /$BASE_USER/home
-RUN cp .gitconfig .motd .tmux.conf .zlogin .zshenv .zshrc $HOME
+# Keep desired base user configuration files
+RUN cp /$BASE_USER/home/.gitconfig $HOME
+RUN cp /$BASE_USER/home/.motd $HOME
+RUN cp /$BASE_USER/home/.tmux $HOME
+RUN cp /$BASE_USER/home/.zlogin $HOME
+RUN cp /$BASE_USER/home/.zshenv $HOME/.zshenv.base
+RUN cp /$BASE_USER/home/.zshrc $HOME
+
+# Remove base user files
+RUN rm -rf $BASE_USER
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-vlc
+  vcsh clone https://github.com/sabrehagen/dotfiles-vlc && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-zsh
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
 
 # Start a shell on entry
-WORKDIR $HOME
 CMD zsh
