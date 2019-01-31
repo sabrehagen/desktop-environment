@@ -1,28 +1,4 @@
-FROM stemn/development-environment:latest
-USER root
-
-ENV BASE_USER stemn
-ENV USER jackson
-ENV HOME /$USER/home
-ENV SSH_AUTH_SOCK /ssh-auth.sock
-ENV STEMN_GIT_EMAIL "jackson@stemn.com"
-ENV STEMN_GIT_NAME "Jackson Delahunt"
-ENV STEMN_TMUX_SESSION desktop-environment
-
-# Make the user's workspace directory
-RUN mkdir -p $HOME
-
-# Rename the first non-root group to jackson
-RUN groupmod \
-  --new-name \
-  $USER $BASE_USER
-
-# Rename the first non-root user to jackson
-RUN usermod \
-  --home $HOME \
-  --groups $USER,docker \
-  --login $USER \
-  $BASE_USER
+FROM ubuntu:18.10
 
 # Install user utilities
 RUN apt-get install -qq \
@@ -53,10 +29,6 @@ RUN apt-get update -qq && apt-get install -qq \
   --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf
-
-# Add user to groups required to run chrome
-RUN groupadd --system chrome && \
-  usermod --append --groups audio,chrome,video $USER
 
 # Install vs code
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
@@ -90,12 +62,42 @@ COPY bin /usr/local/bin
 # Remove root ownership of all files under non-root user directory
 RUN chown -R $USER:$USER /$USER
 
+FROM stemn/development-environment:latest
+USER root
+
 # Record container build information
 ARG CONTAINER_BUILD_DATE
 ARG CONTAINER_GIT_SHA
 ENV CONTAINER_BUILD_DATE $CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $CONTAINER_GIT_SHA
 ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
+
+ENV BASE_USER stemn
+ENV USER jackson
+ENV HOME /$USER/home
+
+ENV STEMN_GIT_EMAIL "jackson@stemn.com"
+ENV STEMN_GIT_NAME "Jackson Delahunt"
+ENV STEMN_TMUX_SESSION desktop-environment
+
+# Make the user's workspace directory
+RUN mkdir -p $HOME
+
+# Rename the first non-root group to jackson
+RUN groupmod \
+  --new-name \
+  $USER $BASE_USER
+
+# Rename the first non-root user to jackson
+RUN usermod \
+  --home $HOME \
+  --groups $USER,docker \
+  --login $USER \
+  $BASE_USER
+
+# Add the user to the groups required to run chrome
+RUN groupadd --system chrome && \
+  usermod --append --groups audio,chrome,video $USER
 
 # Become the desktop user
 USER $USER
