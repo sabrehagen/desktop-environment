@@ -1,4 +1,4 @@
-FROM ubuntu:18.10
+FROM ubuntu:18.10 as build
 
 # Install user utilities
 RUN apt-get install -qq \
@@ -101,10 +101,10 @@ RUN groupadd --system chrome && \
 
 # Become the desktop user
 USER $USER
-WORKDIR $HOME
 
 # Keep existing user configuration files
-RUN zsh -c "cp -r /$BASE_USER/home/{.gitconfig,.motd,.tmux.conf,.zlogin,.zshenv,.zshrc} $HOME"
+WORKDIR /$BASE_USER/home
+RUN cp .gitconfig .motd .tmux.conf .zlogin .zshenv .zshrc $HOME
 
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
@@ -117,4 +117,5 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
 RUN zsh -c "source $HOME/.zshrc"
 
 # Start a shell on entry
+WORKDIR $HOME
 CMD zsh
