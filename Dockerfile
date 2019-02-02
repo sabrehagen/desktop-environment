@@ -35,7 +35,7 @@ RUN apt-get update -qq && apt-get install -qq \
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
   apt-get update -qq && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq code.deb && \
+  apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
 
@@ -53,6 +53,10 @@ RUN add-apt-repository ppa:peek-developers/daily && \
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
+
+# Install yarn utilities
+RUN yarn global add \
+  http-server
 
 # Record container build information
 ARG CONTAINER_BUILD_DATE
