@@ -39,6 +39,7 @@ docker run \
   --volume $HOME/repositories:$DESKTOP_ENVIRONMENT_HOME/repositories \
   --volume $HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
   --volume $HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
+  --volume $HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
   --volume $HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
   --volume $HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
   --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$DESKTOP_ENVIRONMENT_HOME/.ssh/auth.sock \

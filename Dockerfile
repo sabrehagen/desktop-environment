@@ -116,6 +116,7 @@ RUN rm -rf $BASE_USER
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-musikcube && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
   vcsh clone https://github.com/sabrehagen/dotfiles-vlc && \
   vcsh clone https://github.com/sabrehagen/dotfiles-zsh
