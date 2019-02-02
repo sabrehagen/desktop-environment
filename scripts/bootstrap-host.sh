@@ -6,7 +6,7 @@ fi
 
 REPO_ROOT=$(dirname $(realpath $0))/..
 
-# Export development environment shell configuration
+# Export desktop environment shell configuration
 export $(sh $REPO_ROOT/scripts/environment.sh)
 
 # Install utilities

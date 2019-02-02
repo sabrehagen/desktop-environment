@@ -1,1 +1,6 @@
-docker rm -f desktop-environment
+REPO_ROOT=$(dirname $(realpath $0))/..
+
+# Export desktop environment shell configuration
+export $(sh $REPO_ROOT/scripts/environment.sh)
+
+docker rm -f $DESKTOP_ENVIRONMENT_CONTAINER
