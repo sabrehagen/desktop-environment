@@ -3,6 +3,7 @@ USER root
 
 # Install user utilities
 RUN apt-get install -qq \
+  software-properties-common \
   vcsh \
   vlc \
   xinput \
@@ -34,7 +35,7 @@ RUN apt-get update -qq && apt-get install -qq \
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
   apt-get update -qq && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
+  apt-get install -qq code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
 
