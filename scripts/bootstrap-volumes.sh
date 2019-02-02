@@ -19,6 +19,14 @@ docker run \
   $DESKTOP_ENVIRONMENT_USER/desktop-environment:latest \
   chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_CODE
 
+# Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_JUMP volume
+docker run \
+  --rm \
+  --user root \
+  --volume DESKTOP_ENVIRONMENT_CACHE_JUMP:$DESKTOP_ENVIRONMENT_CACHE_JUMP \
+  $DESKTOP_ENVIRONMENT_USER/desktop-environment:latest \
+  chown -R $DESKTOP_ENVIRONMENT_USER:$DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_CACHE_JUMP
+
 # Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_YARN volume
 docker run \
   --rm \
