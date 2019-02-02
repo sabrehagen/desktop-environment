@@ -9,6 +9,36 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 # Export development environment shell configuration
 export $(sh $REPO_ROOT/scripts/environment.sh)
 
+# Install utilities
+apt update && apt install --yes && \
+  docker.io \
+  ksshaskpass \
+  vcsh
+
+# Enable password-less sudo for the sudo group
+echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
+
+# Increase max open files on host
+echo 'fs.file-max=1000000' >> /etc/sysctl.conf
+
+# Increase max open file watchers on host
+echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
+
+# Increase file descriptor limit
+echo '* soft nofile 1000000' >> /etc/security/limits.conf
+echo '* hard nofile 1000000' >> /etc/security/limits.conf
+
+# Install alacritty on the host
+wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.5/Alacritty-v0.2.5_amd64.deb && \
+  dpkg -i alacritty.deb && \
+  rm alacritty.deb
+
+# Start the desktop environment on system start
+echo "@reboot $REPO_ROOT/scripts/start.sh" >> /etc/crontab
+
+# Allow connections from docker containers to the host's X server
+xhost local:docker
+
 # Host user configuration
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
 HOST_USER_ID=1000
@@ -29,37 +59,10 @@ useradd \
   $HOST_USER
 
 # Add the host user to the docker group
-usermod -aG docker $HOST_USER
-
-# Allow connections from docker containers to the host's X server
-xhost local:docker
-
-# Install utilities
-apt update && apt install --yes && \
-  docker.io \
-  ksshaskpass \
-  vcsh
-
-# Enable password-less sudo for the host user
-echo "$HOST_USER ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
-
-# Increase max open files on host
-echo 'fs.file-max=1000000' >> /etc/sysctl.conf
-
-# Increase max open file watchers on host
-echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
-
-# Increase file descriptor limit
-echo '* soft nofile 1000000' >> /etc/security/limits.conf
-echo '* hard nofile 1000000' >> /etc/security/limits.conf
-
-# Install alacritty on the host
-wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.5/Alacritty-v0.2.5_amd64.deb && \
-  dpkg -i alacritty.deb && \
-  rm alacritty.deb
-
-# Start the desktop environment on system start
-echo "@reboot $HOST_HOME/repositories/$DESKTOP_ENVIRONMENT_REGISTRY/desktop-environment/scripts/start.sh" >> /etc/crontab
+usermod \
+  --append \
+  --groups docker,sudo \
+  $HOST_USER
 
 # Take ownership of all files under the user's directory
 chown $HOST_USER:$HOST_USER /$HOST_USER
