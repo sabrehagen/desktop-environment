@@ -3,7 +3,6 @@ USER root
 
 # Install user utilities
 RUN apt-get install -qq \
-  strace \
   vcsh \
   vlc \
   xinput \
@@ -28,7 +27,8 @@ RUN apt-get update -qq && apt-get install -qq \
   apt-get update -qq && \
   apt-get install -qq google-chrome-stable --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
-  wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf
+  wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
+  groupadd --system chrome
 
 # Install vs code
 RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
@@ -71,7 +71,8 @@ ENV STEMN_GIT_NAME "Jackson Delahunt"
 ENV STEMN_TMUX_SESSION desktop-environment
 
 # Make the user's workspace directory
-RUN mkdir -p $HOME
+RUN mkdir -p $HOME && \
+  chown -R stemn:stemn $HOME
 
 # Rename the first non-root group to jackson
 RUN groupmod \
@@ -81,13 +82,15 @@ RUN groupmod \
 # Rename the first non-root user to jackson
 RUN usermod \
   --home $HOME \
-  --groups $USER,docker \
+  --groups $USER,docker,sudo \
   --login $USER \
   $BASE_USER
 
 # Add the user to the groups required to run chrome
-RUN groupadd --system chrome && \
-  usermod --append --groups audio,chrome,video $USER
+RUN usermod \
+  --append \
+  --groups audio,chrome,video \
+  $USER
 
 # Become the desktop user
 USER $USER
@@ -96,7 +99,7 @@ WORKDIR $HOME
 # Keep desired base user configuration files
 RUN cp /$BASE_USER/home/.gitconfig $HOME
 RUN cp /$BASE_USER/home/.motd $HOME
-RUN cp /$BASE_USER/home/.tmux $HOME
+RUN cp /$BASE_USER/home/.tmux.conf $HOME
 RUN cp /$BASE_USER/home/.zlogin $HOME
 RUN cp /$BASE_USER/home/.zshenv $HOME/.zshenv.base
 RUN cp /$BASE_USER/home/.zshrc $HOME
