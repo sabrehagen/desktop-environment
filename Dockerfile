@@ -9,6 +9,11 @@ RUN apt-get install -qq \
   xinput \
   youtube-dl
 
+# Install musikcube
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
+  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+  rm musikcube.deb
+
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
   apt-transport-https \
@@ -38,11 +43,6 @@ RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted univer
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
-
-# Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
-  rm musikcube.deb
 
 # Install peek screen recorder
 RUN add-apt-repository ppa:peek-developers/daily && \
