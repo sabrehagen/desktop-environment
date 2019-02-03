@@ -3,6 +3,7 @@ USER root
 
 # Install user utilities
 RUN apt-get install -qq \
+  feh \
   software-properties-common \
   vcsh \
   vlc \
@@ -123,6 +124,9 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
+
+# Cache tmux plugins
+RUN zsh -c "/opt/tpm/bin/install_plugins"
 
 # Start a shell on entry
 CMD zsh
