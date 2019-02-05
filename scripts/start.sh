@@ -17,7 +17,6 @@ docker run \
   --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh/auth.sock \
   --env STEMN_GIT_EMAIL="$(git config --get user.email)" \
   --env STEMN_GIT_NAME="$(git config --get user.name)" \
-  --env STEMN_TMUX_SESSION=desktop-session \
   --group-add audio \
   --group-add video \
   --interactive \

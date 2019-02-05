@@ -15,6 +15,11 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
+# Install bluetooth utility
+RUN wget -O blueberry.deb -nv http://packages.linuxmint.com//pool/main/b/blueberry/blueberry_1.1.5_all.deb && \
+  dpkg -i blueberry.deb || apt-get install -qq --fix-broken && \
+  rm blueberry.deb
+
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
   apt-transport-https \
@@ -45,15 +50,15 @@ RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted univer
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
 
-# Install peek screen recorder
-RUN add-apt-repository ppa:peek-developers/daily && \
-  apt-get update -qq && \
-  apt-get install -qq peek
-
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
+
+# Install peek screen recorder
+RUN add-apt-repository ppa:peek-developers/daily && \
+  apt-get update -qq && \
+  apt-get install -qq peek
 
 # Install yarn utilities
 RUN yarn global add \
@@ -74,7 +79,6 @@ ENV HOME /$USER/home
 # User specific configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"
 ENV STEMN_GIT_NAME "Jackson Delahunt"
-ENV STEMN_TMUX_SESSION desktop-environment
 
 # Make the user's workspace directory
 RUN mkdir -p $HOME && \
@@ -128,5 +132,5 @@ RUN zsh -c "source $HOME/.zshrc"
 # Cache tmux plugins
 RUN zsh -c "/opt/tpm/bin/install_plugins"
 
-# Start a shell on entry
-CMD zsh
+# Start the global tmux sesssion on entry
+CMD zsh -c 'tmux new-session -d -s desktop-environment zsh --login && sleep infinity'
