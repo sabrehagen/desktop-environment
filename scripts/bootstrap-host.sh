@@ -10,7 +10,7 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 export $(sh $REPO_ROOT/scripts/environment.sh)
 
 # Install utilities
-apt update && apt install --yes && \
+apt update && apt install --yes \
   curl \
   ksshaskpass \
   vcsh
