@@ -11,9 +11,13 @@ export $(sh $REPO_ROOT/scripts/environment.sh)
 
 # Install utilities
 apt update && apt install --yes && \
-  docker.io \
+  curl \
   ksshaskpass \
   vcsh
+
+# Install Docker
+sh -c "$(curl -fsSL get.docker.com)" &&
+  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
