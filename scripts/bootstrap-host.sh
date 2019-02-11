@@ -33,7 +33,7 @@ echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
 # Install alacritty on the host
-wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.5_amd64.deb && \
+wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
