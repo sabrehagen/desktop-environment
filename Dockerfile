@@ -2,7 +2,7 @@ FROM stemn/development-environment:latest
 USER root
 
 # Install user utilities
-RUN apt-get install -qq \
+RUN apt-get update -qq && apt-get install -qq --fix-missing \
   feh \
   software-properties-common \
   vcsh \
