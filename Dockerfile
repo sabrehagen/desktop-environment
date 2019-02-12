@@ -109,6 +109,7 @@ RUN rm -rf $BASE_USER
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
+  vcsh clone https://github.com/sabrehagen/dotfiles-alpine && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
   vcsh clone https://github.com/sabrehagen/dotfiles-musikcube && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
