@@ -3,6 +3,7 @@ USER root
 
 # Install user utilities
 RUN apt-get update -qq && apt-get install -qq --fix-missing \
+  alpine \
   feh \
   software-properties-common \
   vcsh \
@@ -14,11 +15,6 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
-
-# Install bluetooth utility
-RUN wget -O blueberry.deb -nv http://packages.linuxmint.com//pool/main/b/blueberry/blueberry_1.1.5_all.deb && \
-  dpkg -i blueberry.deb || apt-get install -qq --fix-broken && \
-  rm blueberry.deb
 
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
@@ -63,13 +59,6 @@ RUN add-apt-repository ppa:peek-developers/daily && \
 # Install yarn utilities
 RUN yarn global add \
   http-server
-
-# Record container build information
-ARG DESKTOP_CONTAINER_BUILD_DATE
-ARG DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
-ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
 # Container user home directories
 ENV BASE_USER stemn
@@ -131,6 +120,13 @@ RUN zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
 RUN zsh -c "/opt/tpm/bin/install_plugins"
+
+# Record container build information
+ARG DESKTOP_CONTAINER_BUILD_DATE
+ARG DESKTOP_CONTAINER_GIT_SHA
+ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
+ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
+ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
 # Start the global tmux sesssion on entry
 CMD zsh -c 'tmux new-session -d -s desktop-environment zsh --login && sleep infinity'
