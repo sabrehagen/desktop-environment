@@ -7,6 +7,4 @@ sh $REPO_ROOT/scripts/build.sh
 sh $REPO_ROOT/scripts/stop.sh
 sh $REPO_ROOT/scripts/clean.sh
 sh $REPO_ROOT/scripts/start.sh
-
-# Start the desktop environment detached from this shell
-nohup alacritty </dev/null >/dev/null 2>&1 &
+sh $REPO_ROOT/scripts/alacritty.sh
