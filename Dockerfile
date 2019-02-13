@@ -4,7 +4,7 @@ USER root
 # Install user utilities
 RUN apt-get update -qq && apt-get install -qq --fix-missing \
   alpine \
-  alsamixer \
+  alsa-utils \
   feh \
   software-properties-common \
   vcsh \
