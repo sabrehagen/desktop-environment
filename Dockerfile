@@ -106,6 +106,8 @@ RUN cp /$BASE_USER/home/.zshrc $HOME
 # Remove base user files
 RUN rm -rf $BASE_USER
 
+ARG DESKTOP_ENVIRONMENT_GITHUB_TOKEN
+
 # Clone dotfiles configuration
 RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
 RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
@@ -113,6 +115,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
   vcsh clone https://github.com/sabrehagen/dotfiles-musikcube && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
+  vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-stemn && \
+  vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh && \
   vcsh clone https://github.com/sabrehagen/dotfiles-vlc && \
   vcsh clone https://github.com/sabrehagen/dotfiles-zsh
 
