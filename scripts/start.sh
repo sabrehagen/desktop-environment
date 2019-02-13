@@ -26,7 +26,6 @@ docker run \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
-  --volume /etc/hosts:/etc/hosts \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /run/systemd:/run/systemd \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
