@@ -29,15 +29,15 @@ docker run \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/run/dbus:/var/run/dbus \
   --volume /var/run/docker.sock:/var/run/docker.sock \
-  --volume $HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
-  --volume $HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
-  --volume $HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
-  --volume $HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
-  --volume $HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
-  --volume $HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
-  --volume $HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
-  --volume $HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
-  --volume $HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
+  --volume $DESKTOP_ENVIRONMENT_HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
+  --volume $DESKTOP_ENVIRONMENT_HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
+  --volume $DESKTOP_ENVIRONMENT_HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
+  --volume $DESKTOP_ENVIRONMENT_HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
+  --volume $DESKTOP_ENVIRONMENT_HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
+  --volume $DESKTOP_ENVIRONMENT_HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
+  --volume $DESKTOP_ENVIRONMENT_HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
+  --volume $DESKTOP_ENVIRONMENT_HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
+  --volume $DESKTOP_ENVIRONMENT_HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_JUMP:$DESKTOP_ENVIRONMENT_CACHE_JUMP \
