@@ -19,7 +19,7 @@ apt-get update -qq && apt-get install -qq \
 
 # Make gosu accessible to all users
 chown :users /usr/sbin/gosu && \
-  chmod +s gosu
+  chmod +s /usr/sbin/gosu
 
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
