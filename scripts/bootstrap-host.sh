@@ -12,13 +12,14 @@ export $(sh $REPO_ROOT/scripts/environment.sh)
 # Install utilities
 apt-get update -qq && apt-get install -qq \
   curl \
+  gosu \
   sudo \
   vcsh \
   xclip
 
-# Install Docker
-sh -c "$(curl -fsSL get.docker.com)" && \
-  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
+# Make gosu accessible to all users
+chown :users /usr/sbin/gosu && \
+  chmod +s gosu
 
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
@@ -33,16 +34,17 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
-# Install alacritty on the host
-wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
-  dpkg -i alacritty.deb && \
-  rm alacritty.deb
-
-# Start the desktop environment as the host user on system start
-echo "@reboot $HOST_USER $REPO_ROOT/scripts/start.sh" >> /etc/crontab
+# Install Docker
+sh -c "$(curl -fsSL get.docker.com)" && \
+  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Allow connections from docker containers to the host's X server
 xhost local:docker
+
+# Install alacritty
+wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
+  dpkg -i alacritty.deb && \
+  rm alacritty.deb
 
 # Host user configuration
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
@@ -72,17 +74,17 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
-# Avoid committing user credentials to the repository
-git update-index --assume-unchanged $REPO_ROOT/scripts/credentials.sh
-
 # Clone the desktop environment to the host
-git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $HOST_REPOSITORY
+git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DEVELOPMENT_ENVIRONMENT_REPOSITORY
 
-# Copy the existing credentials to the host desktop environment
-cp $REPO_ROOT/scripts/credentials.sh $HOST_REGISTRY/scripts/credentials.sh
+# Avoid committing user credentials to the repository
+git update-index --assume-unchanged $DEVELOPMENT_ENVIRONMENT_REPOSITORY/scripts/credentials.sh
+
+# Start the desktop environment as the host user on system start
+echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
 
 # Take ownership of all files under the user's directory
-chown -R $HOST_USER:$HOST_USER /$HOST_USER $HOST_REPOSITORY
+chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
 # Install dotfiles configuration for host user
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
@@ -95,4 +97,4 @@ gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
 $HOST_HOME/.config/scripts/startup.sh
 
 # Recycle the desktop environment
-$HOST_REPOSITORY/scripts/recycle.sh
+$DEVELOPMENT_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
