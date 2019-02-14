@@ -14,7 +14,8 @@ apt-get update -qq && apt-get install -qq \
   curl \
   ksshaskpass \
   sudo \
-  vcsh
+  vcsh \
+  xclip
 
 # Install Docker
 sh -c "$(curl -fsSL get.docker.com)" && \
