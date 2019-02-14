@@ -12,7 +12,6 @@ export $(sh $REPO_ROOT/scripts/environment.sh)
 # Install utilities
 apt-get update -qq && apt-get install -qq \
   curl \
-  ksshaskpass \
   sudo \
   vcsh \
   xclip
@@ -87,7 +86,13 @@ chown -R $HOST_USER:$HOST_USER /$HOST_USER $HOST_REPOSITORY
 
 # Install dotfiles configuration for host user
 su -c "vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git" $HOST_USER
+su -c "vcsh clone https://github.com/sabrehagen/dotfiles-autostart.git" $HOST_USER
+su -c "vcsh clone https://github.com/sabrehagen/dotfiles-kwin.git" $HOST_USER
+su -c "vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh.git" $HOST_USER
 su -c "vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git" $HOST_USER
+
+# Manually execute startup script to prepare host machine
+$HOST_HOME/.config/scripts/startup.sh
 
 # Start the desktop environment as the host user
 su -c "$HOST_REPOSITORY/scripts/refresh.sh" $HOST_USER
