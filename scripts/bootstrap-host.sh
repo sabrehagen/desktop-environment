@@ -75,10 +75,10 @@ usermod \
   $HOST_USER
 
 # Clone the desktop environment to the host
-git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DEVELOPMENT_ENVIRONMENT_REPOSITORY
+git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
 # Avoid committing user credentials to the repository
-git update-index --assume-unchanged $DEVELOPMENT_ENVIRONMENT_REPOSITORY/scripts/credentials.sh
+git update-index --assume-unchanged $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/credentials.sh
 
 # Start the desktop environment as the host user on system start
 echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
@@ -97,4 +97,4 @@ gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
 $HOST_HOME/.config/scripts/startup.sh
 
 # Recycle the desktop environment
-$DEVELOPMENT_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
+$DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
