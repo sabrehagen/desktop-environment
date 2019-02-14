@@ -22,6 +22,7 @@ docker run \
   --rm \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
+  --user $DESKTOP_ENVIRONMENT_USER \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /run/systemd:/run/systemd \
