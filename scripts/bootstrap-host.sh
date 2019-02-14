@@ -85,14 +85,14 @@ cp $REPO_ROOT/scripts/credentials.sh $HOST_REGISTRY/scripts/credentials.sh
 chown -R $HOST_USER:$HOST_USER /$HOST_USER $HOST_REPOSITORY
 
 # Install dotfiles configuration for host user
-su -c "vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git" $HOST_USER
-su -c "vcsh clone https://github.com/sabrehagen/dotfiles-autostart.git" $HOST_USER
-su -c "vcsh clone https://github.com/sabrehagen/dotfiles-kwin.git" $HOST_USER
-su -c "vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh.git" $HOST_USER
-su -c "vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git" $HOST_USER
+gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
+gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-autostart.git
+gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-kwin.git
+gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh.git
+gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
 
-# Manually execute startup script to prepare host machine
+# Manually execute startup script to simulate host startup
 $HOST_HOME/.config/scripts/startup.sh
 
-# Start the desktop environment as the host user
-su -c "$HOST_REPOSITORY/scripts/refresh.sh" $HOST_USER
+# Recycle the desktop environment
+$HOST_REPOSITORY/scripts/recycle.sh
