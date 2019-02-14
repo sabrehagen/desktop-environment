@@ -15,8 +15,6 @@ docker run \
   --device /dev/bus/usb \
   --env DISPLAY \
   --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh.sock \
-  --env STEMN_GIT_EMAIL="jackson@stemn.com" \
-  --env STEMN_GIT_NAME="Jackson Delahunt" \
   --group-add audio \
   --group-add video \
   --interactive \
@@ -33,12 +31,12 @@ docker run \
   --volume $HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
   --volume $HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
   --volume $HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
-  --volume $HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
   --volume $HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
   --volume $HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
   --volume $HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
   --volume $HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
   --volume $HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
+  --volume $HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_JUMP:$DESKTOP_ENVIRONMENT_CACHE_JUMP \
