@@ -116,8 +116,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
   vcsh clone https://github.com/sabrehagen/dotfiles-code && \
   vcsh clone https://github.com/sabrehagen/dotfiles-musikcube && \
   vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
-  vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-stemn && \
   vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh && \
+  vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-stemn && \
   vcsh clone https://github.com/sabrehagen/dotfiles-vlc && \
   vcsh clone https://github.com/sabrehagen/dotfiles-zsh
 

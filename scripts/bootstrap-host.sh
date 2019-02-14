@@ -78,6 +78,9 @@ git update-index --assume-unchanged $REPO_ROOT/scripts/credentials.sh
 # Clone the desktop environment to the host
 git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $HOST_REPOSITORY
 
+# Copy the existing credentials to the host desktop environment
+cp $REPO_ROOT/scripts/credentials.sh $HOST_REGISTRY/scripts/credentials.sh
+
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER $HOST_REPOSITORY
 

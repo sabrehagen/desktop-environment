@@ -14,14 +14,13 @@ docker run \
   --device /dev/usb \
   --device /dev/bus/usb \
   --env DISPLAY \
-  --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh/auth.sock \
+  --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh.sock \
   --env STEMN_GIT_EMAIL="jackson@stemn.com" \
   --env STEMN_GIT_NAME="Jackson Delahunt" \
   --group-add audio \
   --group-add video \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
-  --net host \
   --rm \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
@@ -35,13 +34,11 @@ docker run \
   --volume $HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
   --volume $HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
   --volume $HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
-  --volume $HOME/repositories:$DESKTOP_ENVIRONMENT_HOME/repositories \
   --volume $HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
   --volume $HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
   --volume $HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
   --volume $HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
   --volume $HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
-  --volume ${SSH_AUTH_SOCK-$HOME/.ssh/auth.sock}:$DESKTOP_ENVIRONMENT_HOME/.ssh/auth.sock \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_JUMP:$DESKTOP_ENVIRONMENT_CACHE_JUMP \
@@ -52,6 +49,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CONFIG_GITHUB:$DESKTOP_ENVIRONMENT_CONFIG_GITHUB \
   --volume DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE:$DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE \
   --volume DESKTOP_ENVIRONMENT_HOME:$DESKTOP_ENVIRONMENT_HOME \
+  --volume DESKTOP_ENVIRONMENT_REPOSITORIES:$DESKTOP_ENVIRONMENT_REPOSITORIES \
   --workdir $DESKTOP_ENVIRONMENT_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:latest
 
