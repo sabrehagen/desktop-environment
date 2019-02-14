@@ -37,8 +37,8 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Start the desktop environment on system start
-echo "@reboot $REPO_ROOT/scripts/start.sh" >> /etc/crontab
+# Start the desktop environment as the host user on system start
+echo "@reboot $HOST_USER $REPO_ROOT/scripts/start.sh" >> /etc/crontab
 
 # Allow connections from docker containers to the host's X server
 xhost local:docker
@@ -67,6 +67,9 @@ usermod \
   --append \
   --groups docker,sudo \
   $HOST_USER
+
+# Avoid committing user credentials to the repository
+git update-index --assume-unchanged $REPO_ROOT/scripts/credentials.sh
 
 # Take ownership of all files under the user's directory
 chown $HOST_USER:$HOST_USER /$HOST_USER
