@@ -15,8 +15,8 @@ docker run \
   --device /dev/bus/usb \
   --env DISPLAY \
   --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh/auth.sock \
-  --env STEMN_GIT_EMAIL="$(git config --get user.email)" \
-  --env STEMN_GIT_NAME="$(git config --get user.name)" \
+  --env STEMN_GIT_EMAIL="jackson@stemn.com" \
+  --env STEMN_GIT_NAME="Jackson Delahunt" \
   --group-add audio \
   --group-add video \
   --interactive \

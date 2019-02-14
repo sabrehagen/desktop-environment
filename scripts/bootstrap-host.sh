@@ -10,13 +10,14 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 export $(sh $REPO_ROOT/scripts/environment.sh)
 
 # Install utilities
-apt update && apt install --yes \
+apt-get update -qq && apt-get install -qq \
   curl \
   ksshaskpass \
+  sudo \
   vcsh
 
 # Install Docker
-sh -c "$(curl -fsSL get.docker.com)" &&
+sh -c "$(curl -fsSL get.docker.com)" && \
   usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Enable password-less sudo for the sudo group
@@ -47,9 +48,10 @@ xhost local:docker
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
 HOST_USER_ID=1000
 HOST_HOME=/$HOST_USER/home
+HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 
-# Make the host user home directory
-mkdir -p $HOST_HOME
+# Make the host user directory
+mkdir /$HOST_USER
 
 # Create the host user group
 groupadd \
@@ -58,9 +60,11 @@ groupadd \
 
 # Create the host user
 useradd \
+  --home-dir $HOST_HOME \
   --gid $HOST_USER_ID \
   --uid $HOST_USER_ID \
-  $HOST_USER
+  $HOST_USER && \
+  passwd $HOST_USER
 
 # Add the host user to the docker group
 usermod \
@@ -71,10 +75,15 @@ usermod \
 # Avoid committing user credentials to the repository
 git update-index --assume-unchanged $REPO_ROOT/scripts/credentials.sh
 
+# Clone the desktop environment to the host
+git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $HOST_REPOSITORY
+
 # Take ownership of all files under the user's directory
-chown $HOST_USER:$HOST_USER /$HOST_USER
+chown -R $HOST_USER:$HOST_USER /$HOST_USER $HOST_REPOSITORY
 
 # Install dotfiles configuration for host user
-su $HOST_USER
-vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
-vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
+su -c "vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git" $HOST_USER
+su -c "vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git" $HOST_USER
+
+# Start the desktop environment as the host user
+su -c "$HOST_REPOSITORY/scripts/refresh.sh" $HOST_USER
