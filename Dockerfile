@@ -67,7 +67,7 @@ ENV USER jackson
 ENV HOME /$USER/home
 
 # System environment configuration
-SSH_AUTH_SOCK $HOME/.ssh.sock
+ENV SSH_AUTH_SOCK $HOME/.ssh.sock
 
 # User specific configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"
