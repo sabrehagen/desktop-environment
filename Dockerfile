@@ -118,8 +118,7 @@ RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git && \
-  rm -rf .gitignore.d
+  vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
