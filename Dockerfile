@@ -104,14 +104,16 @@ WORKDIR $HOME
 
 # Keep desired base user configuration files
 RUN cp /$BASE_USER/home/.gitconfig $HOME
-RUN cp /$BASE_USER/home/.motd $HOME
 RUN cp /$BASE_USER/home/.tmux.conf $HOME
 RUN cp /$BASE_USER/home/.zlogin $HOME
 RUN cp /$BASE_USER/home/.zshenv $HOME/.zshenv.base
 RUN cp /$BASE_USER/home/.zshrc $HOME
 
-# Remove base user files
+# Remove remaining base user files
 RUN rm -rf $BASE_USER
+
+# Add message of the day
+COPY .motd $HOME
 
 # Clone dotfiles configuration
 RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
