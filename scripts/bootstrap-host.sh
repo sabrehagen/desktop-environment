@@ -17,10 +17,6 @@ apt-get update -qq && apt-get install -qq \
   vcsh \
   xclip
 
-# Make gosu accessible to all users
-chown :users /usr/sbin/gosu && \
-  chmod +s /usr/sbin/gosu
-
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
@@ -45,6 +41,10 @@ xhost local:docker
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
+
+# Make gosu accessible to all users
+chown :users /usr/sbin/gosu && \
+  chmod +s /usr/sbin/gosu
 
 # Host user configuration
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
