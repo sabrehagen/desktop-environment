@@ -27,6 +27,7 @@ docker run \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /run/systemd:/run/systemd \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
+  --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/dbus:/var/run/dbus \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $DESKTOP_ENVIRONMENT_HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
