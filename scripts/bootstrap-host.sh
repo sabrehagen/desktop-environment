@@ -105,7 +105,7 @@ gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-kde.git
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git
 
 # Manually execute startup script to simulate host startup
-$HOST_HOME/.config/scripts/startup.sh
+gosu $HOST_USER $HOST_HOME/.config/scripts/startup.sh
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
