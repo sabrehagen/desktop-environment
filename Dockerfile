@@ -113,14 +113,13 @@ RUN cp /$BASE_USER/home/.zshrc $HOME
 RUN rm -rf $BASE_USER
 
 # Clone dotfiles configuration
-RUN alias https-to-git="sed 's;https://github.com/\(.*\);git@github.com:\1.git;'"
-RUN vcsh clone https://github.com/sabrehagen/dotfiles-alacritty && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-alpine && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-code && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-musikcube && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-scripts && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-vlc && \
-  vcsh clone https://github.com/sabrehagen/dotfiles-zsh
+RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-alpine.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-code.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
 
 # Cache zsh plugins
 RUN zsh -c "source $HOME/.zshrc"
