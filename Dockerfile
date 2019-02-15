@@ -86,8 +86,8 @@ RUN groupmod \
 
 # Rename the first non-root user to jackson
 RUN usermod \
-  --home $HOME \
   --groups $USER,docker,sudo \
+  --home $HOME \
   --login $USER \
   $BASE_USER
 
