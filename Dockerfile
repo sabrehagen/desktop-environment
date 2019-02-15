@@ -73,7 +73,6 @@ RUN mkdir -p $HOME && \
 
 # Program environment configuration
 ENV SSH_AUTH_SOCK $HOME/.ssh.sock
-RUN touch $SSH_AUTH_SOCK
 
 # User environment configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"

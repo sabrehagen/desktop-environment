@@ -98,9 +98,6 @@ echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /e
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
-# Clone private ssh keys using github access token
-gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN:-$DESKTOP_ENVIRONMENT_REGISTRY}@github.com/sabrehagen/dotfiles-ssh.git
-
 # Install dotfiles configuration for host user
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-autostart.git
