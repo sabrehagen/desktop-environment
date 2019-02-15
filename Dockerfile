@@ -10,6 +10,7 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
   software-properties-common \
   vcsh \
   vlc \
+  x11-xkb-utils \
   xinput \
   youtube-dl
 
