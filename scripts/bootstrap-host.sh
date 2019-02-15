@@ -9,6 +9,15 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 # Export desktop environment shell configuration
 export $(sh $REPO_ROOT/scripts/environment.sh)
 
+# Clone the desktop environment to the host
+git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
+
+# Fork setup to desktop environment configured location immediately
+if [ "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
+  sh $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap-host.sh
+  exit 0
+fi
+
 # Install utilities
 apt-get update -qq && apt-get install -qq \
   curl \
@@ -34,9 +43,6 @@ echo '* hard nofile 1000000' >> /etc/security/limits.conf
 sh -c "$(curl -fsSL get.docker.com)" && \
   usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
-# Allow connections from docker containers to the host's X server
-xhost local:docker
-
 # Install alacritty
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
   dpkg -i alacritty.deb && \
@@ -46,6 +52,9 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
 chown :users /usr/sbin/gosu && \
   chmod +s /usr/sbin/gosu
 
+# Allow docker containers to access the host's X server
+xhost local:docker
+
 # Host user configuration
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
 HOST_USER_ID=1000
@@ -53,7 +62,7 @@ HOST_HOME=/$HOST_USER/home
 HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 
 # Make the host user directory
-mkdir /$HOST_USER
+mkdir -p /$HOST_USER
 
 # Create the host user group
 groupadd \
@@ -74,9 +83,6 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
-# Clone the desktop environment to the host
-git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
-
 # Avoid committing user credentials to the repository
 git update-index --assume-unchanged $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/credentials.sh
 
@@ -87,12 +93,12 @@ echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /e
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
 # Clone private ssh keys using github access token
-gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh.git
+gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN:-$DESKTOP_ENVIRONMENT_REGISTRY}@github.com/sabrehagen/dotfiles-ssh.git
 
 # Install dotfiles configuration for host user
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-autostart.git
-gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-kwin.git
+gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-kde.git
 gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git
 
 # Manually execute startup script to simulate host startup
