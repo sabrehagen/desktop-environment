@@ -19,7 +19,8 @@ if [ "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
 fi
 
 # Install utilities
-apt-get update -qq && apt-get install -qq \
+apt-get update -qq && \
+  apt-get install -qq \
   curl \
   gosu \
   sudo \
@@ -39,7 +40,7 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
-# Remove any existing group with id 999 that is not the docker group
+# Remove existing group with id 999 if it is not the docker group
 getent group 999 | \
   grep -v docker | \
   cut -d: -f1 | \
