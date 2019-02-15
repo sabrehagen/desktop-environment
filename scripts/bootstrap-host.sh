@@ -39,6 +39,12 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
+# Remove any existing group with id 999 that is not the docker group
+getent group 999 | \
+  grep -v docker | \
+  cut -d: -f1 | \
+  xargs groupdel
+
 # Install Docker
 sh -c "$(curl -fsSL get.docker.com)" && \
   usermod -aG docker $DESKTOP_ENVIRONMENT_USER
