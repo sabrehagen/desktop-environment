@@ -13,7 +13,7 @@ export $(sh $REPO_ROOT/scripts/environment.sh)
 git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
 # Fork setup to desktop environment configured location immediately
-if [ "$REPO_ROOT" != "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
+if [ "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   sh $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap-host.sh
   exit 0
 fi
@@ -96,7 +96,7 @@ chown -R $HOST_USER:$HOST_USER /$HOST_USER
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-autostart.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-kwin.git
-gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN}@github.com/sabrehagen/dotfiles-ssh.git
+gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN-$DESKTOP_ENVIRONMENT_REGISTRY}@github.com/sabrehagen/dotfiles-ssh.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
 
 # Manually execute startup script to simulate host startup
