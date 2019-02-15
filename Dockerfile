@@ -7,6 +7,7 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
   alsa-utils \
   arandr \
   feh \
+  numlockx \
   software-properties-common \
   vcsh \
   vlc \

@@ -13,7 +13,7 @@ export $($REPO_ROOT/scripts/environment.sh)
 git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
 # Fork setup to desktop environment configured location immediately
-if [ "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
+if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap-host.sh
   exit 0
 fi
