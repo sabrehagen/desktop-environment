@@ -5,6 +5,7 @@ USER root
 RUN apt-get update -qq && apt-get install -qq --fix-missing \
   alpine \
   alsa-utils \
+  arandr \
   feh \
   software-properties-common \
   vcsh \
@@ -16,6 +17,11 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
+
+# Install zoom conferencing
+RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
+  dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
+  rm zoom.deb
 
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
@@ -52,11 +58,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
-# Install peek screen recorder
-RUN add-apt-repository ppa:peek-developers/daily && \
-  apt-get update -qq && \
-  apt-get install -qq peek
-
 # Install yarn utilities
 RUN yarn global add \
   http-server
@@ -66,16 +67,17 @@ ENV BASE_USER stemn
 ENV USER jackson
 ENV HOME /$USER/home
 
-# System environment configuration
-ENV SSH_AUTH_SOCK $HOME/.ssh.sock
-
-# User specific configuration
-ENV STEMN_GIT_EMAIL "jackson@stemn.com"
-ENV STEMN_GIT_NAME "Jackson Delahunt"
-
 # Make the user's workspace directory
 RUN mkdir -p $HOME && \
   chown -R stemn:stemn $HOME
+
+# Program environment configuration
+ENV SSH_AUTH_SOCK $HOME/.ssh.sock
+RUN touch $SSH_AUTH_SOCK
+
+# User environment configuration
+ENV STEMN_GIT_EMAIL "jackson@stemn.com"
+ENV STEMN_GIT_NAME "Jackson Delahunt"
 
 # Rename the first non-root group to jackson
 RUN groupmod \
