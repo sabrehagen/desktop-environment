@@ -14,7 +14,7 @@ docker run \
   --device /dev/usb \
   --device /dev/video0 \
   --device /dev/bus/usb \
-  --env DISPLAY=${DISPLAY-0} \
+  --env DISPLAY=${DISPLAY-:0} \
   --env DBUS_SESSION_BUS_ADDRESS \
   --env XAUTHORITY \
   --group-add audio \
