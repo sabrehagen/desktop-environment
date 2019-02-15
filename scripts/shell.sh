@@ -6,4 +6,4 @@ export $($REPO_ROOT/scripts/environment.sh)
 docker exec \
   --interactive \
   --tty \
-  $DESKTOP_ENVIRONMENT_CONTAINER zsh
+  $DESKTOP_ENVIRONMENT_CONTAINER zsh --login
