@@ -1,10 +1,10 @@
 REPO_ROOT=$(dirname $(realpath $0))/..
 
 # Export desktop environment shell configuration
-export $(sh $REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/scripts/environment.sh)
 
 # Ensure the container user has ownership of the volumes before starting
-sh $REPO_ROOT/scripts/bootstrap-volumes.sh
+$REPO_ROOT/scripts/bootstrap-volumes.sh
 
 docker run \
   --cap-add=SYS_PTRACE \
@@ -30,17 +30,17 @@ docker run \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $DESKTOP_ENVIRONMENT_HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
-  --volume $DESKTOP_ENVIRONMENT_HOME/.pki:$DESKTOP_ENVIRONMENT_HOME/.pki \
-  --volume $DESKTOP_ENVIRONMENT_HOME/.ssh:$DESKTOP_ENVIRONMENT_HOME/.ssh \
   --volume $DESKTOP_ENVIRONMENT_HOME/Documents:$DESKTOP_ENVIRONMENT_HOME/Documents \
   --volume $DESKTOP_ENVIRONMENT_HOME/Downloads:$DESKTOP_ENVIRONMENT_HOME/Downloads \
   --volume $DESKTOP_ENVIRONMENT_HOME/Music:$DESKTOP_ENVIRONMENT_HOME/Music \
   --volume $DESKTOP_ENVIRONMENT_HOME/notes:$DESKTOP_ENVIRONMENT_HOME/notes \
   --volume $DESKTOP_ENVIRONMENT_HOME/Pictures:$DESKTOP_ENVIRONMENT_HOME/Pictures \
   --volume $DESKTOP_ENVIRONMENT_HOME/Videos:$DESKTOP_ENVIRONMENT_HOME/Videos \
+  --volume DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES:$DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_JUMP:$DESKTOP_ENVIRONMENT_CACHE_JUMP \
+  --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \
   --volume DESKTOP_ENVIRONMENT_CACHE_YARN:$DESKTOP_ENVIRONMENT_CACHE_YARN \
   --volume DESKTOP_ENVIRONMENT_CACHE_ZSH:$DESKTOP_ENVIRONMENT_CACHE_ZSH \
   --volume DESKTOP_ENVIRONMENT_CONFIG_CHROME:$DESKTOP_ENVIRONMENT_CONFIG_CHROME \

@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(realpath $0))/..
 
 # Export desktop environment shell configuration
-export $(sh $REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/scripts/environment.sh)
 
 # Give the container user ownership of the DESKTOP_ENVIRONMENT_CACHE_CHROME volume
 docker run \

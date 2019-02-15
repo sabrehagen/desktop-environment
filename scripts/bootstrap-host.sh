@@ -7,14 +7,14 @@ fi
 REPO_ROOT=$(dirname $(realpath $0))/..
 
 # Export desktop environment shell configuration
-export $(sh $REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/scripts/environment.sh)
 
 # Clone the desktop environment to the host
 git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
 # Fork setup to desktop environment configured location immediately
 if [ "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
-  sh $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap-host.sh
+  $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap-host.sh
   exit 0
 fi
 
