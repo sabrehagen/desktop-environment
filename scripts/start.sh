@@ -9,11 +9,14 @@ $REPO_ROOT/scripts/bootstrap-volumes.sh
 docker run \
   --cap-add=SYS_PTRACE \
   --detach \
-  --device /dev/snd \
   --device /dev/dri \
+  --device /dev/snd \
   --device /dev/usb \
+  --device /dev/video0 \
   --device /dev/bus/usb \
   --env DISPLAY=${DISPLAY-0} \
+  --env DBUS_SESSION_BUS_ADDRESS \
+  --env XAUTHORITY \
   --group-add audio \
   --group-add docker \
   --group-add video \
@@ -26,6 +29,7 @@ docker run \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
+  --volume /var/run/dbus:/var/run/dbus \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $DESKTOP_ENVIRONMENT_HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
