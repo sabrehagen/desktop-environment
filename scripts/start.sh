@@ -7,15 +7,15 @@ export $($REPO_ROOT/scripts/environment.sh)
 $REPO_ROOT/scripts/bootstrap-volumes.sh
 
 docker run \
-  --cap-add=SYS_PTRACE \
+  --cap-add SYS_PTRACE \
   --detach \
   --device /dev/dri \
   --device /dev/snd \
   --device /dev/usb \
   --device /dev/video0 \
   --device /dev/bus/usb \
-  --env DISPLAY=${DISPLAY-:0} \
   --env DBUS_SESSION_BUS_ADDRESS \
+  --env DISPLAY=${DISPLAY-:0} \
   --env XAUTHORITY \
   --group-add audio \
   --group-add docker \
@@ -53,7 +53,6 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE:$DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE \
   --volume DESKTOP_ENVIRONMENT_CONFIG_ZOOM:$DESKTOP_ENVIRONMENT_CONFIG_ZOOM \
   --volume DESKTOP_ENVIRONMENT_HOME:$DESKTOP_ENVIRONMENT_HOME \
-  --volume DESKTOP_ENVIRONMENT_HOSTS:$DESKTOP_ENVIRONMENT_HOSTS \
   --volume DESKTOP_ENVIRONMENT_REPOSITORIES:$DESKTOP_ENVIRONMENT_REPOSITORIES \
   --workdir $DESKTOP_ENVIRONMENT_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:latest
