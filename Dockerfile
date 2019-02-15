@@ -96,6 +96,9 @@ RUN usermod \
   --groups audio,chrome,video \
   $USER
 
+# Add user configuration files
+COPY .motd $HOME
+
 # Take ownership of the desktop user's folder
 RUN chown -R $USER:$USER /$USER
 
@@ -113,9 +116,6 @@ RUN cp /$BASE_USER/home/.zshrc $HOME
 # Remove remaining base user files
 RUN rm -rf $BASE_USER
 
-# Add message of the day
-COPY .motd $HOME
-
 # Clone dotfiles configuration
 RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-alpine.git && \
@@ -123,6 +123,7 @@ RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
+  vcsh clone git://github.com/sabrehagen/dotfiles-x11.git && \
   vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
 
 # Cache zsh plugins
