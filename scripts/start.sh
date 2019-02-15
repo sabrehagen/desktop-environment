@@ -14,7 +14,6 @@ docker run \
   --device /dev/usb \
   --device /dev/bus/usb \
   --env DISPLAY=${DISPLAY-0} \
-  --env SSH_AUTH_SOCK=$DESKTOP_ENVIRONMENT_HOME/.ssh.sock \
   --group-add audio \
   --group-add docker \
   --group-add video \

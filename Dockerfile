@@ -69,7 +69,7 @@ ENV HOME /$USER/home
 
 # Make the user's workspace directory
 RUN mkdir -p $HOME && \
-  chown -R stemn:stemn $HOME
+  chown -R $USER:$USER /$USER
 
 # Program environment configuration
 ENV SSH_AUTH_SOCK $HOME/.ssh.sock
