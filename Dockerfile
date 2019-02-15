@@ -68,8 +68,7 @@ ENV USER jackson
 ENV HOME /$USER/home
 
 # Make the user's workspace directory
-RUN mkdir -p $HOME && \
-  chown -R $USER:$USER /$USER
+RUN mkdir -p $HOME
 
 # Program environment configuration
 ENV SSH_AUTH_SOCK $HOME/.ssh.sock
@@ -95,6 +94,9 @@ RUN usermod \
   --append \
   --groups audio,chrome,video \
   $USER
+
+# Take ownership of the desktop user's folder
+RUN chown -R $USER:$USER /$USER
 
 # Become the desktop user
 USER $USER
