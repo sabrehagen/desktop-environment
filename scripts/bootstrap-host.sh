@@ -89,9 +89,6 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
-# Avoid committing user credentials to the repository
-git update-index --assume-unchanged $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/credentials.sh
-
 # Start the desktop environment as the host user on system start
 echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
 

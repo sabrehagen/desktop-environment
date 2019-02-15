@@ -53,9 +53,10 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE:$DESKTOP_ENVIRONMENT_CONFIG_MUSIKCUBE \
   --volume DESKTOP_ENVIRONMENT_CONFIG_ZOOM:$DESKTOP_ENVIRONMENT_CONFIG_ZOOM \
   --volume DESKTOP_ENVIRONMENT_HOME:$DESKTOP_ENVIRONMENT_HOME \
+  --volume DESKTOP_ENVIRONMENT_HOSTS:$DESKTOP_ENVIRONMENT_HOSTS \
   --volume DESKTOP_ENVIRONMENT_REPOSITORIES:$DESKTOP_ENVIRONMENT_REPOSITORIES \
   --workdir $DESKTOP_ENVIRONMENT_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:latest
 
-# Wait until the container is running before proceeding
+# Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
