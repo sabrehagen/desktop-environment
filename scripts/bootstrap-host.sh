@@ -96,7 +96,7 @@ chown -R $HOST_USER:$HOST_USER /$HOST_USER
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-autostart.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-kwin.git
-gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN-$DESKTOP_ENVIRONMENT_REGISTRY}@github.com/sabrehagen/dotfiles-ssh.git
+gosu $HOST_USER vcsh clone https://${DESKTOP_ENVIRONMENT_GITHUB_TOKEN:-$DESKTOP_ENVIRONMENT_REGISTRY}@github.com/sabrehagen/dotfiles-ssh.git
 gosu $HOST_USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git
 
 # Manually execute startup script to simulate host startup
