@@ -19,15 +19,20 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
 RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
   tar -C / -xzf -
 
-# Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
-  rm musikcube.deb
+# Install resucetime time tracker
+RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
+  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
+  rm rescuetime.deb
 
 # Install zoom conferencing
 RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
   dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
   rm zoom.deb
+
+# Install musikcube
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
+  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+  rm musikcube.deb
 
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
@@ -52,17 +57,10 @@ RUN apt-get update -qq && apt-get install -qq \
   groupadd --system chrome
 
 # Install vs code
-RUN echo "deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe" > /etc/apt/sources.list && \
-  apt-get update -qq && \
-  wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
+RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
-
-# Install resucetime time tracker
-RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
-  rm rescuetime.deb
 
 # Install yarn utilities
 RUN yarn global add \

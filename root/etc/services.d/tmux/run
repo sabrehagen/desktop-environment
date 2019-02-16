@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Start tmux server as jackson
+exec s6-setuidgid jackson \
+  tmux new-session -s desktop-environment zsh --login
