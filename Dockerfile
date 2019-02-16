@@ -110,7 +110,7 @@ RUN cp /$BASE_USER/home/.zshenv $HOME/.zshenv.base
 RUN cp /$BASE_USER/home/.zshrc $HOME
 
 # Remove remaining base user files
-RUN rm -rf $BASE_USER
+RUN rm -rf /$BASE_USER
 
 # Take ownership of the desktop user's folder
 RUN chown -R $USER:$USER /$USER
