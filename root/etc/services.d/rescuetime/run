@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Start rescuetime as jackson
-exec s6-setuidgid jackson rescuetime
+# exec gosu jackson rescuetime

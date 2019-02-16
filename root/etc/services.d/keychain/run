@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Start ssh keychain as jackson
-exec s6-setuidgid jackson keychain
+# exec gosu jackson keychain
