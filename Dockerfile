@@ -146,4 +146,4 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 COPY root /
 
 # Use s6 init system
-ENTRYPOINT ["/usr/bin/s6-svscan", "/etc/s6"]
+ENTRYPOINT ["/init"]
