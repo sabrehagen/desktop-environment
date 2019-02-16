@@ -102,13 +102,6 @@ RUN usermod \
 # Add user configuration files
 COPY .motd $HOME
 
-# Take ownership of the desktop user's folder
-RUN chown -R $USER:$USER /$USER
-
-# Become the desktop user
-USER $USER
-WORKDIR $HOME
-
 # Keep desired base user configuration files
 RUN cp /$BASE_USER/home/.gitconfig $HOME
 RUN cp /$BASE_USER/home/.tmux.conf $HOME
@@ -119,21 +112,24 @@ RUN cp /$BASE_USER/home/.zshrc $HOME
 # Remove remaining base user files
 RUN rm -rf $BASE_USER
 
+# Take ownership of the desktop user's folder
+RUN chown -R $USER:$USER /$USER
+
 # Clone dotfiles configuration
-RUN vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-alpine.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-code.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-x11.git && \
-  vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
+RUN gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-alpine.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-code.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-x11.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
 
 # Cache zsh plugins
-RUN zsh -c "source $HOME/.zshrc"
+RUN gosu $USER zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
-RUN zsh -c "/opt/tpm/bin/install_plugins"
+RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 
 # Record container build information
 ARG DESKTOP_CONTAINER_BUILD_DATE
