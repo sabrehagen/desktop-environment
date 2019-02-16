@@ -15,6 +15,10 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
   xinput \
   youtube-dl
 
+# Install s6 init system
+RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
+  tar -C / -xzf -
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -48,7 +52,7 @@ RUN apt-get update -qq && apt-get install -qq \
   groupadd --system chrome
 
 # Install vs code
-RUN echo 'deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe' > /etc/apt/sources.list && \
+RUN echo "deb http://au.archive.ubuntu.com/ubuntu/ xenial main restricted universe" > /etc/apt/sources.list && \
   apt-get update -qq && \
   wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
@@ -140,5 +144,8 @@ ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
-# Start the global tmux sesssion on entry
-CMD zsh -c 'tmux new-session -d -s desktop-environment zsh --login && sleep infinity'
+# Add static container filesystem
+COPY root /
+
+# Use s6 init system
+ENTRYPOINT ["/usr/bin/s6-svscan", "/etc/s6"]
