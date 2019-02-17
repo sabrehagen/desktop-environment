@@ -77,6 +77,8 @@ RUN mkdir -p $HOME
 # User environment configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"
 ENV STEMN_GIT_NAME "Jackson Delahunt"
+ENV TMUX $HOME/.tmux.sock
+RUN touch $TMUX
 
 # Rename the first non-root group to jackson
 RUN groupmod \
