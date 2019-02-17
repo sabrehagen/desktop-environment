@@ -1,4 +1,4 @@
 #!/usr/bin/execlineb -P
 
 # Start ssh keychain as jackson
-exec gosu jackson keychain
+gosu jackson keychain
