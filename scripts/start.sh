@@ -25,7 +25,6 @@ docker run \
   --rm \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
-  --user $DESKTOP_ENVIRONMENT_USER \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
@@ -60,3 +59,8 @@ docker run \
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+
+# Start desktop services
+docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/tmux
+docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/tmux
+docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/tmux
