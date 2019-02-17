@@ -74,9 +74,6 @@ ENV HOME /$USER/home
 # Make the user's workspace directory
 RUN mkdir -p $HOME
 
-# Program environment configuration
-ENV SSH_AUTH_SOCK $HOME/.ssh.sock
-
 # User environment configuration
 ENV STEMN_GIT_EMAIL "jackson@stemn.com"
 ENV STEMN_GIT_NAME "Jackson Delahunt"
