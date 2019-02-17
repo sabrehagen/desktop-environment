@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/usr/bin/execlineb -P
 
 # Start tmux server as jackson
 exec gosu jackson \
-  tmux new-session -d -s desktop-environment zsh --login
+  tmux new-session -s desktop-environment zsh --login
