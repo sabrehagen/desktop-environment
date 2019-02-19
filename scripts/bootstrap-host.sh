@@ -105,5 +105,8 @@ gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git
 # Manually execute startup script to simulate host startup
 gosu $HOST_USER $HOST_HOME/.config/scripts/startup.sh
 
+# Ensure the container user has ownership of the volumes before starting
+$REPO_ROOT/scripts/bootstrap-volumes.sh
+
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh

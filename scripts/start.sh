@@ -3,9 +3,6 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 # Export desktop environment shell configuration
 export $($REPO_ROOT/scripts/environment.sh)
 
-# Ensure the container user has ownership of the volumes before starting
-$REPO_ROOT/scripts/bootstrap-volumes.sh
-
 docker run \
   --cap-add SYS_PTRACE \
   --detach \
