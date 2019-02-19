@@ -11,7 +11,7 @@ On a clean install of Ubuntu 18.10+ run as `root`:
 git clone https://github.com/sabrehagen/desktop-environment
 
 # Start desktop environment
-desktop-environment/scripts/bootstrap-host.sh
+desktop-environment/scripts/bootstrap.sh
 ```
 
 ## Forking

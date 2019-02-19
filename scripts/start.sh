@@ -61,4 +61,5 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 ru
 # Start desktop services
 docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/keychain
 docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/rescuetime
+docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/sshd
 docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/tmux

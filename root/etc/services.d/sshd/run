@@ -1,0 +1,8 @@
+#!/usr/bin/execlineb -P
+
+# Make sshd privilege separation directory
+foreground { s6-mkdir -p -m 750 /var/run/sshd }
+fdmove -c 2 1
+
+# Run ssh in non-daemon mode
+if { /usr/sbin/sshd -t } /usr/sbin/sshd -D -e
