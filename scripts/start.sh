@@ -20,6 +20,7 @@ docker run \
   --group-add audio \
   --group-add docker \
   --group-add video \
+  --hostname $DESKTOP_ENVIRONMENT_CONTAINER \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --rm \
