@@ -66,6 +66,9 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 RUN yarn global add \
   http-server
 
+# SSH daemon config
+RUN echo 'ListenAddress 0.0.0.0\nPort 8022' > /etc/ssh/sshd_config
+
 # Container user home directories
 ENV BASE_USER stemn
 ENV USER jackson
