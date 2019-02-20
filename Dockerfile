@@ -118,15 +118,16 @@ RUN rm -rf /$BASE_USER
 RUN chown -R $USER:$USER /$USER
 
 # Clone dotfiles configuration
-RUN gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-alpine.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-code.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-ssh.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-x11.git && \
-  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
+RUN gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-alpine.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-code.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-musikcube.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-ssh.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-vlc.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-x11.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-zsh.git & \
+  wait
 
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
