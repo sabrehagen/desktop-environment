@@ -51,7 +51,7 @@ sh -c "$(curl -fsSL get.docker.com)" && \
   usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Install alacritty
-wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.8/Alacritty-v0.2.8_amd64.deb && \
+wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
