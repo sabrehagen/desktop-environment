@@ -70,7 +70,7 @@ RUN yarn global add \
 ENV S6_LOGGING 1
 
 # SSH daemon config
-RUN echo 'ListenAddress 0.0.0.0\nPort 8022' > /etc/ssh/sshd_config
+RUN echo 'ListenAddress 0.0.0.0\nPort 22' > /etc/ssh/sshd_config
 
 # Container user home directories
 ENV BASE_USER stemn
