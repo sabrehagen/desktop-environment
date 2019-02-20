@@ -120,6 +120,7 @@ RUN gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git && 
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-code.git && \
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-musikcube.git && \
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git && \
+  gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-ssh.git && \
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-vlc.git && \
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-x11.git && \
   gosu $USER vcsh clone git://github.com/sabrehagen/dotfiles-zsh.git
