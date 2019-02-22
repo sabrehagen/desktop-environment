@@ -109,13 +109,6 @@ RUN usermod \
 # Add user configuration files
 COPY .motd $HOME
 
-# Keep desired base user configuration files
-RUN cp /$BASE_USER/home/.gitconfig $HOME
-RUN cp /$BASE_USER/home/.tmux.conf $HOME
-RUN cp /$BASE_USER/home/.zlogin $HOME
-RUN cp /$BASE_USER/home/.zshenv $HOME/.zshenv.base
-RUN cp /$BASE_USER/home/.zshrc $HOME
-
 # Remove remaining base user files
 RUN rm -rf /$BASE_USER
 
@@ -126,10 +119,12 @@ RUN chown -R $USER:$USER /$USER
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-vlc.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
