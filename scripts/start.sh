@@ -65,7 +65,7 @@ $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/sshd
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty
+$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
 
 # Run user startup script
