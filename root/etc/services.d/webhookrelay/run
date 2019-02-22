@@ -1,0 +1,4 @@
+#!/usr/bin/execlineb -P
+
+# Start webhookrelay tunnel as jackson
+gosu jackson relay connect --name $HOSTNAME localhost:8022
