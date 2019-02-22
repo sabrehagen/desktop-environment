@@ -2,7 +2,7 @@ FROM stemn/development-environment:latest
 USER root
 
 # Install user utilities
-RUN apt-get update -qq && apt-get install -qq --fix-missing \
+RUN apt-get update -qq && apt-get install -qq --fix-broken \
   acpi \
   alpine \
   alsa-utils \
@@ -35,6 +35,17 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
+# Install polo
+RUN wget -O polo.deb -nv https://github.com/teejee2008/polo/releases/download/v18.8-beta/polo-file-manager-v18.8.2-amd64.deb && \
+  dpkg -i polo.deb || apt-get install -qq --fix-broken && \
+  rm polo.deb
+
+# Install vs code
+RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
+  apt-get install -qq ./code.deb && \
+  rm code.deb && \
+  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
+
 # Install chrome
 RUN apt-get update -qq && apt-get install -qq \
   apt-transport-https \
@@ -56,12 +67,6 @@ RUN apt-get update -qq && apt-get install -qq \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
-
-# Install vs code
-RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
-  rm code.deb && \
-  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils # vs live share dependencies
 
 # Install yarn utilities
 RUN yarn global add \
