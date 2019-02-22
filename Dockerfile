@@ -124,6 +124,7 @@ RUN chown -R $USER:$USER /$USER
 RUN gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-alacritty.git & \
   gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-alpine.git & \
   gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-code.git & \
+  gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-mime.git & \
   gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-musikcube.git & \
   gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-scripts.git & \
   gosu $USER vcsh clone https://github.com/sabrehagen/dotfiles-ssh.git & \
