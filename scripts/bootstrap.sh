@@ -108,5 +108,8 @@ gosu $HOST_USER $HOST_HOME/.config/scripts/startup.sh
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/scripts/bootstrap-volumes.sh
 
+# Make logs directory
+mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
+
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh

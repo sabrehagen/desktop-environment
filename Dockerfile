@@ -3,6 +3,7 @@ USER root
 
 # Install user utilities
 RUN apt-get update -qq && apt-get install -qq --fix-missing \
+  acpi \
   alpine \
   alsa-utils \
   arandr \
