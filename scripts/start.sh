@@ -11,13 +11,11 @@ docker run \
   --device /dev/usb \
   --device /dev/video0 \
   --device /dev/bus/usb \
-  --env DBUS_SESSION_BUS_ADDRESS \
   --env DISPLAY=${DISPLAY-:0} \
-  --env XAUTHORITY \
   --group-add audio \
   --group-add docker \
   --group-add video \
-  --hostname $DESKTOP_ENVIRONMENT_CONTAINER-$HOSTNAME \
+  --hostname $DESKTOP_ENVIRONMENT_USER-$DESKTOP_ENVIRONMENT_CONTAINER-$(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --publish 22 \
@@ -27,7 +25,6 @@ docker run \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
-  --volume /var/run/dbus:/var/run/dbus \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume $DESKTOP_ENVIRONMENT_HOME/.config/alacritty:$DESKTOP_ENVIRONMENT_HOME/.config/alacritty \
