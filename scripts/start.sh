@@ -60,10 +60,10 @@ docker run \
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
-$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/keychain
-$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/rescuetime
-$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/sshd
-$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/tmux
+$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
+$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
+$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/sshd
+$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux
 
 # Manually start services whilst s6 issue persists
-$REPO_ROOT/scripts/exec.sh gosu "jackson tmux new-session -d -s desktop-environment"
+$REPO_ROOT/scripts/exec.sh tmux new-session -d -s desktop-environment zsh --login
