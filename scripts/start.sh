@@ -15,7 +15,7 @@ docker run \
   --group-add audio \
   --group-add docker \
   --group-add video \
-  --hostname $DESKTOP_ENVIRONMENT_USER-$DESKTOP_ENVIRONMENT_CONTAINER-$(hostname) \
+  --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER-$(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --publish 22 \
