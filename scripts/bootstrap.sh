@@ -24,6 +24,7 @@ apt-get update -qq && \
   curl \
   gosu \
   sudo \
+  tilda \
   vcsh \
   xclip \
   zsh
@@ -111,10 +112,8 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-aut
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-kde.git
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tilda.git
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
-
-# Manually execute startup script to simulate host startup
-gosu $HOST_USER $HOST_HOME/.config/scripts/startup.sh
 
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/scripts/bootstrap-volumes.sh
