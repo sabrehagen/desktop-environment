@@ -10,6 +10,7 @@ RUN apt-get update -qq && apt-get install -qq --fix-missing \
   feh \
   numlockx \
   software-properties-common \
+  thunar \
   vcsh \
   vlc \
   x11-xkb-utils \
