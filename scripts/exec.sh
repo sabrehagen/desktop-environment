@@ -6,5 +6,4 @@ export $($REPO_ROOT/scripts/environment.sh)
 docker exec \
   --interactive \
   --tty \
-  --user $DESKTOP_ENVIRONMENT_USER \
   $DESKTOP_ENVIRONMENT_CONTAINER zsh -c "$*"

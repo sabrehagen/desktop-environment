@@ -20,7 +20,7 @@ docker run \
   --hostname $DESKTOP_ENVIRONMENT_CONTAINER-$HOSTNAME \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
-  --port 22 \
+  --publish 22 \
   --rm \
   --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
   --tty \
@@ -60,7 +60,7 @@ docker run \
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
-docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/keychain
-docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/rescuetime
-docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/sshd
-docker exec $DESKTOP_ENVIRONMENT_CONTAINER s6-svc -u /run/s6/services/tmux
+$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/keychain
+$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/rescuetime
+$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/sshd
+$REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/tmux
