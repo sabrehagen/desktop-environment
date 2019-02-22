@@ -64,3 +64,6 @@ $REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/keychain
 $REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/rescuetime
 $REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/sshd
 $REPO_ROOT/scripts/exec.sh s6-svc -u /run/s6/services/tmux
+
+# Manually start services whilst s6 issue persists
+$REPO_ROOT/scripts/exec.sh gosu "jackson tmux new-session -d -s desktop-environment"
