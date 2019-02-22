@@ -27,6 +27,11 @@ apt-get update -qq && \
   vcsh \
   xclip
 
+# Install KDE backports
+add-apt-repository ppa:kubuntu-ppa/backports && \
+  apt-get update && \
+  apt-get upgrade -qq
+
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 

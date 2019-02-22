@@ -34,11 +34,6 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
-# Install polo
-RUN wget -O polo.deb -nv https://github.com/teejee2008/polo/releases/download/v18.8-beta/polo-file-manager-v18.8.2-amd64.deb && \
-  dpkg -i polo.deb || apt-get install -qq --fix-broken && \
-  rm polo.deb
-
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
