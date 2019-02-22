@@ -26,6 +26,7 @@ apt-get update -qq && \
   sudo \
   tilda \
   vcsh \
+  wicd-curses \
   xclip \
   zsh
 
