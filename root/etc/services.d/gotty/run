@@ -1,4 +1,4 @@
 #!/usr/bin/execlineb -P
 
 # Start gotty server as jackson
-gosu jackson gotty --permit-write --port 8022 tmux new-session -s gotty-$(date +%s) -t gotty
+gosu jackson gotty --permit-write --port 8022 zsh -c 'tmux new-session -s gotty-$(date +%s) -t gotty'
