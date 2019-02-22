@@ -25,12 +25,8 @@ apt-get update -qq && \
   gosu \
   sudo \
   vcsh \
-  xclip
-
-# Install KDE backports
-add-apt-repository ppa:kubuntu-ppa/backports && \
-  apt-get update && \
-  apt-get upgrade -qq
+  xclip \
+  zsh
 
 # Enable password-less sudo for the sudo group
 echo "%sudo ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
@@ -59,6 +55,14 @@ sh -c "$(curl -fsSL get.docker.com)" && \
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
+
+# Install KDE backports
+add-apt-repository ppa:kubuntu-ppa/backports && \
+  apt-get update && \
+  apt-get upgrade -qq
+
+# Install antigen
+curl -L git.io/antigen > /usr/local/bin/antigen.zsh
 
 # Make gosu accessible to all users
 chown :users /usr/sbin/gosu && \
@@ -102,10 +106,12 @@ echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /e
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
 # Install dotfiles configuration for host user
-gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-alacritty.git
-gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-autostart.git
-gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-kde.git
-gosu $HOST_USER vcsh clone git://github.com/sabrehagen/dotfiles-scripts.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autostart.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-kde.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git
+gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Manually execute startup script to simulate host startup
 gosu $HOST_USER $HOST_HOME/.config/scripts/startup.sh
