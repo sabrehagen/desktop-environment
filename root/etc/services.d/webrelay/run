@@ -1,4 +1,4 @@
 #!/usr/bin/execlineb -P
 
 # Start webrelay tunnel as jackson
-gosu jackson relay connect --name $HOSTNAME localhost:8022
+gosu jackson relay connect -s $HOSTNAME --crypto full http://localhost:8022
