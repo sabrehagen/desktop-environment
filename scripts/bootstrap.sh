@@ -107,6 +107,9 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
+# Make desktop environment logs directory
+mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
+
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
@@ -128,9 +131,6 @@ $REPO_ROOT/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/scripts/bootstrap-volumes.sh
-
-# Make logs directory
-mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
