@@ -61,8 +61,8 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Install KDE backports
-add-apt-repository ppa:kubuntu-ppa/backports && \
+# Install kde backports
+add-apt-repository --yes ppa:kubuntu-ppa/backports && \
   apt-get update && \
   apt-get upgrade -qq
 
@@ -70,7 +70,7 @@ add-apt-repository ppa:kubuntu-ppa/backports && \
 curl -L git.io/antigen > /usr/local/bin/antigen.zsh
 
 # Install jump directory navigator
-RUN wget -nv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
+wget -nv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
 
