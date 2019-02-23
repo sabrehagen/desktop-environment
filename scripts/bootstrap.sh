@@ -25,6 +25,7 @@ apt-get update -qq && \
   apt-get install -qq \
   curl \
   gosu \
+  keychain \
   sudo \
   tilda \
   vcsh \
