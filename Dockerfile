@@ -77,6 +77,9 @@ ENV BASE_USER stemn
 ENV USER jackson
 ENV HOME /$USER/home
 
+# Remove base user files
+RUN rm -rf /$BASE_USER
+
 # Make the user's workspace directory
 RUN mkdir -p $HOME
 
@@ -106,9 +109,6 @@ RUN usermod \
 
 # Add user configuration files
 COPY .motd $HOME
-
-# Remove base user files
-RUN rm -rf /$BASE_USER
 
 # Take ownership of the desktop user's folder
 RUN chown -R $USER:$USER /$USER
