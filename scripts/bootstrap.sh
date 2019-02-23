@@ -121,6 +121,9 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scr
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tilda.git
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
+# Ensure the desktop environment container exists before starting
+$REPO_ROOT/scripts/build.sh
+
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/scripts/bootstrap-volumes.sh
 
