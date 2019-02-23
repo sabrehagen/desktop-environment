@@ -43,6 +43,9 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
+# Start the desktop environment as the host user on system start
+echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
+
 # Remove existing group with id 999 if it is not the docker group
 getent group 999 | \
   grep -v docker | \
@@ -69,11 +72,7 @@ curl -L git.io/antigen > /usr/local/bin/antigen.zsh
 # Install jump directory navigator
 RUN wget -nv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
-rm jump.deb
-
-# Make gosu accessible to all users
-chown :users /usr/sbin/gosu && \
-  chmod +s /usr/sbin/gosu
+  rm jump.deb
 
 # Allow docker containers to access the host's X server
 xhost local:docker
@@ -106,11 +105,12 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
-# Start the desktop environment as the host user on system start
-echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
-
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
+
+# Make gosu accessible to the host user for running desktop environment scripts
+chown :$HOST_USER /usr/sbin/gosu && \
+  chmod +s /usr/sbin/gosu
 
 # Install dotfiles configuration for host user
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git
