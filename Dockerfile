@@ -3,7 +3,7 @@ USER root
 
 # Install user utilities
 RUN apt-get update -qq && \
-  apt-get install -qq --fix-broken \
+  apt-get install -qq --fix-missing \
   alpine \
   alsa-utils \
   arandr \
