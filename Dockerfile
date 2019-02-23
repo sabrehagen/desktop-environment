@@ -2,7 +2,8 @@ FROM stemn/development-environment:latest
 USER root
 
 # Install user utilities
-RUN apt-get update -qq && apt-get install -qq --fix-broken \
+RUN apt-get update -qq && \
+  apt-get install -qq --fix-broken \
   alpine \
   alsa-utils \
   arandr \
@@ -71,9 +72,6 @@ RUN yarn global add \
 # System environment configuration
 ENV S6_LOGGING 1
 
-# SSH daemon config
-RUN echo 'ListenAddress 0.0.0.0\nPort 22' > /etc/ssh/sshd_config
-
 # Container user home directories
 ENV BASE_USER stemn
 ENV USER jackson
@@ -109,7 +107,7 @@ RUN usermod \
 # Add user configuration files
 COPY .motd $HOME
 
-# Remove remaining base user files
+# Remove base user files
 RUN rm -rf /$BASE_USER
 
 # Take ownership of the desktop user's folder
