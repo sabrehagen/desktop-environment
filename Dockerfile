@@ -1,6 +1,8 @@
 FROM stemn/development-environment:latest
 USER root
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Install user utilities
 RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
