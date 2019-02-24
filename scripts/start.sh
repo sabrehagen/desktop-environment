@@ -11,6 +11,7 @@ docker run \
   --device /dev/snd \
   --device /dev/usb \
   --device /dev/video0 \
+  --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=${DISPLAY-:0} \
   --group-add audio \
   --group-add docker \
@@ -57,12 +58,12 @@ docker run \
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
+# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
 
 # Run user startup script
 $REPO_ROOT/scripts/exec.sh $DESKTOP_ENVIRONMENT_HOME/.config/scripts/startup.sh
