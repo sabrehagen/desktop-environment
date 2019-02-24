@@ -60,7 +60,6 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 ru
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/sshd
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
 $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
