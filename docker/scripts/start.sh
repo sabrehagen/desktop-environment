@@ -1,7 +1,7 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/docker/scripts/environment.sh)
 
 docker run \
   --cap-add SYS_PTRACE \
@@ -11,6 +11,7 @@ docker run \
   --device /dev/snd \
   --device /dev/usb \
   --device /dev/video0 \
+  --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=${DISPLAY-:0} \
   --group-add audio \
   --group-add docker \
@@ -19,7 +20,7 @@ docker run \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --rm \
-  --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
+  --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
@@ -33,6 +34,8 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CACHE_SECRETS:$DESKTOP_ENVIRONMENT_CACHE_SECRETS \
   --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \
   --volume DESKTOP_ENVIRONMENT_CACHE_STEMN:$DESKTOP_ENVIRONMENT_CACHE_STEMN \
+  --volume DESKTOP_ENVIRONMENT_CACHE_VCSH:$DESKTOP_ENVIRONMENT_CACHE_VCSH \
+  --volume DESKTOP_ENVIRONMENT_CACHE_VCSH_PRIVATE:$DESKTOP_ENVIRONMENT_CACHE_VCSH_PRIVATE \
   --volume DESKTOP_ENVIRONMENT_CACHE_YARN:$DESKTOP_ENVIRONMENT_CACHE_YARN \
   --volume DESKTOP_ENVIRONMENT_CACHE_ZOOM:$DESKTOP_ENVIRONMENT_CACHE_ZOOM \
   --volume DESKTOP_ENVIRONMENT_CACHE_ZSH:$DESKTOP_ENVIRONMENT_CACHE_ZSH \
@@ -41,7 +44,6 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_STATE_GITHUB:$DESKTOP_ENVIRONMENT_STATE_GITHUB \
   --volume DESKTOP_ENVIRONMENT_STATE_JUMP:$DESKTOP_ENVIRONMENT_STATE_JUMP \
   --volume DESKTOP_ENVIRONMENT_STATE_MUSIKCUBE:$DESKTOP_ENVIRONMENT_STATE_MUSIKCUBE \
-  --volume DESKTOP_ENVIRONMENT_STATE_VCSH:$DESKTOP_ENVIRONMENT_STATE_VCSH \
   --volume DESKTOP_ENVIRONMENT_STATE_ZOOM:$DESKTOP_ENVIRONMENT_STATE_ZOOM \
   --volume DESKTOP_ENVIRONMENT_USER_DOCUMENTS:$DESKTOP_ENVIRONMENT_USER_DOCUMENTS \
   --volume DESKTOP_ENVIRONMENT_USER_DOWNLOADS:$DESKTOP_ENVIRONMENT_USER_DOWNLOADS \
@@ -57,13 +59,9 @@ docker run \
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/sshd
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
-$REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
-
-# Run user startup script
-$REPO_ROOT/scripts/exec.sh $DESKTOP_ENVIRONMENT_HOME/.config/scripts/startup.sh
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay

@@ -4,10 +4,10 @@ if [ $USER != "root" ]; then
   exit 1
 fi
 
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/docker/scripts/environment.sh)
 
 # Fork setup to desktop environment global location immediately
 if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
@@ -129,10 +129,10 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-til
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Ensure the desktop environment container exists before starting
-$REPO_ROOT/scripts/build.sh
+$REPO_ROOT/docker/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
-$REPO_ROOT/scripts/bootstrap-volumes.sh
+$REPO_ROOT/docker/scripts/bootstrap-volumes.sh
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
