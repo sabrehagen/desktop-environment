@@ -7,7 +7,6 @@ $REPO_ROOT/scripts/build.sh
 $REPO_ROOT/scripts/pre-clean.sh
 
 # Reset the desktop environment state
-$REPO_ROOT/scripts/stop.sh
 $REPO_ROOT/scripts/clean.sh
 $REPO_ROOT/scripts/start.sh
 $REPO_ROOT/scripts/alacritty.sh
