@@ -25,6 +25,7 @@ apt-get update -qq && \
   apt-get install -qq \
   curl \
   gosu \
+  keychain \
   sudo \
   tilda \
   vcsh \
@@ -54,7 +55,12 @@ getent group 999 | \
   cut -d: -f1 | \
   xargs groupdel
 
-# Install Docker
+# Install kde backports
+add-apt-repository --yes ppa:kubuntu-ppa/backports && \
+  apt-get update && \
+  apt-get upgrade -qq
+
+# Install docker
 sh -c "$(curl -fsSL get.docker.com)" && \
   usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
@@ -63,18 +69,18 @@ wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Install kde backports
-add-apt-repository --yes ppa:kubuntu-ppa/backports && \
-  apt-get update && \
-  apt-get upgrade -qq
-
-# Install antigen
-curl -L git.io/antigen > /usr/local/bin/antigen.zsh
+# Install bat
+wget -O bat.deb -nv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
+  dpkg -i bat.deb && \
+  rm bat.deb
 
 # Install jump directory navigator
 wget -nv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
+
+# Install antigen
+curl -L git.io/antigen > /usr/local/bin/antigen.zsh
 
 # Allow docker containers to access the host's X server
 xhost local:docker
@@ -107,6 +113,9 @@ usermod \
   --groups docker,sudo \
   $HOST_USER
 
+# Make desktop environment logs directory
+mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
+
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER
 
@@ -128,9 +137,6 @@ $REPO_ROOT/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/scripts/bootstrap-volumes.sh
-
-# Make logs directory
-mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
