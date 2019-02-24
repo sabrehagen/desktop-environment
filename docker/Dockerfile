@@ -35,10 +35,6 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
-# Install gotty-client
-RUN wget -O gotty-client.deb -nv https://github.com/moul/gotty-client/releases/download/v1.6.1/gotty-client_1.6.1_amd64.deb && \
-  dpkg -i gotty-client.deb
-
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
