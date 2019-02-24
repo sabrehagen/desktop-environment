@@ -31,6 +31,7 @@ apt-get update -qq && \
   vcsh \
   wicd-curses \
   xclip \
+  xserver-xephyr \
   zsh
 
 # Enable password-less sudo for the sudo group
@@ -54,11 +55,6 @@ getent group 999 | \
   grep -v docker | \
   cut -d: -f1 | \
   xargs groupdel
-
-# Install kde backports
-add-apt-repository --yes ppa:kubuntu-ppa/backports && \
-  apt-get update && \
-  apt-get upgrade -qq
 
 # Install docker
 sh -c "$(curl -fsSL get.docker.com)" && \

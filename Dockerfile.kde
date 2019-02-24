@@ -1,0 +1,16 @@
+# FROM sabrehagen/desktop-environment:master
+FROM ubuntu:18.04
+
+RUN apt-get update -qq && \
+  apt-get install -y curl gnupg2
+
+RUN echo 'deb http://archive.neon.kde.org/dev/stable bionic main\ndeb-src http://archive.neon.kde.org/dev/stable bionic main' > /etc/apt/sources.list.d/neon.list && \
+  curl -sSL https://raw.githubusercontent.com/KDE/docker-neon/Neon/stable/public.key | apt-key add - && \
+  apt-get update -qq && \
+  apt-get install -y --fix-broken --fix-missing \
+  neon-desktop \
+  plasma-workspace
+
+
+ENV DISPLAY=:1
+CMD startkde
