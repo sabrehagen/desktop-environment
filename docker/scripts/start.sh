@@ -1,7 +1,7 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/docker/scripts/environment.sh)
 
 docker run \
   --cap-add SYS_PTRACE \
@@ -20,7 +20,7 @@ docker run \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --rm \
-  --security-opt seccomp:$REPO_ROOT/config/chrome/chrome.json \
+  --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
   --volume /etc/localtime:/etc/localtime:ro \
@@ -59,9 +59,9 @@ docker run \
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
-# $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay

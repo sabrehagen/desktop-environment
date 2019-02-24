@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Desktop environment container user
 DESKTOP_ENVIRONMENT_USER=jackson
@@ -7,7 +7,7 @@ DESKTOP_ENVIRONMENT_HOME=/$DESKTOP_ENVIRONMENT_USER/home
 DESKTOP_ENVIRONMENT_REGISTRY=sabrehagen
 
 # Desktop environment repository configuration
-echo DESKTOP_ENVIRONMENT_BRANCH=$(git --git-dir $REPO_ROOT/.git rev-parse --abbrev-ref HEAD)
+echo DESKTOP_ENVIRONMENT_BRANCH=$(git --git-dir $REPO_ROOT/docker/.git rev-parse --abbrev-ref HEAD)
 echo DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER
 echo DESKTOP_ENVIRONMENT_HOME=$DESKTOP_ENVIRONMENT_HOME
 echo DESKTOP_ENVIRONMENT_USER=$DESKTOP_ENVIRONMENT_USER

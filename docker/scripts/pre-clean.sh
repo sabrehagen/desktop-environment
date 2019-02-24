@@ -1,7 +1,7 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Check for changes to vcsh repositories before removing home volume
-$REPO_ROOT/scripts/exec.sh "vcsh status | grep -qE \"^ M \" -"
+$REPO_ROOT/docker/scripts/exec.sh "vcsh status | grep -qE \"^ M \" -"
 DOTFILES_CHANGED=$?
 
 if [ "$DOTFILES_CHANGED" = "0" ]; then

@@ -1,7 +1,7 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Clean secrets and home
-$REPO_ROOT/scripts/clean-secrets.sh
+$REPO_ROOT/docker/scripts/clean-secrets.sh
 
 # Remove volumes that can be recreated from scratch, but require manual configuration in app
 docker volume rm DESKTOP_ENVIRONMENT_STATE_CHROME

@@ -1,7 +1,7 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/scripts/environment.sh)
+export $($REPO_ROOT/docker/scripts/environment.sh)
 
 DESKTOP_ENVIRONMENT_VOLUMES=$(cat scripts/environment.sh | grep -E "CACHE|STATE|USER_" | cut -b 6- | cut -f 1 -d =)
 
