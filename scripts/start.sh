@@ -64,6 +64,3 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 ru
 # $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
 # $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
 # $REPO_ROOT/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
-
-# Run user startup script
-$REPO_ROOT/scripts/exec.sh $DESKTOP_ENVIRONMENT_HOME/.config/scripts/startup.sh
