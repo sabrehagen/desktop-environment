@@ -24,6 +24,7 @@ fi
 apt-get update -qq && \
   apt-get install -qq \
   curl \
+  docker.io \
   docker-compose \
   gosu \
   keychain \
@@ -50,20 +51,20 @@ echo '* hard nofile 1000000' >> /etc/security/limits.conf
 # Start the desktop environment as the host user on system start
 echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/start.sh" >> /etc/crontab
 
-# Remove existing group with id 999 if it is not the docker group
-getent group 999 | \
+# Remove existing group with our docker group id that is not the docker group
+DOCKER_GID=999
+getent group $DOCKER_GID | \
   grep -v docker | \
   cut -d: -f1 | \
-  xargs groupdel
+  xargs groupdel 2>/dev/null
+
+# Create the docker group
+groupadd --gid $DOCKER_GID docker
 
 # Install kde backports
 add-apt-repository --yes ppa:kubuntu-ppa/backports && \
   apt-get update && \
   apt-get upgrade -qq
-
-# Install docker
-sh -c "$(curl -fsSL get.docker.com)" && \
-  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Install alacritty
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
@@ -95,11 +96,6 @@ HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 # Make the host user directory
 mkdir -p /$HOST_USER
 
-# Create the host user group
-groupadd \
-  --gid $HOST_USER_ID \
-  $HOST_USER
-
 # Create the host user
 useradd \
   --home-dir $HOST_HOME \
@@ -108,7 +104,7 @@ useradd \
   $HOST_USER && \
   passwd $HOST_USER
 
-# Add the host user to the docker group
+# Give the host user access to required tools
 usermod \
   --append \
   --groups docker,sudo \
