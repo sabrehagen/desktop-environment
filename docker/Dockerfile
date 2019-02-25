@@ -35,6 +35,11 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
+# Install traefik
+RUN wget -O traefik.deb -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
+  dpkg -i traefik.deb \
+  rm traefik.deb
+
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \

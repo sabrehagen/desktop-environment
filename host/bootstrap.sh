@@ -4,7 +4,7 @@ if [ $USER != "root" ]; then
   exit 1
 fi
 
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(realpath $0))/..
 
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
@@ -16,7 +16,7 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
   # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/bootstrap.sh
+  $DESKTOP_ENVIRONMENT_REPOSITORY/host/bootstrap.sh
   exit 0
 fi
 
@@ -24,6 +24,7 @@ fi
 apt-get update -qq && \
   apt-get install -qq \
   curl \
+  docker-compose \
   gosu \
   keychain \
   sudo \
