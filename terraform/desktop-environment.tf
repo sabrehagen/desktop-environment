@@ -40,12 +40,14 @@ resource "google_compute_instance" "desktop-environment" {
   provisioner "remote-exec" {
 
     inline = [
-      "# Install docker",
-      "apt-get update -qq && apt-get install -qq docker.io",
+      "# Start the X server",
 
-      "# Make the docker socket accessible to the docker group",
-      "chown :999 /var/run/docker.sock",
+      "# Clone and start the desktop environment",
+      "git clone https://github.com/sabrehagen/desktop-environment",
+      "desktop-environment/host/bootstrap.sh",
 
+      "# Expose X server publicly with nginx",
+      "desktop-environment/docker/scripts/exec.sh ~/.config/scripts/traefik.sh",
     ]
   }
 

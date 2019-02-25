@@ -24,7 +24,7 @@ fi
 apt-get update -qq && \
   apt-get install -qq \
   curl \
-  docker.io \
+  docker-compose \
   gosu \
   keychain \
   sudo \
@@ -60,6 +60,10 @@ getent group 999 | \
 add-apt-repository --yes ppa:kubuntu-ppa/backports && \
   apt-get update && \
   apt-get upgrade -qq
+
+# Install docker
+sh -c "$(curl -fsSL get.docker.com)" && \
+  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Install alacritty
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
@@ -133,7 +137,7 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh
 $REPO_ROOT/docker/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
-$REPO_ROOT/docker/scripts/take-ownership.sh
+$REPO_ROOT/docker/scripts/bootstrap-volumes.sh
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/recycle.sh
