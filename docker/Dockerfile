@@ -17,7 +17,7 @@ RUN apt-get update -qq && \
   youtube-dl
 
 # Install s6 init system
-RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
+RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
   tar -C / -xzf -
 
 # Install resucetime time tracker
