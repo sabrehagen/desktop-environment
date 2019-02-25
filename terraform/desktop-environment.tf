@@ -28,7 +28,9 @@ resource "google_compute_instance" "desktop-environment" {
   }
 
   network_interface {
-    access_config { } # Creates ephemeral IP
+    access_config {
+      nat_ip = "35.201.14.140"
+    }
     subnetwork = "${google_compute_subnetwork.desktop-environment.name}"
   }
 

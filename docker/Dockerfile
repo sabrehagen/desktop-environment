@@ -17,7 +17,7 @@ RUN apt-get update -qq && \
   youtube-dl
 
 # Install s6 init system
-RUN curl -L https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
+RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
   tar -C / -xzf -
 
 # Install resucetime time tracker
@@ -36,9 +36,8 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   rm musikcube.deb
 
 # Install traefik
-RUN wget -O traefik.deb -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
-  dpkg -i traefik.deb \
-  rm traefik.deb
+RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
+  chmod +x /usr/local/bin/traefik
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
@@ -111,9 +110,6 @@ RUN usermod \
   --append \
   --groups audio,chrome,video \
   $USER
-
-# Add user configuration files
-COPY .motd $HOME
 
 # Take ownership of the desktop user's folder
 RUN chown -R $USER:$USER /$USER
