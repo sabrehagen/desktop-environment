@@ -4,7 +4,7 @@ if [ $USER != "root" ]; then
   exit 1
 fi
 
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(realpath $0))/..
 
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
@@ -16,7 +16,7 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
   # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/bootstrap.sh
+  $DESKTOP_ENVIRONMENT_REPOSITORY/host/bootstrap.sh
   exit 0
 fi
 
@@ -136,7 +136,7 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh
 $REPO_ROOT/docker/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
-$REPO_ROOT/docker/scripts/bootstrap-volumes.sh
+$REPO_ROOT/docker/scripts/take-ownership.sh
 
 # Recycle the desktop environment
 $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/recycle.sh
