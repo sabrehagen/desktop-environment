@@ -24,6 +24,7 @@ fi
 apt-get update -qq && \
   apt-get install -qq \
   curl \
+  docker.io \
   gosu \
   keychain \
   sudo \
@@ -59,10 +60,6 @@ getent group 999 | \
 add-apt-repository --yes ppa:kubuntu-ppa/backports && \
   apt-get update && \
   apt-get upgrade -qq
-
-# Install docker
-sh -c "$(curl -fsSL get.docker.com)" && \
-  usermod -aG docker $DESKTOP_ENVIRONMENT_USER
 
 # Install alacritty
 wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \

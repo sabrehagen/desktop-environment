@@ -107,9 +107,6 @@ RUN usermod \
   --groups audio,chrome,video \
   $USER
 
-# Add user configuration files
-COPY .motd $HOME
-
 # Take ownership of the desktop user's folder
 RUN chown -R $USER:$USER /$USER
 
