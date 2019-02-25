@@ -37,39 +37,15 @@ resource "google_compute_instance" "desktop-environment" {
     owner-name = "${replace(lower(var.owner_name), "/[^a-z0-9-_]/", "")}"
   }
 
-  metadata {
-    ssh-keys = "root:${file("${var.public_key_path}")}"
-  }
-
   provisioner "remote-exec" {
-    connection {
-      type = "ssh"
-      user = "root"
-      private_key = "${file("${var.private_key_path}")}"
-      agent = false
-    }
 
     inline = [
       "# Install docker",
       "apt-get update -qq && apt-get install -qq docker.io",
 
-      "# Supply docker daemon configuration using stemn certificates",
-      "echo '${file("${var.docker_config_path}")}' > /etc/docker/daemon.json",
-      "echo '${file("${var.tls_ca_cert_path}")}' > /etc/docker/ca.crt",
-      "echo '${file("${var.tls_cert_path}")}' > /etc/docker/server.crt",
-      "echo '${file("${var.tls_key_path}")}' > /etc/docker/server.key",
-
-      "# Override default docker daemon config",
-      "mkdir -p /etc/systemd/system/docker.service.d",
-      "printf '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' > /etc/systemd/system/docker.service.d/override.conf",
-      "systemctl daemon-reload && service docker restart",
-
       "# Make the docker socket accessible to the docker group",
       "chown :999 /var/run/docker.sock",
 
-       "# Supply stemn certificates to ubuntu certificate store",
-      "echo '${file("${var.tls_ca_cert_path}")}' > /usr/local/share/ca-certificates/desktop-environment.crt",
-      "update-ca-certificates",
     ]
   }
 
@@ -90,7 +66,6 @@ resource "google_compute_firewall" "desktop-environment" {
 
   allow {
     ports = [
-      "80",
       "443",
     ]
     protocol = "tcp"

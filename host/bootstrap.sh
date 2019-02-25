@@ -16,7 +16,7 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
   # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/bootstrap.sh
+  $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/bootstrap.sh
   exit 0
 fi
 
@@ -47,7 +47,7 @@ echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
 # Start the desktop environment as the host user on system start
-echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/scripts/start.sh" >> /etc/crontab
+echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/start.sh" >> /etc/crontab
 
 # Remove existing group with id 999 if it is not the docker group
 getent group 999 | \
@@ -139,4 +139,4 @@ $REPO_ROOT/docker/scripts/build.sh
 $REPO_ROOT/docker/scripts/bootstrap-volumes.sh
 
 # Recycle the desktop environment
-$DESKTOP_ENVIRONMENT_REPOSITORY/scripts/recycle.sh
+$DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/recycle.sh
