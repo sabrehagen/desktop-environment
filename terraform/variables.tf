@@ -46,5 +46,5 @@ variable "tls_key_path" {
 }
 
 output "ip" {
-  value = "${google_compute_instance.development-environment.network_interface.0.access_config.0.nat_ip}"
+  value = "${google_compute_instance.desktop-environment.network_interface.0.access_config.0.nat_ip}"
 }
