@@ -17,11 +17,11 @@
         "# Install git",
         "apt-get update -qq && apt-get install -qq git",
 
-        "# Clone the desktop environment repository",
+        "# Clone the desktop environment",
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}/{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
 
-        "# Bootstrap the host",
-        "{{user `DESKTOP_ENVIRONMENT_HOST_REPOSITORY`}}/host/bootstrap.sh"
+        "# Start the desktop environment",
+        "{{user `DESKTOP_ENVIRONMENT_ENVIRONMENT_CONTAINER`}}/host/bootstrap.sh"
       ]
     }
   ]

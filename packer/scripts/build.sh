@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
@@ -11,11 +11,9 @@ docker run \
   --interactive \
   --rm \
   --tty \
-  --volume $DESKTOP_ENVIRONMENT_HOST_REPOSITORY:$DESKTOP_ENVIRONMENT_HOST_REPOSITORY \
-  --workdir $DESKTOP_ENVIRONMENT_HOST_REPOSITORY \
+  --volume $DESKTOP_ENVIRONMENT_HOST_REPOSITORY:$DESKTOP_ENVIRONMENT_HOST_REPOSITORY:ro \
   hashicorp/packer:light build \
   -force \
   -var DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER \
   -var DESKTOP_ENVIRONMENT_REGISTRY=$DESKTOP_ENVIRONMENT_REGISTRY \
-  -var DESKTOP_ENVIRONMENT_USER=$DESKTOP_ENVIRONMENT_USER \
-  packer/desktop-environment.json
+  $DESKTOP_ENVIRONMENT_HOST_REPOSITORY:packer/desktop-environment.json
