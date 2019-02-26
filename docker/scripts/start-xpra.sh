@@ -30,3 +30,6 @@ docker run \
 
 # Start a desktop environment attached to the xpra server display
 DISPLAY=$XPRA_DISPLAY $REPO_ROOT/docker/scripts/start.sh
+
+# Expose desktop environment publicly with traefik
+$REPO_ROOT/docker/scripts/traefik.sh
