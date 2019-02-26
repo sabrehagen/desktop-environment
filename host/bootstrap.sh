@@ -70,7 +70,7 @@ wget -nv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.2
   rm jump.deb
 
 # Install antigen
-curl -L git.io/antigen > /usr/local/bin/antigen.zsh
+curl -sSL git.io/antigen > /usr/local/bin/antigen.zsh
 
 # Allow docker containers to access the host's X server
 xhost local:docker
