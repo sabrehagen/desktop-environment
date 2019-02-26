@@ -6,11 +6,7 @@ export $($REPO_ROOT/docker/scripts/environment.sh)
 docker run \
   --cap-add SYS_PTRACE \
   --detach \
-  --device /dev/bus/usb \
-  --device /dev/dri \
   --device /dev/snd \
-  --device /dev/usb \
-  --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=${DISPLAY-:0} \
   --group-add audio \

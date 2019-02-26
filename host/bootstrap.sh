@@ -131,7 +131,8 @@ $REPO_ROOT/docker/scripts/take-ownership.sh
 
 # Start the environment on host startup
 if [ "$1" = "--xpra" ]; then
-  echo "@reboot $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle-xpra.sh" >> /etc/crontab
+  echo "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle-xpra.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
 else
-  echo "@reboot $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle.sh" >> /etc/crontab
+  echo "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
 fi
+
