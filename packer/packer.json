@@ -2,19 +2,18 @@
   "builders": [
     {
       "type": "googlecompute",
-      "account_file": "/stemn/credentials/development-environment.json",
       "source_image_family": "ubuntu-minimal-1810",
       "project_id": "stemnapp",
       "zone": "australia-southeast1-a",
-      "instance_name": "packer-development-environment-{{timestamp}}",
-      "image_name": "development-environment",
+      "instance_name": "packer-desktop-environment-{{timestamp}}",
+      "image_name": "desktop-environment",
       "ssh_username": "root"
     }
   ],
   "provisioners": [
     {
       "type": "file",
-      "source": "../docker/scripts/bootstrap.sh",
+      "source": "../host/bootstrap.sh",
       "destination": "/bootstrap.sh"
     },
     {
