@@ -1,9 +1,3 @@
-terraform {
-  backend "gcs" {
-    bucket = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}"
-  }
-}
-
 provider "google" {
   project = "${var.gcp_project}"
 }
