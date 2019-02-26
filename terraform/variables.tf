@@ -15,11 +15,6 @@ variable "gcp_project" {
   default = "stemnapp"
 }
 
-variable "gcp_credentials_path" {
-  description = "The path to the file containing credentials for accessing gcp."
-  default = "/stemn/credentials/development-environment.json"
-}
-
 variable "machine_region" {
   description = "The zone to create the machine in."
   default = "australia-southeast1"
