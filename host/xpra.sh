@@ -42,6 +42,8 @@ docker run \
   --detach \
   --env DISPLAY=$XPRA_DISPLAY \
   --name $XPRA_DESKTOP_ENVIRONMENT_CONTAINER \
+  --publish 80:80 \
+  --publish 443:443 \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volumes-from $XPRA_CONTAINER \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH
@@ -64,6 +66,8 @@ docker exec \
   --docker.endpoint=unix:///var/run/docker.sock \
   --docker.exposedbydefault=false \
   --docker.watch=true \
+  --entryPoints='Name:http Address::80'
+  --entryPoints='Name:https Address::443 TLS'
   --logLevel=info \
-  --web \
-  $TRAEFIK_ENTRYPOINT_HTTP $TRAEFIK_ENTRYPOINT_HTTPS
+  --web
+  # $TRAEFIK_ENTRYPOINT_HTTP $TRAEFIK_ENTRYPOINT_HTTPS
