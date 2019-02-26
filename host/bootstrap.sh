@@ -25,7 +25,6 @@ apt-get update -qq && \
   apt-get install -qq \
   curl \
   docker.io \
-  docker-compose \
   gosu \
   keychain \
   sudo \
@@ -141,6 +140,6 @@ if [ "$1" = "--start" ]; then
 fi
 
 # Start the X server in a cloud environment
-if [ "$1" = "--cloud" ]; then
-  $REPO_ROOT/host/xpra.sh
+if [ "$1" = "--start-xpra" ]; then
+  $REPO_ROOT/docker/scripts/start-xpra.sh
 fi
