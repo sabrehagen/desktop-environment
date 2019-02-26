@@ -3,11 +3,8 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
 
-# Kill all existing xpra services
+# Kill existing xpra server
 docker ps -a | grep xpra | cut -c 1-15 | xargs docker rm -f
-
-# Xpra client configuration
-DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-client
 
 # Xpra server configuration
 XPRA_DISPLAY=:14
@@ -27,10 +24,9 @@ docker run \
   --label traefik.port=$XPRA_WEB_PORT \
   --name $XPRA_SERVER_CONTAINER \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
-  --expose $XPRA_WEB_PORT \
   --rm \
+  --volume /tmp/.X11-unix:/tmp/.X11-unix \
   jare/x11-bridge:latest
 
-# Start a desktop environment attached to the xpra server
+# Start a desktop environment attached to the xpra server display
 DISPLAY=$XPRA_DISPLAY $REPO_ROOT/docker/scripts/start.sh
-  --volumes-from $XPRA_SERVER_CONTAINER \
