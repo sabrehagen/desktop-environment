@@ -20,6 +20,12 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY" ]; then
   exit 0
 fi
 
+# Conventional docker group id
+DOCKER_GID=999
+
+# Remove existing group with docker group id
+getent group $DOCKER_GID | sed 's;:.*;;' | xargs groupdel --force
+
 # Install utilities
 apt-get update -qq && \
   apt-get install -qq \
@@ -31,6 +37,7 @@ apt-get update -qq && \
   tilda \
   vcsh \
   wicd-curses \
+  x11-xserver-utils \
   xclip \
   zsh
 
@@ -47,28 +54,13 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
-# Remove existing group with our docker group id that is not the docker group
-DOCKER_GID=999
-getent group $DOCKER_GID | \
-  grep -v docker | \
-  cut -d: -f1 | \
-  xargs groupdel 2>/dev/null
-
-# Create the docker group
-groupadd --gid $DOCKER_GID docker
-
-# Install kde backports
-add-apt-repository --yes ppa:kubuntu-ppa/backports && \
-  apt-get update && \
-  apt-get upgrade -qq
-
 # Install alacritty
-wget -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
+wget -nv -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
 # Install bat
-wget -O bat.deb -nv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
+wget -nv -O bat.deb -nv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
 
