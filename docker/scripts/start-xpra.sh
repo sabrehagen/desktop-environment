@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(realpath $0))/../..
 
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
