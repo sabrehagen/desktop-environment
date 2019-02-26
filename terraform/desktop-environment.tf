@@ -38,17 +38,6 @@ resource "google_compute_instance" "desktop-environment" {
     owner-name = "${replace(lower(var.owner_name), "/[^a-z0-9-_]/", "")}"
   }
 
-  provisioner "remote-exec" {
-
-    inline = [
-      "# Clone the desktop environment",
-      "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}/${var.DESKTOP_ENVIRONMENT_CONTAINER}",
-
-      "# Start the desktop-environment",
-      "${var.DESKTOP_ENVIRONMENT_HOST_REPOSITORY}/host/bootstrap-cloud.sh",
-    ]
-  }
-
   service_account {
     scopes = [
       "https://www.googleapis.com/auth/compute.readonly",

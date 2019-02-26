@@ -47,9 +47,6 @@ echo 'fs.inotify.max_user_watches=1000000' >> /etc/sysctl.conf
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
-# Start the desktop environment as the host user on system start
-echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/start.sh" >> /etc/crontab
-
 # Remove existing group with our docker group id that is not the docker group
 DOCKER_GID=999
 getent group $DOCKER_GID | \
@@ -134,12 +131,9 @@ $REPO_ROOT/docker/scripts/build.sh
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/docker/scripts/take-ownership.sh
 
-# Start the desktop environment if requested
-if [ "$1" = "--start" ]; then
-  $REPO_ROOT/docker/scripts/start.sh
-fi
-
-# Start the X server in a cloud environment
-if [ "$1" = "--start-xpra" ]; then
-  $REPO_ROOT/docker/scripts/start-xpra.sh
+# Start the environment on host startup
+if [ "$1" = "--xpra" ]; then
+  echo "@reboot root $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle-xpra.sh" >> /etc/crontab
+else
+  echo "@reboot root $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle.sh" >> /etc/crontab
 fi
