@@ -81,13 +81,16 @@ HOST_USER_ID=1000
 HOST_HOME=/$HOST_USER/home
 HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 
+# Remove existing user with host user id
+userdel --force $(getent passwd $HOST_USER_ID | cut -d : -f 1)
+
 # Make the host user directory
 mkdir -p /$HOST_USER
 
 # Create the host user
 useradd \
-  --home-dir $HOST_HOME \
   --gid $HOST_USER_ID \
+  --home-dir $HOST_HOME \
   --uid $HOST_USER_ID \
   $HOST_USER && \
   passwd $HOST_USER
