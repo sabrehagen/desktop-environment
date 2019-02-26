@@ -132,7 +132,7 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh
 $REPO_ROOT/docker/scripts/build.sh
 
 # Ensure the container user has ownership of the volumes before starting
-$REPO_ROOT/docker/scripts/bootstrap-volumes.sh
+$REPO_ROOT/docker/scripts/take-ownership.sh
 
 # Start the desktop environment if requested
 if [ "$1" = "--start" ]; then

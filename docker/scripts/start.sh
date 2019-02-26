@@ -3,9 +3,6 @@ REPO_ROOT=$(dirname $(realpath $0))/../..
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
 
-# Ensure desktop environment network exists
-docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
-
 docker run \
   --cap-add SYS_PTRACE \
   --detach \

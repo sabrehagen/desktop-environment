@@ -21,3 +21,6 @@ done
 
 # Wait for ownership changes to complete in parallel
 wait
+
+# Ensure desktop environment network exists
+docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
