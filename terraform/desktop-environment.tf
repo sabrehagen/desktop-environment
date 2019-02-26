@@ -1,13 +1,15 @@
+terraform {
+  backend "gcs" {
+    bucket = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}"
+  }
+}
+
 provider "google" {
   project = "${var.gcp_project}"
 }
 
-resource "random_id" "instance_id" {
-  byte_length = 2
-}
-
 locals {
-  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}-${random_id.instance_id.hex}"
+  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}"
 }
 
 resource "google_compute_instance" "desktop-environment" {
