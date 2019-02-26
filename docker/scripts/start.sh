@@ -20,8 +20,8 @@ docker run \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
-  --publish 80 \
-  --publish 443 \
+  --publish 80:80 \
+  --publish 443:443 \
   --rm \
   --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
   --tty \
