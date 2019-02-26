@@ -7,7 +7,7 @@ resource "random_id" "instance_id" {
 }
 
 locals {
-  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_REPOSITORY}-${random_id.instance_id.hex}"
+  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}-${random_id.instance_id.hex}"
 }
 
 resource "google_compute_instance" "desktop-environment" {
@@ -42,10 +42,10 @@ resource "google_compute_instance" "desktop-environment" {
 
     inline = [
       "# Clone the desktop environment",
-      "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}/${var.DESKTOP_ENVIRONMENT_REPOSITORY}",
+      "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}/${var.DESKTOP_ENVIRONMENT_CONTAINER}",
 
       "# Start the desktop-environment",
-      "${var.DESKTOP_ENVIRONMENT_REPOSITORY}/host/bootstrap-cloud.sh",
+      "${var.DESKTOP_ENVIRONMENT_HOST_REPOSITORY}/host/bootstrap-cloud.sh",
     ]
   }
 

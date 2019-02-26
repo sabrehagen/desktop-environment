@@ -1,13 +1,13 @@
-variable "DESKTOP_ENVIRONMENT_USER" {
-  description = "The DESKTOP_ENVIRONMENT_USER environment variable."
+variable "DESKTOP_ENVIRONMENT_CONTAINER" {
+  description = "The DESKTOP_ENVIRONMENT_CONTAINER environment variable."
 }
 
 variable "DESKTOP_ENVIRONMENT_REGISTRY" {
   description = "The DESKTOP_ENVIRONMENT_REGISTRY environment variable."
 }
 
-variable "DESKTOP_ENVIRONMENT_REPOSITORY" {
-  description = "The DESKTOP_ENVIRONMENT_REPOSITORY environment variable."
+variable "DESKTOP_ENVIRONMENT_USER" {
+  description = "The DESKTOP_ENVIRONMENT_USER environment variable."
 }
 
 variable "gcp_project" {

@@ -10,13 +10,13 @@ REPO_ROOT=$(dirname $(realpath $0))/..
 export $($REPO_ROOT/docker/scripts/environment.sh)
 
 # Fork setup to desktop environment global location immediately
-if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
+if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY" ]; then
 
   # Clone the desktop environment to the global location on the host
-  git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
+  git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_HOST_REPOSITORY
 
   # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_REPOSITORY/host/bootstrap.sh "$@"
+  $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/host/bootstrap.sh "$@"
   exit 0
 fi
 
@@ -49,7 +49,7 @@ echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
 # Start the desktop environment as the host user on system start
-echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/start.sh" >> /etc/crontab
+echo "@reboot $HOST_USER $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/start.sh" >> /etc/crontab
 
 # Remove existing group with our docker group id that is not the docker group
 DOCKER_GID=999
@@ -111,7 +111,7 @@ usermod \
   $HOST_USER
 
 # Make desktop environment logs directory
-mkdir $DESKTOP_ENVIRONMENT_REPOSITORY/logs
+mkdir $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/logs
 
 # Take ownership of all files under the user's directory
 chown -R $HOST_USER:$HOST_USER /$HOST_USER

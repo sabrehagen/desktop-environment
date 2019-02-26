@@ -5,8 +5,8 @@
       "source_image_family": "ubuntu-minimal-1810",
       "project_id": "stemnapp",
       "zone": "australia-southeast1-a",
-      "instance_name": "packer-${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_REPOSITORY}-{{timestamp}}",
-      "image_name": "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_REPOSITORY}",
+      "instance_name": "packer-${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}-{{timestamp}}",
+      "image_name": "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}",
       "ssh_username": "root"
     }
   ],
@@ -15,10 +15,10 @@
       "type": "shell",
       "inline": [
         "# Clone the desktop environment repository",
-        "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_REPOSITORY}",
+        "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}",
 
         "# Bootstrap the host",
-        "${var.DESKTOP_ENVIRONMENT_REPOSITORY}/host/bootstrap.sh"
+        "${var.DESKTOP_ENVIRONMENT_HOST_REPOSITORY}/host/bootstrap.sh"
       ]
     }
   ]
