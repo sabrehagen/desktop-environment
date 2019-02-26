@@ -21,7 +21,7 @@
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}/{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
 
         "# Start the desktop environment",
-        "{{user `DESKTOP_ENVIRONMENT_ENVIRONMENT_CONTAINER`}}/host/bootstrap.sh"
+        "{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}/host/bootstrap.sh"
       ]
     }
   ]
