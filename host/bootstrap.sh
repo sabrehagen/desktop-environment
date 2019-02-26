@@ -123,6 +123,9 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh
 # Ensure the desktop environment container exists before starting
 $REPO_ROOT/docker/scripts/build.sh
 
+# Pre-cache environment support container
+docker pull jare/x11-bridge:latest
+
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/docker/scripts/take-ownership.sh
 

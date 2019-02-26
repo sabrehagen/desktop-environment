@@ -20,7 +20,7 @@
         "# Clone the desktop environment",
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}/{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
 
-        "# Start the desktop environment",
+        "# Prepare the desktop environment host",
         "{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}/host/bootstrap.sh --xpra"
       ]
     }
