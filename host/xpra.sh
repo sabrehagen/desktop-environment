@@ -45,9 +45,25 @@ docker run \
   --volumes-from $DESKTOP_ENVIRONMENT_CONTAINER-xpra-x11-bridge \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH
 
-# Make the X server publicly accessible
+# Make the X server publicly accessible using traefik
 docker exec \
   --tty \
-  --user jackson \
+  --user $DESKTOP_ENVIRONMENT_USER \
   $DESKTOP_ENVIRONMENT_CONTAINER-xpra-client \
-  traefik
+  traefik \
+  --acme.domains=$ACME_DOMAINS \
+  --acme.email="$ACME_EMAIL" \
+  --acme.entrypoint=https \
+  --acme.httpchallenge \
+  --acme.httpchallenge.entrypoint=http \
+  --acme.storage=/etc/traefik/acme.json \
+  --acme=$ACME_ENABLE \
+  --defaultentrypoints=$TRAEFIK_DEFAULT_ENTRYPOINTS \
+  --docker \
+  --docker.domain="$DOCKER_DOMAIN" \
+  --docker.endpoint="unix:///var/run/docker.sock" \
+  --docker.exposedbydefault=false \
+  --docker.watch=true \
+  --logLevel=info \
+  --web \
+  $TRAEFIK_ENTRYPOINT_HTTP $TRAEFIK_ENTRYPOINT_HTTPS
