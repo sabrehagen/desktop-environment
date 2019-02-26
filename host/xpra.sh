@@ -29,7 +29,7 @@ docker run \
   --env DISPLAY=$XPRA_DISPLAY \
   --env MODE=tcp \
   --env XPRA_HTML=yes \
-  --label traefik.backend=nginx
+  --label traefik.backend=$XPRA_CONTAINER
   --label traefik.enable=true
   --label traefik.frontend.rule=Host:$TRAEFIK_HOST
   --label traefik.port=$XPRA_WEB_PORT
