@@ -15,9 +15,6 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY" ]; then
   # Clone the desktop environment to the global location on the host
   git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_HOST_REPOSITORY
 
-  ls -la .
-  ls l-a /
-
   # Restart bootstrap from the global location
   $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/host/bootstrap.sh "$@"
   exit 0

@@ -21,7 +21,7 @@
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}/{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
 
         "# Bootstrap the host",
-        "${{user `DESKTOP_ENVIRONMENT_HOST_REPOSITORY`}}/host/bootstrap.sh"
+        "{{user `DESKTOP_ENVIRONMENT_HOST_REPOSITORY`}}/host/bootstrap.sh"
       ]
     }
   ]
