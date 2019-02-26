@@ -1,5 +1,4 @@
 provider "google" {
-  credentials = "${file("${var.gcp_credentials_path}")}"
   project = "${var.gcp_project}"
 }
 
@@ -8,7 +7,7 @@ resource "random_id" "instance_id" {
 }
 
 locals {
-  environment_name = "desktop-environment-${random_id.instance_id.hex}"
+  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_REPOSITORY}-${random_id.instance_id.hex}"
 }
 
 resource "google_compute_instance" "desktop-environment" {
@@ -16,7 +15,7 @@ resource "google_compute_instance" "desktop-environment" {
   machine_type = "${var.machine_type}"
   name = "${local.environment_name}"
   project = "${var.gcp_project}"
-  tags = ["desktop-environment"]
+  tags = ["${local.environment_name}"]
   zone = "${var.machine_region}-a"
 
   boot_disk {
@@ -42,14 +41,11 @@ resource "google_compute_instance" "desktop-environment" {
   provisioner "remote-exec" {
 
     inline = [
-      "# Start the X server",
+      "# Clone the desktop environment",
+      "git clone https://github.com/${var.DESKTOP_ENVIRONMENT_REGISTRY}/${var.DESKTOP_ENVIRONMENT_REPOSITORY}",
 
-      "# Clone and start the desktop environment",
-      "git clone https://github.com/sabrehagen/desktop-environment",
-      "desktop-environment/host/bootstrap.sh",
-
-      "# Expose X server publicly with nginx",
-      "desktop-environment/docker/scripts/exec.sh ~/.config/scripts/traefik.sh",
+      "# Start the desktop-environment",
+      "${var.DESKTOP_ENVIRONMENT_REPOSITORY}/host/bootstrap-cloud.sh",
     ]
   }
 
@@ -70,12 +66,13 @@ resource "google_compute_firewall" "desktop-environment" {
 
   allow {
     ports = [
+      "80",
       "443",
     ]
     protocol = "tcp"
   }
 
-  target_tags = ["desktop-environment"]
+  target_tags = ["${local.environment_name}"]
 }
 
 resource "google_compute_subnetwork" "desktop-environment" {

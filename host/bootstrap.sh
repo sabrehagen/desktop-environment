@@ -16,7 +16,7 @@ if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_REPOSITORY" ]; then
   git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_REPOSITORY
 
   # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_REPOSITORY/host/bootstrap.sh
+  $DESKTOP_ENVIRONMENT_REPOSITORY/host/bootstrap.sh "$@"
   exit 0
 fi
 
@@ -135,5 +135,12 @@ $REPO_ROOT/docker/scripts/build.sh
 # Ensure the container user has ownership of the volumes before starting
 $REPO_ROOT/docker/scripts/bootstrap-volumes.sh
 
-# Recycle the desktop environment
-$DESKTOP_ENVIRONMENT_REPOSITORY/docker/scripts/recycle.sh
+# Start the desktop environment if requested
+if [ "$1" = "--start" ]; then
+  $REPO_ROOT/docker/scripts/start.sh
+fi
+
+# Start the X server in a cloud environment
+if [ "$1" = "--cloud" ]; then
+  $REPO_ROOT/host/xpra.sh
+fi
