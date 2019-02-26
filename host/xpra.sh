@@ -6,11 +6,11 @@ export $($REPO_ROOT/docker/scripts/environment.sh)
 # Kill all existing xpra services
 docker ps -a | grep xpra | cut -c 1-15 | xargs docker rm -f
 
-# Xpra desktop environment configuration
-DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-client
+# Xpra client configuration
+XPRA_DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-client
 
 # Xpra server configuration
-XPRA_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-x11-bridge
+XPRA_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-server
 XPRA_DISPLAY=:14
 XPRA_WEB_PORT=10000
 
@@ -41,7 +41,7 @@ docker run \
 docker run \
   --detach \
   --env DISPLAY=$XPRA_DISPLAY \
-  --name $DESKTOP_ENVIRONMENT_CONTAINER \
+  --name $XPRA_DESKTOP_ENVIRONMENT_CONTAINER \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volumes-from $XPRA_CONTAINER \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH
@@ -50,7 +50,7 @@ docker run \
 docker exec \
   --tty \
   --user $DESKTOP_ENVIRONMENT_USER \
-  $DESKTOP_ENVIRONMENT_CONTAINER \
+  $XPRA_DESKTOP_ENVIRONMENT_CONTAINER \
   traefik \
   --acme.domains=$ACME_DOMAINS \
   --acme.email=$ACME_EMAIL \
