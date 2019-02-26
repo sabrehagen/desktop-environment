@@ -15,7 +15,7 @@
       "type": "shell",
       "inline": [
         "# Install git",
-        "apt-get install -qq git",
+        "apt-get update -qq && apt-get install -qq git",
 
         "# Clone the desktop environment repository",
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}-{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
