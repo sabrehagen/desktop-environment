@@ -16,4 +16,4 @@ desktop-environment/host/bootstrap.sh
 
 ## Forking
 
-Set your [user configuration](scripts/environment.sh#L3) and go.
+Set your [user configuration](docker/scripts/environment.sh#L3) and go.
