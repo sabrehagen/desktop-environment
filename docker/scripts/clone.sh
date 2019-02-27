@@ -8,3 +8,6 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY:$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY \
   --workdir $DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY \
   alpine/git:latest clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER --branch $DESKTOP_ENVIRONMENT_BRANCH $DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
+
+# Ensure the container user has ownership of docker volumes
+$REPO_ROOT/docker/scripts/take-ownership.sh

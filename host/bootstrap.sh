@@ -101,9 +101,6 @@ docker pull --quiet jare/x11-bridge:latest
 # Clone the desktop environment into a local docker volume
 $REPO_ROOT/docker/scripts/clone.sh
 
-# Ensure the container user has ownership of docker volumes
-$REPO_ROOT/docker/scripts/take-ownership.sh
-
 # Start the environment on host startup
 DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH=/var/lib/docker/volumes/$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
 if [ "$1" = "--xpra" ]; then
