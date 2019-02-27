@@ -1,0 +1,12 @@
+language: bash
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+script:
+  - ./packer/scripts/build.sh
