@@ -17,7 +17,7 @@ echo DESKTOP_ENVIRONMENT_DOCKER_NETWORK=$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_E
 echo DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 
 # Desktop environment repository information
-echo DESKTOP_ENVIRONMENT_BRANCH=$(git --git-dir $REPO_ROOT/.git rev-parse --abbrev-ref HEAD)
+echo DESKTOP_ENVIRONMENT_BRANCH=${TRAVIS_BRANCH-$(git --git-dir $REPO_ROOT/.git rev-parse --abbrev-ref HEAD)}
 
 # Desktop environment application cache volumes
 echo DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES=$DESKTOP_ENVIRONMENT_USER_HOME/.pki
