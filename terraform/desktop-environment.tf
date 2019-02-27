@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket  = "desktop-environment"
+    prefix  = "terraform  "
+  }
+}
+
 provider "google" {
   project = "${var.gcp_project}"
 }

@@ -9,17 +9,6 @@ REPO_ROOT=$(dirname $(readlink -f $0))/..
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)
 
-# Fork setup to desktop environment global location immediately
-if [ ! "$REPO_ROOT" -ef "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY" ]; then
-
-  # Clone the desktop environment to the global location on the host
-  git clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_HOST_REPOSITORY
-
-  # Restart bootstrap from the global location
-  $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/host/bootstrap.sh "$@"
-  exit 0
-fi
-
 # Conventional docker group id
 DOCKER_GID=999
 
@@ -37,7 +26,6 @@ apt-get update -qq && \
   tilda \
   vcsh \
   wicd-curses \
-  x11-xserver-utils \
   xclip \
   zsh
 
@@ -78,38 +66,22 @@ xhost local:docker
 # Host user configuration
 HOST_USER=$DESKTOP_ENVIRONMENT_USER
 HOST_USER_ID=1000
-HOST_HOME=/$HOST_USER/home
 HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
 
 # Remove existing user with host user id
 userdel --force $(getent passwd $HOST_USER_ID | cut -d : -f 1)
 
-# Make the host user directory
-mkdir -p /$HOST_USER
-
 # Create the host user
 useradd \
   --gid $HOST_USER_ID \
-  --home-dir $HOST_HOME \
   --uid $HOST_USER_ID \
-  $HOST_USER && \
-  passwd $HOST_USER
+  $HOST_USER
 
 # Give the host user access to required tools
 usermod \
   --append \
   --groups docker,sudo \
   $HOST_USER
-
-# Make desktop environment logs directory
-mkdir $DESKTOP_ENVIRONMENT_HOST_REPOSITORY/logs
-
-# Take ownership of all files under the user's directory
-chown -R $HOST_USER:$HOST_USER /$HOST_USER
-
-# Make gosu accessible to the host user for running desktop environment scripts
-chown :$HOST_USER /usr/sbin/gosu && \
-  chmod +s /usr/sbin/gosu
 
 # Install dotfiles configuration for host user
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git
@@ -120,19 +92,22 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scr
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tilda.git
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
-# Ensure the desktop environment container exists before starting
-$REPO_ROOT/docker/scripts/build.sh
+# Pre-cache development environment container
+docker pull $DESKTOP_ENVIRONMENT_REPOSITORY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_BRANCH
 
-# Pre-cache environment support container
+# Pre-cache development environment support container
 docker pull jare/x11-bridge:latest
 
-# Ensure the container user has ownership of the volumes before starting
+# Clone the desktop environment into a local docker volume
+$REPO_ROOT/docker/scripts/clone.sh
+
+# Ensure the container user has ownership of docker volumes
 $REPO_ROOT/docker/scripts/take-ownership.sh
 
 # Start the environment on host startup
+DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH=/var/lib/docker/volumes/$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
 if [ "$1" = "--xpra" ]; then
-  echo "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle-xpra.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+  echo "$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH/docker/scripts/recycle-xpra.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
 else
-  echo "$DESKTOP_ENVIRONMENT_HOST_REPOSITORY/docker/scripts/recycle.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+  echo "$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH/docker/scripts/recycle.sh; exit 0" > /etc/rc2.d/S01$DESKTOP_ENVIRONMENT_REPOSITORY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
 fi
-

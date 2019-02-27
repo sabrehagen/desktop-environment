@@ -2,10 +2,6 @@ variable "DESKTOP_ENVIRONMENT_CONTAINER" {
   description = "The DESKTOP_ENVIRONMENT_CONTAINER environment variable."
 }
 
-variable "DESKTOP_ENVIRONMENT_HOST_REPOSITORY" {
-  description = "The DESKTOP_ENVIRONMENT_HOST_REPOSITORY environment variable."
-}
-
 variable "DESKTOP_ENVIRONMENT_REGISTRY" {
   description = "The DESKTOP_ENVIRONMENT_REGISTRY environment variable."
 }
@@ -22,7 +18,7 @@ variable "machine_region" {
 
 variable "machine_type" {
   description = "The machine type."
-  default = "custom-6-30720"
+  default = "custom-6-16384"
 }
 
 variable "owner_host" {
