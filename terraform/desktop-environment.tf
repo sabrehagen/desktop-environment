@@ -2,7 +2,6 @@ terraform {
   backend "gcs" {
     bucket = "desktop-environment"
     prefix = "terraform"
-    project = "${var.gcp_project}"
   }
 }
 
