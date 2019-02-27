@@ -32,7 +32,7 @@ resource "google_compute_instance" "desktop-environment" {
 
   network_interface {
     access_config {
-      nat_ip = "35.201.14.140"
+        nat_ip = "${google_compute_address.static.address}"
     }
     subnetwork = "${google_compute_subnetwork.desktop-environment.name}"
   }
@@ -78,4 +78,8 @@ resource "google_compute_subnetwork" "desktop-environment" {
 resource "google_compute_network" "desktop-environment" {
   auto_create_subnetworks = false
   name = "${local.environment_name}"
+}
+
+resource "google_compute_address" "static" {
+  name = "cloud-jacksondelahunt-com"
 }
