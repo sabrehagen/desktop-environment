@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Check for changes to vcsh repositories before removing home volume
 $REPO_ROOT/docker/scripts/exec.sh "vcsh status | grep -qE \"^ M \" -"

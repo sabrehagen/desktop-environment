@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Perform standard clean
 $REPO_ROOT/docker/scripts/clean.sh

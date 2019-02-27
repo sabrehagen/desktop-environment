@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Desktop environment user configuration
 DESKTOP_ENVIRONMENT_CONTAINER=desktop-environment

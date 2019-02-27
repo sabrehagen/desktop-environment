@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Rebuild the desktop environment
 $REPO_ROOT/docker/scripts/build.sh

@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Stop the running environment so there are no containers using the volumes, ignoring errors if it does not exist
 $REPO_ROOT/docker/scripts/stop.sh 2>/dev/null

@@ -4,7 +4,7 @@ if [ $USER != "root" ]; then
   exit 1
 fi
 
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(readlink -f $0))/..
 
 # Export desktop environment shell configuration
 export $($REPO_ROOT/docker/scripts/environment.sh)

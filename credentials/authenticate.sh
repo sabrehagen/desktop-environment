@@ -1,4 +1,4 @@
-REPO_ROOT=$(dirname $(realpath $0))/..
+REPO_ROOT=$(dirname $(readlink -f $0))/..
 
 # Extract credentials from environment
 if [ ! -z "$DESKTOP_ENVIRONMENT_CREDENTIALS" ]; then
