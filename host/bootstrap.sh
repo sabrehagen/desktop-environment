@@ -93,10 +93,10 @@ gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-til
 gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Pre-cache development environment container
-docker pull $DESKTOP_ENVIRONMENT_REPOSITORY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_BRANCH
+docker pull --quiet $DESKTOP_ENVIRONMENT_REPOSITORY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_BRANCH
 
 # Pre-cache development environment support container
-docker pull jare/x11-bridge:latest
+docker pull --quiet jare/x11-bridge:latest
 
 # Clone the desktop environment into a local docker volume
 $REPO_ROOT/docker/scripts/clone.sh
