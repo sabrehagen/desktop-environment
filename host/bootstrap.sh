@@ -63,34 +63,29 @@ curl -sSL git.io/antigen > /usr/local/bin/antigen.zsh
 # Allow docker containers to access the host's X server
 xhost local:docker
 
-# Host user configuration
-HOST_USER=$DESKTOP_ENVIRONMENT_USER
-HOST_USER_ID=1000
-HOST_REPOSITORY=/$DESKTOP_ENVIRONMENT_CONTAINER
-
 # Remove existing user with host user id
-userdel --force $(getent passwd $HOST_USER_ID | cut -d : -f 1)
+userdel --force $(getent passwd $DESKTOP_ENVIRONMENT_USER_ID | cut -d : -f 1)
 
 # Create the host user
 useradd \
-  --gid $HOST_USER_ID \
-  --uid $HOST_USER_ID \
-  $HOST_USER
+  --gid $DESKTOP_ENVIRONMENT_USER_ID \
+  --uid $DESKTOP_ENVIRONMENT_USER_ID \
+  $DESKTOP_ENVIRONMENT_USER
 
 # Give the host user access to required tools
 usermod \
   --append \
   --groups docker,sudo \
-  $HOST_USER
+  $DESKTOP_ENVIRONMENT_USER
 
 # Install dotfiles configuration for host user
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autostart.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-kde.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tilda.git
-gosu $HOST_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autostart.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-kde.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tilda.git
+gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Pre-cache development environment container
 docker pull --quiet $DESKTOP_ENVIRONMENT_REPOSITORY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_BRANCH
