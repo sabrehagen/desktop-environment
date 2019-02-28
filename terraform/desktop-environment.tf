@@ -32,7 +32,7 @@ resource "google_compute_instance" "desktop-environment" {
 
   network_interface {
     access_config {
-        nat_ip = "${google_compute_address.static.address}"
+      nat_ip = "${google_compute_address.static.address}"
     }
     subnetwork = "${google_compute_subnetwork.desktop-environment.name}"
   }
