@@ -9,6 +9,8 @@ docker exec \
   --tty \
   $DESKTOP_ENVIRONMENT_CONTAINER \
   traefik \
+  --accessLog.filePath=/var/log/traefik-http.log \
+  --accessLog.format=json \
   --acme.domains=*.stemn.com \
   --acme.email=security@stemn.com \
   --acme.entrypoint=https \
@@ -24,4 +26,6 @@ docker exec \
   --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
   --entryPoints='Name:https Address::443 TLS' \
   --logLevel=info \
+  --traefikLog.filePath=/var/log/traefik-system.log \
+  --traefikLog.format=json \
   --web
