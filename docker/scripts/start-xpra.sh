@@ -20,7 +20,7 @@ docker run \
   --label traefik.backend=$XPRA_SERVER_CONTAINER \
   --label traefik.enable=true \
   --label traefik.frontend.entryPoints=https  \
-  --label traefik.frontend.rule=Host:$DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN \
+  --label traefik.frontend.rule=Host:cloud.$DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN \
   --label traefik.port=$XPRA_WEB_PORT \
   --name $XPRA_SERVER_CONTAINER \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \

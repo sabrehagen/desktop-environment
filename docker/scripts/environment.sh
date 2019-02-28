@@ -17,7 +17,7 @@ echo DESKTOP_ENVIRONMENT_USER_HOME=$DESKTOP_ENVIRONMENT_USER_HOME
 echo DESKTOP_ENVIRONMENT_USER_ID=1000
 
 # Desktop environment cloudflare configuration
-echo DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN=cloud.jacksondelahunt.com
+echo DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN=jacksondelahunt.com
 echo DESKTOP_ENVIRONMENT_CLOUDFLARE_EMAIL=jackson@jacksondelahunt.com
 
 # Desktop environment docker configuration
