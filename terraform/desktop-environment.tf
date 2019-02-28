@@ -24,7 +24,7 @@ resource "google_compute_instance" "desktop-environment" {
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-minimal-1810"
+      image = "${local.environment_name}"
       type = "pd-ssd"
       size = "80"
     }
