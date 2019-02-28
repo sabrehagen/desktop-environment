@@ -8,5 +8,6 @@ docker build \
   --build-arg DESKTOP_CONTAINER_GIT_SHA=$(git --git-dir $REPO_ROOT/.git rev-parse HEAD | cut -b 1-7) \
   --build-arg DESKTOP_ENVIRONMENT_GIT_EMAIL \
   --build-arg DESKTOP_ENVIRONMENT_GIT_NAME \
+  --file docker/Dockerfile \
   --tag $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH \
   $REPO_ROOT/docker
