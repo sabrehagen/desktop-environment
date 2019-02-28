@@ -54,6 +54,7 @@ resource "google_compute_firewall" "desktop-environment" {
 
   allow {
     ports = [
+      "22",
       "80",
       "443",
     ]
