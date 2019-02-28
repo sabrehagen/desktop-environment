@@ -1,28 +1,32 @@
 {
   "builders": [
     {
-      "type": "googlecompute",
-      "source_image_family": "ubuntu-minimal-1810",
-      "project_id": "stemnapp",
-      "zone": "australia-southeast1-a",
-      "instance_name": "packer-{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}-{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}-{{timestamp}}",
       "image_name": "{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}-{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
-      "ssh_username": "root"
+      "instance_name": "packer-{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}-{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}-{{timestamp}}",
+      "project_id": "stemnapp",
+      "source_image_family": "ubuntu-minimal-1810",
+      "ssh_username": "root",
+      "type": "googlecompute",
+      "zone": "australia-southeast1-a"
     }
   ],
   "provisioners": [
     {
-      "type": "shell",
       "inline": [
         "# Install git",
         "apt-get update -qq && apt-get install -qq git",
-
+ 
         "# Clone the desktop environment",
         "git clone https://github.com/{{user `DESKTOP_ENVIRONMENT_REGISTRY`}}/{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}",
-
+ 
         "# Prepare the desktop environment host",
         "{{user `DESKTOP_ENVIRONMENT_CONTAINER`}}/host/bootstrap.sh --xpra"
-      ]
+      ],
+      "type": "shell"
     }
-  ]
+  ],
+  "variables": {
+    "DESKTOP_ENVIRONMENT_CONTAINER": "{{env `DESKTOP_ENVIRONMENT_CONTAINER`}}",
+    "DESKTOP_ENVIRONMENT_REGISTRY": "{{env `DESKTOP_ENVIRONMENT_REGISTRY`}}"
+  }
 }
