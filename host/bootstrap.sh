@@ -89,10 +89,16 @@ gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehag
 gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Pre-cache development environment container
-docker pull $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG &>/dev/null
+docker pull $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG &>/dev/null &
+
+# Pre-cache kde development environment container
+docker pull $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:kde &>/dev/null &
 
 # Pre-cache development environment support container
-docker pull jare/x11-bridge:latest &>/dev/null
+docker pull jare/x11-bridge:latest &>/dev/null &
+
+# Wait for docker image pulls to complete
+wait
 
 # Clone the desktop environment into a local docker volume
 $REPO_ROOT/docker/scripts/clone.sh
