@@ -21,16 +21,6 @@ variable "machine_type" {
   default = "custom-6-16384"
 }
 
-variable "owner_host" {
-  description = "The hostname of the machine that created the instance."
-  default = "owner-host"
-}
-
-variable "owner_name" {
-  description = "The username of the user that created the instance."
-  default = "owner-name"
-}
-
 variable "tls_cert_path" {
   description = "Path to file containing public TLS certificate."
   default = "~/.ssl/server.cert"

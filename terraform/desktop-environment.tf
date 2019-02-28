@@ -37,11 +37,6 @@ resource "google_compute_instance" "desktop-environment" {
     subnetwork = "${google_compute_subnetwork.desktop-environment.name}"
   }
 
-  labels {
-    owner-host = "${replace(lower(var.owner_host), "/[^a-z0-9-_]/", "")}"
-    owner-name = "${replace(lower(var.owner_name), "/[^a-z0-9-_]/", "")}"
-  }
-
   service_account {
     scopes = [
       "https://www.googleapis.com/auth/compute.readonly",
