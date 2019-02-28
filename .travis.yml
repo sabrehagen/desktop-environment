@@ -8,5 +8,10 @@ addons:
     packages:
       - docker-ce
 
-script:
-  - ./packer/scripts/build.sh
+script: packer/scripts/build.sh
+
+deploy:
+  on:
+    branch: master
+  provider: script
+  script: terraform/scripts/recycle.sh
