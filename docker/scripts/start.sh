@@ -7,6 +7,7 @@ docker run \
   --cap-add SYS_PTRACE \
   --detach \
   --device /dev/snd \
+  --env DBUS_SESSION_BUS_ADDRESS \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=${DISPLAY-:0} \
   --group-add audio \
@@ -25,6 +26,7 @@ docker run \
   --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/lib/docker:/var/lib/docker \
+  --volume /var/run/dbus:/var/run/dbus \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES:$DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
