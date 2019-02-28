@@ -11,8 +11,8 @@ docker exec \
   traefik \
   --accessLog.filePath=/var/log/traefik-http.log \
   --accessLog.format=json \
-  --acme.domains=*.stemn.com \
-  --acme.email=security@stemn.com \
+  --acme.domains=$DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN \
+  --acme.email=$DESKTOP_ENVIRONMENT_CLOUDFLARE_EMAIL \
   --acme.entrypoint=https \
   --acme.httpchallenge \
   --acme.httpchallenge.entrypoint=http \
