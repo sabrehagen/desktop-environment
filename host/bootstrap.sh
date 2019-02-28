@@ -98,12 +98,13 @@ docker pull jare/x11-bridge:latest &>/dev/null
 $REPO_ROOT/docker/scripts/clone.sh
 
 # Create a boot entry for the desktop environment
-DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH=/var/lib/docker/volumes/$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
+INIT_SCRIPT=/etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
 if [ "$1" = "--xpra" ]; then
-  echo "$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH/docker/scripts/start-xpra.sh; exit 0" > /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
+  echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/start-xpra.sh; exit 0" > $INIT_SCRIPT
 else
-  echo "$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY_VOLUME_PATH/docker/scripts/start.sh; exit 0" > /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
+  echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/start.sh; exit 0" > $INIT_SCRIPT
 fi
+chmod +x $INIT_SCRIPT
 
 # Start the environment on host startup
 ln -s /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER /etc/rc2.d/S02$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
