@@ -97,14 +97,15 @@ docker pull jare/x11-bridge:latest &>/dev/null
 # Clone the desktop environment into a local docker volume
 $REPO_ROOT/docker/scripts/clone.sh
 
-# Create a boot entry for the desktop environment
-INIT_SCRIPT=/etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+# Start the desktop environment on host start
+INIT_SCRIPT_NAME=$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+INIT_SCRIPT_PATH=/etc/init.d/$INIT_SCRIPT_NAME
 if [ "$1" = "--xpra" ]; then
-  echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/start-xpra.sh; exit 0" > $INIT_SCRIPT
+  INIT_SCRIPT_TARGET=start-xpra.sh
 else
-  echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/start.sh; exit 0" > $INIT_SCRIPT
+  INIT_SCRIPT_TARGET=start.sh
 fi
-chmod +x $INIT_SCRIPT
-
-# Start the environment on host startup
-ln -s /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME /etc/rc1.d/S02$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/$INIT_SCRIPT_TARGET; exit 0" > $INIT_SCRIPT_PATH
+chmod +x $INIT_SCRIPT_PATH
+update-rc.d $INIT_SCRIPT_NAME defaults
+update-rc.d $INIT_SCRIPT_NAME enable
