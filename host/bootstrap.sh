@@ -68,6 +68,7 @@ userdel --force $(getent passwd $DESKTOP_ENVIRONMENT_USER_ID | cut -d : -f 1)
 
 # Create the host user
 useradd \
+  --create-home \
   --gid $DESKTOP_ENVIRONMENT_USER_ID \
   --uid $DESKTOP_ENVIRONMENT_USER_ID \
   $DESKTOP_ENVIRONMENT_USER
