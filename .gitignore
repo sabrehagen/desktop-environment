@@ -1,4 +1,3 @@
 credentials.json
 logs/
-.terraform
 terraform.tfstate
