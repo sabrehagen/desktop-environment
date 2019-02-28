@@ -12,7 +12,6 @@ echo "TERRAFORM_ARGS: $@"
 docker run \
   --entrypoint ash \
   --env GOOGLE_APPLICATION_CREDENTIALS=$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/credentials/credentials.json \
-  --env TF_CLI_ARGS=-auto-approve \
   --env TF_IN_AUTOMATION=true \
   --env TF_INPUT=false \
   --env TF_VAR_DESKTOP_ENVIRONMENT_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER \
