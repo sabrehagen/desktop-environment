@@ -85,14 +85,10 @@ provider "cloudflare" {
   token = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN}"
 }
 
-variable "domain" {
-  default = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN}"
-}
-
-resource "cloudflare_record" "cloud" {
+resource "cloudflare_record" "desktop-environment" {
   domain = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN}"
   name = "cloud"
-  value = "${google_compute_address.static.address}"
-  type = "A"
   proxied = true
+  type = "A"
+  value = "${google_compute_address.static.address}"
 }
