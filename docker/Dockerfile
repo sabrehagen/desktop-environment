@@ -1,6 +1,23 @@
 FROM stemn/development-environment:latest
 USER root
 
+# System environment configuration
+ENV S6_LOGGING 1
+
+# Container user home directories
+ENV BASE_USER stemn
+ENV USER jackson
+ENV HOME /$USER/home
+
+# User environment configuration
+ARG STEMN_GIT_EMAIL
+ARG STEMN_GIT_NAME
+ENV STEMN_GIT_EMAIL $STEMN_GIT_EMAIL
+ENV STEMN_GIT_NAME $STEMN_GIT_NAME
+
+# Remove base user files
+RUN rm -rf /$BASE_USER
+
 # Install user utilities
 RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
@@ -9,6 +26,7 @@ RUN apt-get update -qq && \
   arandr \
   feh \
   numlockx \
+  ruby-dev \
   software-properties-common \
   vcsh \
   vlc \
@@ -69,29 +87,16 @@ RUN apt-get update -qq && apt-get install -qq \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
 
+# Install gem utilities
+RUN gem install \
+  travis
+
 # Install yarn utilities
 RUN yarn global add \
   http-server
 
-# System environment configuration
-ENV S6_LOGGING 1
-
-# Container user home directories
-ENV BASE_USER stemn
-ENV USER jackson
-ENV HOME /$USER/home
-
-# Remove base user files
-RUN rm -rf /$BASE_USER
-
-# Make the user's workspace directory
+# Make the new user's home directory
 RUN mkdir -p $HOME
-
-# User environment configuration
-ENV STEMN_GIT_EMAIL "jackson@stemn.com"
-ENV STEMN_GIT_NAME "Jackson Delahunt"
-ENV TMUX $HOME/.tmux.sock
-RUN touch $TMUX
 
 # Rename the first non-root group to jackson
 RUN groupmod \

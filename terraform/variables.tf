@@ -1,3 +1,15 @@
+variable "DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN" {
+  description = "The DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN environment variable."
+}
+
+variable "DESKTOP_ENVIRONMENT_CLOUDFLARE_EMAIL" {
+  description = "The DESKTOP_ENVIRONMENT_CLOUDFLARE_EMAIL environment variable."
+}
+
+variable "DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN" {
+  description = "The DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN environment variable."
+}
+
 variable "DESKTOP_ENVIRONMENT_CONTAINER" {
   description = "The DESKTOP_ENVIRONMENT_CONTAINER environment variable."
 }

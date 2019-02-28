@@ -79,3 +79,20 @@ resource "google_compute_network" "desktop-environment" {
 resource "google_compute_address" "static" {
   name = "cloud-jacksondelahunt-com"
 }
+
+provider "cloudflare" {
+  email = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_EMAIL}"
+  token = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN}"
+}
+
+variable "domain" {
+  default = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN}"
+}
+
+resource "cloudflare_record" "cloud" {
+  domain = "${var.DESKTOP_ENVIRONMENT_CLOUDFLARE_DOMAIN}"
+  name = "cloud"
+  value = "${google_compute_address.static.address}"
+  type = "A"
+  proxied = true
+}
