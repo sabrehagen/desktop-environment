@@ -8,7 +8,7 @@ docker ps -a | grep xpra | cut -c 1-15 | xargs docker rm -f
 
 # Xpra server configuration
 XPRA_DISPLAY=:14
-XPRA_SERVER_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER-xpra-server
+XPRA_SERVER_CONTAINER=$DESKTOP_ENVIRONMENT_CONTAINER_NAME-xpra-server
 XPRA_WEB_PORT=10000
 
 # Start the xpra server
@@ -29,7 +29,7 @@ docker run \
   jare/x11-bridge:latest
 
 # Start a desktop environment attached to the xpra server display
-DISPLAY=$XPRA_DISPLAY $REPO_ROOT/docker/scripts/start.sh
+DESKTOP_ENVIRONMENT_CONTAINER_TAG=kde DISPLAY=$XPRA_DISPLAY $REPO_ROOT/docker/scripts/start.sh
 
 # Expose desktop environment publicly with traefik
 $REPO_ROOT/docker/scripts/start-traefik.sh

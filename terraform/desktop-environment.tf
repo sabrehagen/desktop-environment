@@ -11,7 +11,7 @@ provider "google" {
 }
 
 locals {
-  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER}"
+  environment_name = "${var.DESKTOP_ENVIRONMENT_REGISTRY}-${var.DESKTOP_ENVIRONMENT_CONTAINER_NAME}"
 }
 
 resource "google_compute_instance" "desktop-environment" {

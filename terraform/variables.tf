@@ -10,8 +10,8 @@ variable "DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN" {
   description = "The DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN environment variable."
 }
 
-variable "DESKTOP_ENVIRONMENT_CONTAINER" {
-  description = "The DESKTOP_ENVIRONMENT_CONTAINER environment variable."
+variable "DESKTOP_ENVIRONMENT_CONTAINER_NAME" {
+  description = "The DESKTOP_ENVIRONMENT_CONTAINER_NAME environment variable."
 }
 
 variable "DESKTOP_ENVIRONMENT_REGISTRY" {

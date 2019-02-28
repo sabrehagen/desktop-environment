@@ -13,9 +13,9 @@ docker run \
   --group-add audio \
   --group-add docker \
   --group-add video \
-  --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER-$(hostname) \
+  --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
   --interactive \
-  --name $DESKTOP_ENVIRONMENT_CONTAINER \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --publish 80:80 \
   --publish 443:443 \
@@ -54,10 +54,10 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_REPOSITORIES:$DESKTOP_ENVIRONMENT_USER_REPOSITORIES \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir /$DESKTOP_ENVIRONMENT_USER \
-  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG
 
 # Wait until the desktop environment container is running before proceeding
-until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start desktop services
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty

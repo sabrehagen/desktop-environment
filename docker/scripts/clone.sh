@@ -13,7 +13,7 @@ docker run \
 docker run \
   --rm \
   --volume DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY:$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY \
-  alpine/git:latest clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER $DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
+  alpine/git:latest clone https://github.com/$DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME $DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY
 
 # Ensure the container user has ownership of docker volumes
 $REPO_ROOT/docker/scripts/take-ownership.sh

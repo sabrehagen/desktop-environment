@@ -7,7 +7,7 @@ export $($REPO_ROOT/docker/scripts/environment.sh)
 docker exec \
   --detach \
   --tty \
-  $DESKTOP_ENVIRONMENT_CONTAINER \
+  $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   traefik \
   --accessLog.filePath=/var/log/traefik-http.log \
   --accessLog.format=json \

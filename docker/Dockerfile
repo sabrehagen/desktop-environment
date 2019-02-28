@@ -71,7 +71,8 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install chrome
-RUN apt-get update -qq && apt-get install -qq \
+RUN apt-get update -qq && \
+  apt-get install -qq \
   apt-transport-https \
   ca-certificates \
   gnupg \

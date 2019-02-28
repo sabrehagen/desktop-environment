@@ -89,7 +89,7 @@ gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehag
 gosu $DESKTOP_ENVIRONMENT_USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git
 
 # Pre-cache development environment container
-docker pull $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER:$DESKTOP_ENVIRONMENT_BRANCH &>/dev/null
+docker pull $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG &>/dev/null
 
 # Pre-cache development environment support container
 docker pull jare/x11-bridge:latest &>/dev/null
@@ -98,7 +98,7 @@ docker pull jare/x11-bridge:latest &>/dev/null
 $REPO_ROOT/docker/scripts/clone.sh
 
 # Create a boot entry for the desktop environment
-INIT_SCRIPT=/etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
+INIT_SCRIPT=/etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME
 if [ "$1" = "--xpra" ]; then
   echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/start-xpra.sh; exit 0" > $INIT_SCRIPT
 else
@@ -107,4 +107,4 @@ fi
 chmod +x $INIT_SCRIPT
 
 # Start the environment on host startup
-ln -s /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER /etc/rc2.d/S02$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER
+ln -s /etc/init.d/$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME /etc/rc2.d/S02$DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME

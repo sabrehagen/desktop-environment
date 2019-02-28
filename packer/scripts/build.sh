@@ -10,7 +10,7 @@ $REPO_ROOT/docker/scripts/clone.sh
 $REPO_ROOT/credentials/authenticate.sh
 
 docker run \
-  --env DESKTOP_ENVIRONMENT_CONTAINER \
+  --env DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --env DESKTOP_ENVIRONMENT_REGISTRY \
   --env GOOGLE_APPLICATION_CREDENTIALS=$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/credentials/google.json \
   --interactive \

@@ -7,4 +7,4 @@ docker exec \
   --interactive \
   --tty \
   --user $DESKTOP_ENVIRONMENT_USER \
-  $DESKTOP_ENVIRONMENT_CONTAINER zsh --login
+  $DESKTOP_ENVIRONMENT_CONTAINER_NAME zsh --login
