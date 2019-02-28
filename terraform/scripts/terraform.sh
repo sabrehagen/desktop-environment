@@ -24,6 +24,5 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY:$DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY \
   --workdir $DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/terraform \
   hashicorp/terraform:light -c "\
-  echo XXXXXXX $TERRAFORM_ARGS;
   terraform init;
   terraform $TERRAFORM_ARGS"
