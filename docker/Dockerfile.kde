@@ -1,0 +1,12 @@
+FROM sabrehagen/desktop-environment:latest
+
+# Install kde plasma desktop environment
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  kde-plasma-desktop
+
+# Record container build information
+ARG DESKTOP_CONTAINER_BUILD_DATE
+ARG DESKTOP_CONTAINER_GIT_SHA
+ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
+ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
