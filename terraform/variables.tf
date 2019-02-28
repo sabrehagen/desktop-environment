@@ -33,16 +33,6 @@ variable "machine_type" {
   default = "custom-6-16384"
 }
 
-variable "tls_cert_path" {
-  description = "Path to file containing public TLS certificate."
-  default = "~/.ssl/server.cert"
-}
-
-variable "tls_key_path" {
-  description = "Path to file containing TLS private signing key."
-  default = "~/.ssl/server.pem"
-}
-
 output "ip" {
   value = "${google_compute_instance.desktop-environment.network_interface.0.access_config.0.nat_ip}"
 }
