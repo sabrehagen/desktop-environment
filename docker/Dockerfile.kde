@@ -1,9 +1,8 @@
 FROM sabrehagen/desktop-environment:latest
 
 # Install kde plasma desktop environment
-RUN DEBIAN_FRONTEND=noninteractive \
-  apt-get update -qq && \
-  apt-get install -qq \
+RUN apt-get update -qq && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -qq \
   kde-plasma-desktop
 
 # Record container build information
