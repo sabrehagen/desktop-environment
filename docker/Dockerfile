@@ -54,7 +54,7 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   rm musikcube.deb
 
 # Install alacritty
-RUN wget -nv -O alacritty.deb https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
+RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
