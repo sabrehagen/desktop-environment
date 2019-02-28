@@ -8,10 +8,15 @@ addons:
     packages:
       - docker-ce
 
+git:
+  depth: false
+  quiet: true
+  
+
 script: packer/scripts/build.sh
 
 deploy:
   on:
     branch: master
   provider: script
-  script: terraform/scripts/recycle.sh
+  script: terraform/scripts/recycle-xpra.sh
