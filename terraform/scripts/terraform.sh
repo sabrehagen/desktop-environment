@@ -6,8 +6,6 @@ export $($REPO_ROOT/docker/scripts/environment.sh)
 # Authenticate with cloud service provider
 $REPO_ROOT/credentials/authenticate.sh
 
-echo "TERRAFORM_ARGS: $@"
-
 # Execute the supplied terraform command
 docker run \
   --entrypoint ash \
