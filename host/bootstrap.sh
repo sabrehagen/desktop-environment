@@ -111,7 +111,11 @@ if [ "$1" = "--xpra" ]; then
 else
   INIT_SCRIPT_TARGET=start.sh
 fi
-echo "/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/$INIT_SCRIPT_TARGET; exit 0" > $INIT_SCRIPT_PATH
+echo "\
+### BEGIN INIT INFO\
+# Default-Start: 2 3 4 5\
+/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/$INIT_SCRIPT_TARGET\
+exit 0" > $INIT_SCRIPT_PATH
 chmod +x $INIT_SCRIPT_PATH
 update-rc.d $INIT_SCRIPT_NAME defaults
 update-rc.d $INIT_SCRIPT_NAME enable
