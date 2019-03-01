@@ -112,9 +112,9 @@ else
   INIT_SCRIPT_TARGET=start.sh
 fi
 echo "\
-### BEGIN INIT INFO\
-# Default-Start: 2 3 4 5\
-/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/$INIT_SCRIPT_TARGET\
+### BEGIN INIT INFO \n\
+# Default-Start: 2 3 4 5 \n\
+/var/lib/docker/volumes/DESKTOP_ENVIRONMENT_DOCKER_REPOSITORY/_data/docker/scripts/$INIT_SCRIPT_TARGET \n\
 exit 0" > $INIT_SCRIPT_PATH
 chmod +x $INIT_SCRIPT_PATH
 update-rc.d $INIT_SCRIPT_NAME defaults
