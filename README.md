@@ -6,7 +6,7 @@ My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-
 
 ## Getting Started
 
-On a clean install of Ubuntu 18.10+ run as `root`:
+As `root`:
 
 ```sh
 # Clone desktop environment
