@@ -18,6 +18,21 @@ ENV STEMN_GIT_NAME $DESKTOP_ENVIRONMENT_GIT_NAME
 # Remove base user files
 RUN rm -rf /$BASE_USER
 
+# Make the new user's home directory
+RUN mkdir -p $HOME
+
+# Rename the first non-root group to jackson
+RUN groupmod \
+  --new-name \
+  $USER $BASE_USER
+
+# Rename the first non-root user to jackson
+RUN usermod \
+  --groups $USER,docker,sudo \
+  --home $HOME \
+  --login $USER \
+  $BASE_USER
+
 # Install user utilities
 RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
@@ -68,7 +83,7 @@ RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/rel
 # Install tormix
 RUN git clone https://github.com/ckardaris/tormix.git && \
   cd tormix && \
-  ./install && \
+  gosu $USER install && \
   rm -rf ../tormix
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
@@ -100,7 +115,8 @@ RUN apt-get update -qq && \
   apt-get install -qq google-chrome-stable --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
-  groupadd --system chrome
+  groupadd --system chrome && \
+  usermod --append --groups audio,chrome,video $USER
 
 # Install gem utilities
 RUN gem install \
@@ -110,29 +126,8 @@ RUN gem install \
 RUN yarn global add \
   http-server
 
-# Make the new user's home directory
-RUN mkdir -p $HOME
-
-# Rename the first non-root group to jackson
-RUN groupmod \
-  --new-name \
-  $USER $BASE_USER
-
-# Rename the first non-root user to jackson
-RUN usermod \
-  --groups $USER,docker,sudo \
-  --home $HOME \
-  --login $USER \
-  $BASE_USER
-
-# Add the user to the groups required to run chrome
-RUN usermod \
-  --append \
-  --groups audio,chrome,video \
-  $USER
-
-# Take ownership of the desktop user's folder
-RUN chown -R $USER:$USER /$USER
+# Take ownership of the desktop user's files
+RUN chown -R $USER:$USER $HOME
 
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
