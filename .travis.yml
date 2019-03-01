@@ -19,4 +19,4 @@ deploy:
   on:
     branch: master
   provider: script
-  script: terraform/scripts/recycle-xpra.sh
+  script: terraform/scripts/restart.sh
