@@ -28,6 +28,9 @@ RUN apt-get update -qq && \
   numlockx \
   ruby-dev \
   software-properties-common \
+  transmission-cli \
+  transmission-common \
+  transmission-daemon \
   vcsh \
   vlc \
   x11-xkb-utils \
@@ -61,6 +64,12 @@ RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/downlo
 # Install traefik
 RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
   chmod +x /usr/local/bin/traefik
+
+# Install tormix
+RUN git clone https://github.com/ckardaris/tormix.git && \
+  cd tormix && \
+  ./install && \
+  rm -rf ../tormix
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
