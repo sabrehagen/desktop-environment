@@ -7,7 +7,7 @@ ENV S6_LOGGING 1
 # Container user home directories
 ENV BASE_USER stemn
 ENV USER jackson
-ENV HOME /$USER/home
+ENV HOME /home/$USER
 
 # User environment configuration
 ARG DESKTOP_ENVIRONMENT_GIT_EMAIL
