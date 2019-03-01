@@ -23,7 +23,6 @@ docker run \
   --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
   --tty \
   --volume /dev/shm:/dev/shm \
-  --volume /etc/localtime:/etc/localtime:ro \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/dbus:/var/run/dbus \
