@@ -33,6 +33,9 @@ RUN usermod \
   --login $USER \
   $BASE_USER
 
+# Give the user ownership of their home folder
+RUN chown -R $USER:$USER $HOME
+
 # Install user utilities
 RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
@@ -83,7 +86,7 @@ RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/rel
 # Install tormix
 RUN git clone https://github.com/ckardaris/tormix.git && \
   cd tormix && \
-  gosu $USER install && \
+  gosu $USER ./install && \
   rm -rf ../tormix
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
@@ -125,9 +128,6 @@ RUN gem install \
 # Install yarn utilities
 RUN yarn global add \
   http-server
-
-# Take ownership of the desktop user's files
-RUN chown -R $USER:$USER $HOME
 
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
