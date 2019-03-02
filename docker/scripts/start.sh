@@ -52,7 +52,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_PICTURES:$DESKTOP_ENVIRONMENT_USER_PICTURES \
   --volume DESKTOP_ENVIRONMENT_USER_REPOSITORIES:$DESKTOP_ENVIRONMENT_USER_REPOSITORIES \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
-  --workdir /$DESKTOP_ENVIRONMENT_USER_HOME \
+  --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG
 
 # Wait until the desktop environment container is running before proceeding
@@ -64,4 +64,8 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
+# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/transmission
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
+
+# Manually start services whilst s6 issues above persists
+$REPO_ROOT/docker/scripts/exec.sh $DESKTOP_ENVIRONMENT_USER_HOME/.config/scripts/startup.sh
