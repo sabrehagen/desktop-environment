@@ -12,7 +12,7 @@ As `root`:
 # Clone desktop environment
 git clone https://github.com/sabrehagen/desktop-environment
 
-# Supply access credentials
+# Supply cloud provider credentials
 export DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN=
 export DESKTOP_ENVIRONMENT_GOOGLE_CREDENTIALS=
 
