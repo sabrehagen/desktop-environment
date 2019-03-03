@@ -6,6 +6,8 @@ export $($REPO_ROOT/docker/scripts/environment.sh)
 VOLUME_NAME=$1
 VOLUME_PATH=$(printenv $VOLUME_NAME)
 
+echo Wiping $VOLUME_NAME...
+
 # Remove all files in the volume rather than removing the volume so that ownership permissions are preserved
 docker run \
   --rm \

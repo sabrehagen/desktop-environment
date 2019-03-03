@@ -9,6 +9,8 @@ for VOLUME_NAME in $DESKTOP_ENVIRONMENT_VOLUMES; do
 
   VOLUME_PATH=$(printenv $VOLUME_NAME)
 
+  echo Owning $VOLUME_NAME...
+
   # Give the desktop environment user ownership of the volume
   docker run \
     --rm \
