@@ -4,6 +4,6 @@ REPO_ROOT=$(dirname $(readlink -f $0))/../..
 $REPO_ROOT/docker/scripts/clean.sh
 
 # Remove volumes containing secrets
-docker volume rm DESKTOP_ENVIRONMENT_CACHE_SECRETS
-docker volume rm DESKTOP_ENVIRONMENT_CACHE_SSH
-docker volume rm DESKTOP_ENVIRONMENT_CACHE_VCSH_PRIVATE
+$REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_CACHE_SECRETS
+$REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_CACHE_SSH
+$REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_CACHE_VCSH_PRIVATE
