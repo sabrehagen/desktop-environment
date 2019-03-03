@@ -9,6 +9,3 @@ $REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_USER_HOME &
 
 # Wait for wipes to complete in parallel
 wait
-
-# Ensure all docker volumes are owned after removing paths
-$REPO_ROOT/docker/scripts/take-ownership.sh
