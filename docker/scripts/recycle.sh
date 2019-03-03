@@ -9,5 +9,6 @@ $REPO_ROOT/docker/scripts/pre-clean.sh
 # Reset the desktop environment state
 $REPO_ROOT/docker/scripts/stop.sh
 $REPO_ROOT/docker/scripts/clean.sh
+$REPO_ROOT/docker/scripts/take-ownership.sh
 $REPO_ROOT/docker/scripts/start.sh
 $REPO_ROOT/docker/scripts/alacritty.sh
