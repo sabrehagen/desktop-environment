@@ -1,4 +1,4 @@
-language: bash
+language: sh
 
 services:
   - docker
@@ -12,11 +12,13 @@ git:
   depth: false
   quiet: true
   
-
-script: packer/scripts/build.sh
+script:
+  - docker/scripts/build.sh
+  - packer/scripts/build.sh
 
 deploy:
   on:
     branch: master
   provider: script
-  script: terraform/scripts/restart.sh
+  script:
+    - terraform/scripts/restart.sh
