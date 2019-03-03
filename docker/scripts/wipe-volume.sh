@@ -11,6 +11,5 @@ docker run \
   --rm \
   --user root \
   --volume $VOLUME_NAME:$VOLUME_PATH \
-  --workdir $VOLUME_PATH \
   alpine:latest \
-  rm -rf ..?* .[!.]* *
+  find $VOLUME_PATH -name . -o -prune -exec rm -rf -- {} +
