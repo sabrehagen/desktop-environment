@@ -24,5 +24,4 @@ deploy:
   on:
     branch: master
   provider: script
-  script:
-    - terraform/scripts/restart.sh
+  script: terraform/scripts/restart.sh
