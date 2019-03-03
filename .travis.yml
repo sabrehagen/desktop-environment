@@ -11,9 +11,13 @@ addons:
 git:
   depth: false
   quiet: true
-  
+
+before_script:
+  - echo $DESKTOP_ENVIRONMENT_REGISTRY_PASSWORD | docker login -u $DESKTOP_ENVIRONMENT_REGISTRY --password-stdin
+
 script:
   - docker/scripts/build.sh
+  - docker/scripts/push.sh
   - packer/scripts/build.sh
 
 deploy:
