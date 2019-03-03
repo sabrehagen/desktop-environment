@@ -89,6 +89,12 @@ RUN git clone https://github.com/ckardaris/tormix.git && \
   gosu $USER ./install && \
   rm -rf ../tormix
 
+# Install signal messenger
+RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
+  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
+  apt-get update -qq && \
+  apt-get install -qq signal-desktop
+
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
