@@ -7,8 +7,5 @@ $REPO_ROOT/docker/scripts/stop.sh 2>/dev/null
 $REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_CACHE_VCSH &
 $REPO_ROOT/docker/scripts/wipe-volume.sh DESKTOP_ENVIRONMENT_USER_HOME &
 
-# Ensure cleaned volumes are owned after removal
-$REPO_ROOT/docker/scripts/clean-ownership.sh
-
 # Wait for cleans to complete in parallel
 wait
