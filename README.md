@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sabrehagen/desktop-environment.svg?branch=master)](https://travis-ci.org/sabrehagen/desktop-environment)
 
-My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) cloud computer.
+My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) on the cloud and desktop.
 
 ## Getting Started
 
