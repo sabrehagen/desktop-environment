@@ -23,7 +23,7 @@ script:
   - docker load < /docker/cache.tar
   - docker/scripts/build.sh
   - docker/scripts/push.sh
-  - docker save $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME $(docker history -q $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME) > /docker/cache.tar
+  - # docker save $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME $(docker history -q $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME) > /docker/cache.tar
   - packer/scripts/build.sh
 
 deploy:
