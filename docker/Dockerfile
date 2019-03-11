@@ -131,6 +131,11 @@ RUN apt-get update -qq && \
   groupadd --system chrome && \
   usermod --append --groups audio,chrome,video $USER
 
+# Install google drive client
+RUN add-apt-repository ppa:alessandro-strada/ppa && \
+  apt-get update -qq && \
+  apt-get install -qq google-drive-ocamlfuse
+
 # Install gem utilities
 RUN gem install \
   travis
