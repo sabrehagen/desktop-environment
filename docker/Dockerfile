@@ -89,6 +89,10 @@ RUN git clone https://github.com/ckardaris/tormix.git && \
   gosu $USER ./install && \
   rm -rf ../tormix
 
+# Install onedrive client
+RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
+  chmod +x /usr/local/bin/onedrive
+
 # Install signal messenger
 RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
