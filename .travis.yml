@@ -20,7 +20,7 @@ before_script:
   - echo $DESKTOP_ENVIRONMENT_REGISTRY_PASSWORD | docker login -u $DESKTOP_ENVIRONMENT_REGISTRY --password-stdin
 
 script:
-  - docker load < /docker/cache.tar
+  - # docker load < /docker/cache.tar
   - docker/scripts/build.sh
   - docker/scripts/push.sh
   - # docker save $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME $(docker history -q $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME) > /docker/cache.tar
