@@ -8,9 +8,9 @@ addons:
     packages:
       - docker-ce
 
-cache:
-  directories:
-    - /docker
+# cache:
+#   directories:
+#     - /docker
 
 git:
   depth: false
