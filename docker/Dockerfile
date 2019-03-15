@@ -42,6 +42,7 @@ RUN apt-get update -qq && \
   alpine \
   alsa-utils \
   arandr \
+  bitlbee \
   feh \
   numlockx \
   ruby-dev \
@@ -167,6 +168,9 @@ RUN gosu $USER zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
 RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
+
+# Install fzf
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
 
 # Record container build information
 ARG DESKTOP_CONTAINER_BUILD_DATE
