@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/docker/scripts/environment.sh)
+eval $($REPO_ROOT/docker/scripts/environment.sh)
 
 # Clone the desktop environment into a local docker volume
 $REPO_ROOT/docker/scripts/clone.sh

@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-export $($REPO_ROOT/docker/scripts/environment.sh)
+eval $($REPO_ROOT/docker/scripts/environment.sh)
 
 # Kill existing xpra server
 docker ps -a | grep xpra | cut -c 1-15 | xargs docker rm -f
