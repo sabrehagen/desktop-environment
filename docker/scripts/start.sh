@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-eval $($REPO_ROOT/docker/scripts/environment.sh)
+eval "$(cat $REPO_ROOT/docker/scripts/environment.sh)"
 
 # Ensure volumes that can be removed are owned before starting
 $REPO_ROOT/docker/scripts/clean-ownership.sh

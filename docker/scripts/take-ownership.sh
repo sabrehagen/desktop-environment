@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-eval $($REPO_ROOT/docker/scripts/environment.sh)
+eval "$(cat $REPO_ROOT/docker/scripts/environment.sh)"
 
 DESKTOP_ENVIRONMENT_VOLUMES=$(cat $REPO_ROOT/docker/scripts/environment.sh | grep echo | grep -v _ID | grep -E "CACHE|STATE|USER_" | cut -b 6- | cut -f 1 -d =)
 

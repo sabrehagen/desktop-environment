@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-eval $($REPO_ROOT/docker/scripts/environment.sh)
+eval "$(cat $REPO_ROOT/docker/scripts/environment.sh)"
 
 SECRETS_VOLUMES=$(cat $REPO_ROOT/docker/scripts/clean*.sh | grep DESKTOP_ | grep -v SECRETS_ | cut -f 2 -d ' ' | sort | uniq)
 

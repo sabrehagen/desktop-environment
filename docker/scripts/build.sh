@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Export desktop environment shell configuration
-eval $($REPO_ROOT/docker/scripts/environment.sh)
+eval "$(cat $REPO_ROOT/docker/scripts/environment.sh)"
 
 docker build \
   --build-arg DESKTOP_CONTAINER_BUILD_DATE=$(date +%s) \
