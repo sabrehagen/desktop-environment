@@ -181,5 +181,8 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 # Add static container filesystem
 COPY root /
 
+# s6 overlay temporary hack
+RUN mv /usr/local/bin/define /usr/local/bin/def
+
 # Use s6 init system
 ENTRYPOINT ["/init"]
