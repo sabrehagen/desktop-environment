@@ -1,8 +1,6 @@
-REPO_ROOT=$(dirname $(readlink -f $0))/../..
-
 # Desktop environment repository information
 export DESKTOP_ENVIRONMENT_CONTAINER_NAME=desktop-environment
-export DESKTOP_ENVIRONMENT_CONTAINER_TAG=${DESKTOP_ENVIRONMENT_CONTAINER_TAG-$(git --git-dir $REPO_ROOT/.git rev-parse --abbrev-ref HEAD)}
+export DESKTOP_ENVIRONMENT_CONTAINER_TAG=${DESKTOP_ENVIRONMENT_CONTAINER_TAG-$(git rev-parse --abbrev-ref HEAD)}
 export DESKTOP_ENVIRONMENT_REGISTRY=sabrehagen
 
 # Desktop environment user configuration
