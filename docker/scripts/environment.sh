@@ -1,13 +1,20 @@
+DESKTOP_ENVIRONMENT_CONTAINER_NAME=desktop-environment
+DESKTOP_ENVIRONMENT_REGISTRY=sabrehagen
+DESKTOP_ENVIRONMENT_USER=jackson
+
+REPO_ROOT=$(dirname $(readlink -f $0))/../..
+
 # Desktop environment repository information
-echo export DESKTOP_ENVIRONMENT_CONTAINER_NAME=desktop-environment
-echo export DESKTOP_ENVIRONMENT_CONTAINER_TAG=${DESKTOP_ENVIRONMENT_CONTAINER_TAG-$(git rev-parse --abbrev-ref HEAD)}
-echo export DESKTOP_ENVIRONMENT_REGISTRY=sabrehagen
+echo export DESKTOP_ENVIRONMENT_CONTAINER_NAME=$DESKTOP_ENVIRONMENT_CONTAINER_NAME
+echo export DESKTOP_ENVIRONMENT_CONTAINER_TAG=${DESKTOP_ENVIRONMENT_CONTAINER_TAG-$(git --git-dir $REPO_ROOT/.git rev-parse --abbrev-ref HEAD)}
+echo export DESKTOP_ENVIRONMENT_REGISTRY=$DESKTOP_ENVIRONMENT_REGISTRY
 
 # Desktop environment user configuration
-echo export DESKTOP_ENVIRONMENT_GIT_EMAIL=jackson@stemn.com
-echo export DESKTOP_ENVIRONMENT_GIT_NAME="Jackson Delahunt"
-echo export DESKTOP_ENVIRONMENT_USER=jackson
-echo export DESKTOP_ENVIRONMENT_USER_HOME=/home/$DESKTOP_ENVIRONMENT_USER
+DESKTOP_ENVIRONMENT_USER_HOME=/home/$DESKTOP_ENVIRONMENT_USER
+echo export DESKTOP_ENVIRONMENT_GIT_EMAIL=$(git --git-dir $REPO_ROOT/.git config user.email)
+echo export DESKTOP_ENVIRONMENT_GIT_NAME=$(git --git-dir $REPO_ROOT/.git config user.name)
+echo export DESKTOP_ENVIRONMENT_USER=$DESKTOP_ENVIRONMENT_USER
+echo export DESKTOP_ENVIRONMENT_USER_HOME=$DESKTOP_ENVIRONMENT_USER_HOME
 echo export DESKTOP_ENVIRONMENT_USER_ID=1000
 
 # Desktop environment cloudflare configuration
