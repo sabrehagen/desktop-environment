@@ -30,4 +30,4 @@ deploy:
   on:
     branch: master
   provider: script
-  script: terraform/scripts/restart.sh
+  script: kubernetes/scripts/bootstrap.sh
