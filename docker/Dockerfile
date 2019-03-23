@@ -131,6 +131,10 @@ RUN add-apt-repository ppa:alessandro-strada/ppa && \
   apt-get update -qq && \
   apt-get install -qq google-drive-ocamlfuse
 
+# Install kind
+RUN wget -O /usr/local/bin/kind -nv https://github.com/kubernetes-sigs/kind/releases/download/0.2.0/kind-linux-amd64 && \
+  chmod +x /usr/local/bin/kind
+
 # Install gem utilities
 RUN gem install \
   travis
