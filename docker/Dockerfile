@@ -134,9 +134,11 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
+  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rofi.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rpi.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmuxinator.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-vlc.git & \
@@ -144,7 +146,7 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
-  wait && echo 1
+  wait
 
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
