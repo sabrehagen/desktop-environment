@@ -152,13 +152,6 @@ RUN gosu $USER zsh -c "source $HOME/.zshrc"
 # Cache tmux plugins
 RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 
-# Record container build information
-ARG DESKTOP_CONTAINER_BUILD_DATE
-ARG DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
-ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
-
 # Add static container filesystem
 COPY root /
 
@@ -172,6 +165,13 @@ RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude=./bin && \
   tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin
+
+# Record container build information
+ARG DESKTOP_CONTAINER_BUILD_DATE
+ARG DESKTOP_CONTAINER_GIT_SHA
+ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
+ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
+ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
 # Use s6 init system
 ENTRYPOINT ["/init"]
