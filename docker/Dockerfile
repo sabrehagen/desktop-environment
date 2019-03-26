@@ -35,72 +35,17 @@ RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
   alpine \
   alsa-utils \
-  arandr \
-  bitlbee \
-  feh \
-  numlockx \
   ruby-dev \
-  software-properties-common \
   transmission-cli \
   transmission-common \
   transmission-daemon \
-  vcsh \
   vlc \
-  x11-xkb-utils \
-  xinput \
   youtube-dl
-
-# Install s6 init system
-RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
-  tar -C / -xzf -
-
-# Install resucetime time tracker
-RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
-  rm rescuetime.deb
-
-# Install zoom conferencing
-RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
-  dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
-  rm zoom.deb
-
-# Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
-  rm musikcube.deb
 
 # Install alacritty
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
-
-# Install traefik
-RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
-  chmod +x /usr/local/bin/traefik
-
-# Install tormix
-RUN git clone https://github.com/ckardaris/tormix.git && \
-  cd tormix && \
-  gosu $USER ./install && \
-  rm -rf ../tormix
-
-# Install onedrive client
-RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
-  chmod +x /usr/local/bin/onedrive
-
-# Install signal messenger
-RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
-  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
-  apt-get update -qq && \
-  apt-get install -qq signal-desktop
-
-# Install vs code, vs live share dependencies, and shfmt extension dependency
-RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
-  rm code.deb && \
-  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
 
 # Install chrome
 RUN apt-get update -qq && \
@@ -126,18 +71,65 @@ RUN apt-get update -qq && \
   groupadd --system chrome && \
   usermod --append --groups audio,chrome,video $USER
 
+# Install gem utilities
+RUN gem install \
+  travis
+
 # Install google drive client
 RUN add-apt-repository ppa:alessandro-strada/ppa && \
   apt-get update -qq && \
   apt-get install -qq google-drive-ocamlfuse
 
-# Install gem utilities
-RUN gem install \
-  travis
+# Install kind
+RUN wget -O /usr/local/bin/kind -nv https://github.com/kubernetes-sigs/kind/releases/download/0.2.0/kind-linux-amd64 && \
+  chmod +x /usr/local/bin/kind
+
+# Install musikcube
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
+  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+  rm musikcube.deb
+
+# Install onedrive client
+RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
+  chmod +x /usr/local/bin/onedrive
+
+# Install resucetime time tracker
+RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
+  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
+  rm rescuetime.deb
+
+# Install signal messenger
+RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
+  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
+  apt-get update -qq && \
+  apt-get install -qq signal-desktop
+
+# Install tormix
+RUN git clone https://github.com/ckardaris/tormix.git && \
+  cd tormix && \
+  gosu $USER ./install && \
+  rm -rf ../tormix
+
+# Install traefik
+RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
+  chmod +x /usr/local/bin/traefik
+
+# Install vs code, vs live share dependencies, and shfmt extension dependency
+RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
+  apt-get install -qq ./code.deb && \
+  rm code.deb && \
+  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
+  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
+  chmod +x /usr/local/bin/shfmt
 
 # Install yarn utilities
 RUN yarn global add \
   http-server
+
+# Install zoom conferencing
+RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
+  dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
+  rm zoom.deb
 
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
@@ -174,6 +166,10 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 
 # Add static container filesystem
 COPY root /
+
+# Install s6 init system
+RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
+  tar -C / -xzf -
 
 # s6 overlay temporary hack
 RUN mv /usr/local/bin/define /usr/local/bin/def
