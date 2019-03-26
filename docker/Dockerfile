@@ -75,11 +75,6 @@ RUN apt-get update -qq && \
 RUN gem install \
   travis
 
-# Install google drive client
-RUN add-apt-repository ppa:alessandro-strada/ppa && \
-  apt-get update -qq && \
-  apt-get install -qq google-drive-ocamlfuse
-
 # Install kind
 RUN wget -O /usr/local/bin/kind -nv https://github.com/kubernetes-sigs/kind/releases/download/0.2.0/kind-linux-amd64 && \
   chmod +x /usr/local/bin/kind
@@ -167,12 +162,12 @@ ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
 # Add static container filesystem
 COPY root /
 
-# Install s6 init system
-RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz | \
-  tar -C / -xzf -
-
 # s6 overlay temporary hack
 RUN mv /usr/local/bin/define /usr/local/bin/def
+
+# Install s6 init system
+RUN curl -sSL https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz | \
+  tar -C / -xzf -
 
 # Use s6 init system
 ENTRYPOINT ["/init"]
