@@ -1,9 +1,6 @@
 FROM stemn/development-environment:latest
 USER root
 
-# System environment configuration
-ENV S6_LOGGING 1
-
 # Container user home directories
 ENV BASE_USER stemn
 ENV USER jackson
@@ -75,10 +72,6 @@ RUN apt-get update -qq && \
 RUN gem install \
   travis
 
-# Install kind
-RUN wget -O /usr/local/bin/kind -nv https://github.com/kubernetes-sigs/kind/releases/download/0.2.0/kind-linux-amd64 && \
-  chmod +x /usr/local/bin/kind
-
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -146,7 +139,7 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
-  wait
+  wait && echo
 
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
@@ -157,13 +150,8 @@ RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 # Add static container filesystem
 COPY root /
 
-# s6 overlay temporary hack
-RUN mv /usr/local/bin/define /usr/local/bin/def
-
-# Install s6 init system
-ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude=./bin && \
-  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin
+# Become desktop environment user
+USER $DESKTOP_ENVIRONMENT_USER
 
 # Record container build information
 ARG DESKTOP_CONTAINER_BUILD_DATE
@@ -171,6 +159,3 @@ ARG DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
-
-# Use s6 init system
-ENTRYPOINT ["/init"]

@@ -4,23 +4,27 @@ REPO_ROOT=$(dirname $(readlink -f $0))/../..
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 # Ensure volumes that can be removed are owned before starting
-$REPO_ROOT/docker/scripts/clean-ownership.sh
+$REPO_ROOT/docker/scripts/clean.sh
 
+# Ensure the desktop environment network exists
+docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
+
+# Start the desktop environment container
 docker run \
   --cap-add SYS_PTRACE \
   --detach \
   --device /dev/snd \
   --env DESKTOP_ENVIRONMENT_USER \
-  --env DISPLAY=${DISPLAY-:0} \
-  --env GIT_COMMITTER_EMAIL=$DESKTOP_ENVIRONMENT_GIT_EMAIL \
-  --env GIT_COMMITTER_NAME=$DESKTOP_ENVIRONMENT_GIT_NAME \
+  --env DISPLAY \
+  --env GIT_COMMITTER_EMAIL="$DESKTOP_ENVIRONMENT_GIT_EMAIL" \
+  --env GIT_COMMITTER_NAME="$DESKTOP_ENVIRONMENT_GIT_NAME" \
   --group-add audio \
   --group-add docker \
   --group-add video \
   --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
-  --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
+  --network host \
   --publish 80:80 \
   --publish 443:443 \
   --rm \
@@ -59,7 +63,8 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_TORRENTS:$DESKTOP_ENVIRONMENT_USER_TORRENTS \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
-  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
+  sleep infinity
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
@@ -72,6 +77,3 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/transmission
 # $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
-
-# Manually start services whilst s6 issues above persists
-$REPO_ROOT/docker/scripts/exec.sh $DESKTOP_ENVIRONMENT_USER_HOME/.config/scripts/startup.sh
