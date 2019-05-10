@@ -143,6 +143,10 @@ RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 # Add static container filesystem
 COPY root /
 
+# Create the docker group with the host os group id
+ENV DOCKER_GROUP 233
+RUN groupmod --gid $DOCKER_GROUP docker
+
 # Become desktop environment user
 USER $DESKTOP_ENVIRONMENT_USER
 
