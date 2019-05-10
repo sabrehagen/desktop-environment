@@ -149,6 +149,7 @@ RUN groupmod --gid $DOCKER_GROUP docker
 
 # Become desktop environment user
 USER $USER
+WORKDIR $HOME
 
 # Record container build information
 ARG DESKTOP_CONTAINER_BUILD_DATE
