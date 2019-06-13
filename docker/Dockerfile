@@ -32,6 +32,7 @@ RUN apt-get update -qq && \
   apt-get install -qq --fix-broken --fix-missing \
   alpine \
   alsa-utils \
+  arandr \
   transmission-cli \
   transmission-common \
   transmission-daemon \
@@ -85,6 +86,11 @@ RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
   apt-get update -qq && \
   apt-get install -qq signal-desktop
+
+# Install slack
+RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-3.4.2-amd64.deb && \
+  dpkg -i slack.deb || apt-get install -qq --fix-broken && \
+  rm slack.deb
 
 # Install tormix
 RUN git clone https://github.com/ckardaris/tormix.git && \
