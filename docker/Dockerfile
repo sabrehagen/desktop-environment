@@ -150,7 +150,7 @@ RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 COPY root /
 
 # Create the docker group with the host os group id
-ENV DOCKER_GROUP 233
+ENV DOCKER_GROUP 999
 RUN groupmod --gid $DOCKER_GROUP docker
 
 # Become desktop environment user
