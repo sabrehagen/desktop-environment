@@ -67,6 +67,19 @@ RUN apt-get update -qq && \
   groupadd --system chrome && \
   usermod --append --groups audio,chrome,video $USER
 
+# Install compose-on-kubernetes
+RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kubernetes/releases/download/v0.4.23/installer-linux && \
+  chmod +x compose-on-kubernetes && \
+  mv compose-on-kubernetes /usr/local/bin
+
+# Install helm
+RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+
+# Install kind
+RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/v0.3.0/kind-linux-amd64 && \
+  chmod +x kind && \
+  mv kind /usr/local/bin
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
