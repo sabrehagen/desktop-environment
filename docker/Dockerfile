@@ -131,6 +131,10 @@ RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kube
   chmod +x compose-on-kubernetes && \
   mv compose-on-kubernetes /usr/local/bin
 
+# Install docker-compose
+RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+  chmod +x /usr/local/bin/docker-compose
+
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
   /opt/fzf/install --bin
