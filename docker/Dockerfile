@@ -174,10 +174,6 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
 
-# Install traefik
-RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
-  chmod +x /usr/local/bin/traefik
-
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
