@@ -51,6 +51,7 @@ RUN apt-get update -qq && \
   iftop \
   iputils-ping \
   jq \
+  keychain \
   libnss3-tools \
   lsb-core \
   make \
@@ -61,7 +62,6 @@ RUN apt-get update -qq && \
   netcat-openbsd \
   nnn \
   numlockx \
-  openbox \
   openssl \
   perl \
   python \
@@ -78,12 +78,10 @@ RUN apt-get update -qq && \
   vim \
   weechat \
   wmctrl \
-  x11vnc \
   xauth \
   xdotool \
   xinput \
   xsel \
-  xvfb \
   zsh
 
 # Install antigen
@@ -132,6 +130,10 @@ RUN apt-get update -qq && \
 RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kubernetes/releases/download/v0.4.23/installer-linux && \
   chmod +x compose-on-kubernetes && \
   mv compose-on-kubernetes /usr/local/bin
+
+# Install fzf
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
+  /opt/fzf/install --bin
 
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
