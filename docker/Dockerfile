@@ -136,6 +136,11 @@ RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kube
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
+# Install jump directory navigator
+RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
+  dpkg -i jump.deb && \
+  rm jump.deb
+
 # Install kind
 RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/v0.3.0/kind-linux-amd64 && \
   chmod +x kind && \
@@ -173,6 +178,13 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
 # Install tormix
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
+
+# Install tmux plugin manager
+RUN git clone https://github.com/tmux-plugins/tpm /opt/tpm --depth 1 && \
+  ln -s /opt/tpm/tpm /usr/local/bin
+
+# Install tmuxinator
+RUN gem install tmuxinator
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
