@@ -204,8 +204,12 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
 # Enable password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
-# Create the docker group with the host os group id
+# Create the docker group with the host os group id, backing up any existing group with docker group id
 ENV DOCKER_GROUP 999
+RUN getent group $DOCKER_GROUP | \
+  grep -v docker | \
+  cut -d: -f1 | \
+  xargs groupmod --gid 9999 2>/dev/null || true
 RUN groupmod --gid $DOCKER_GROUP docker
 
 # Create a non-root user for safe operation
@@ -236,7 +240,10 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
-  wait && echo 1
+  wait
+
+# Take ownership of user's home and applications directory
+RUN chown -R $USER:$USER $HOME /opt
 
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
