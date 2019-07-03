@@ -171,10 +171,8 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
   rm slack.deb
 
 # Install tormix
-RUN git clone https://github.com/ckardaris/tormix.git && \
-  cd tormix && \
-  gosu $USER ./install && \
-  rm -rf ../tormix
+RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
+  chmod +x /usr/local/bin/tormix
 
 # Install traefik
 RUN wget -O /usr/local/bin/traefik -nv https://github.com/containous/traefik/releases/download/v1.7.9/traefik_linux-amd64 && \
