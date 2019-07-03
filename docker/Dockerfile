@@ -182,9 +182,19 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
-# Install yarn utilities
+# Install yarn
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+  apt-get update -qq && apt-get install -qq yarn
+
+# Install yarn based utilities
 RUN yarn global add \
-  http-server
+  clipboard-cli \
+  github-email \
+  http-server \
+  imgur-uploader-cli \
+  rebase-editor \
+  tldr
 
 # Install zoom conferencing
 RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
