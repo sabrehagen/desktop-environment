@@ -126,8 +126,7 @@ RUN apt-get update -qq && \
   apt-get install -qq google-chrome-stable --no-install-recommends && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
-  groupadd --system chrome && \
-  usermod --append --groups audio,chrome,video $USER
+  groupadd --system chrome
 
 # Install compose-on-kubernetes
 RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kubernetes/releases/download/v0.4.23/installer-linux && \
@@ -197,6 +196,21 @@ RUN yarn global add \
 RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
   dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
   rm zoom.deb
+
+# Enable password-less sudo for the sudo group
+RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Create the docker group with the host os group id
+ENV DOCKER_GROUP 999
+RUN groupmod --gid $DOCKER_GROUP docker
+
+# Create a non-root user for safe operation
+RUN useradd \
+  --create-home \
+  --groups $DOCKER_GROUP,audio,chrome,sudo,video \
+  --password $USER \
+  --shell /bin/zsh \
+  $USER
 
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
