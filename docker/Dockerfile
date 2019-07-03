@@ -1,42 +1,104 @@
-FROM stemn/development-environment:latest
-USER root
+FROM ubuntu:19.04
 
-# Container user home directories
-ENV BASE_USER stemn
 ENV USER jackson
+ENV EDITOR nano
 ENV HOME /home/$USER
+ENV LANG en_US.UTF-8
+ENV LANGUAGE $LANG
+ENV LC_ALL $LANG
+ENV LC_CTYPE $LANG
+ENV SHELL /bin/zsh
+ENV TERM xterm-256color
+ENV TZ Australia/Sydney
 
-# Remove base user files
-RUN rm -rf /$BASE_USER
+# Restore minimized distribution content e.g. man pages
+RUN yes | unminimize
 
-# Make the new user's home directory
-RUN mkdir -p $HOME
-
-# Rename the first non-root group to jackson
-RUN groupmod \
-  --new-name \
-  $USER $BASE_USER
-
-# Rename the first non-root user to jackson
-RUN usermod \
-  --groups $USER,docker,sudo \
-  --home $HOME \
-  --login $USER \
-  $BASE_USER
-
-# Give the user ownership of their home folder
-RUN chown -R $USER:$USER $HOME
-
-# Install user utilities
+# Install locales and timezone data
 RUN apt-get update -qq && \
-  apt-get install -qq --fix-broken --fix-missing \
-  alpine \
+  apt-get install -qq \
+  locales \
+  tzdata
+
+# Generate locales
+RUN locale-gen $LANG && \
+  update-locale LC_ALL=$LC_ALL LANG=$LANG && \
+  dpkg-reconfigure --frontend=noninteractive locales
+
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+  echo $TZ > /etc/timezone
+
+# Install cloud computer utilities
+RUN apt-get update -qq && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
   arandr \
+  asciinema \
+  build-essential \
+  cmake \
+  cmatrix \
+  curl \
+  dnsutils \
+  docker.io \
+  figlet \
+  g++ \
+  gcc \
+  git \
+  gtk+3.0 \
+  gosu \
+  htop \
+  iftop \
+  iputils-ping \
+  jq \
+  libnss3-tools \
+  lsb-core \
+  make \
+  man-db \
+  nano \
+  ncdu \
+  net-tools \
+  netcat-openbsd \
+  nnn \
+  numlockx \
+  openbox \
+  openssl \
+  perl \
+  python \
+  ruby \
+  software-properties-common \
+  ssh \
+  sudo \
+  tmux \
   transmission-cli \
   transmission-common \
   transmission-daemon \
-  youtube-dl
+  tree \
+  vcsh \
+  vim \
+  weechat \
+  wmctrl \
+  x11vnc \
+  xauth \
+  xdotool \
+  xinput \
+  xsel \
+  xvfb \
+  zsh
+
+# Install antigen
+RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
+
+# Install bat
+RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
+  dpkg -i bat.deb && \
+  rm bat.deb
+
+# Install code
+RUN curl -fsSL https://github.com/cdr/code-server/releases/download/1.1119-vsc1.33.1/code-server1.1119-vsc1.33.1-linux-x64.tar.gz | \
+  tar -C /tmp -xzf - && \
+  mv /tmp/code-server*/code-server /usr/local/bin && \
+  rm -rf /tmp/code-server*
 
 # Install alacritty
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
