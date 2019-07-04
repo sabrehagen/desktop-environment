@@ -35,6 +35,7 @@ RUN apt-get update -qq && \
   alsa-utils \
   arandr \
   asciinema \
+  bitlbee \
   build-essential \
   cmake \
   cmatrix \
@@ -65,6 +66,7 @@ RUN apt-get update -qq && \
   openssl \
   perl \
   python \
+  python-pip \
   ruby \
   software-properties-common \
   ssh \
@@ -200,6 +202,12 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
+# Install weechat slack plugin
+RUN mkdir -p $HOME/.weechat/python/autoload && \
+  curl -fsSL "https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py" -o $HOME/.weechat/python/wee_slack.py && \
+  ln -s $HOME/.weechat/python/wee_slack.py $HOME/.weechat/python/autoload && \
+  pip install websocket-client
+
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
@@ -238,6 +246,9 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
+# Take ownership of user's home and applications directory
+RUN chown -R $USER:$USER $HOME /opt
+
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
@@ -259,9 +270,6 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
-
-# Take ownership of user's home and applications directory
-RUN chown -R $USER:$USER $HOME /opt
 
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
