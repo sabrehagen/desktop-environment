@@ -1,4 +1,0 @@
-#!/usr/bin/execlineb -P
-
-# Start rescuetime as jackson
-# gosu jackson rescuetime

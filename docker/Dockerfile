@@ -158,6 +158,10 @@ RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/
 RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Install lazygit
+RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
+  tar -C /usr/local/bin -xzf -
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -277,8 +281,9 @@ RUN gosu $USER zsh -c "source $HOME/.zshrc"
 # Cache tmux plugins
 RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 
-# Add static container filesystem
-COPY root /
+# Configure lazygit
+RUN mkdir -p $HOME/.config/jesseduffield/lazygit && \
+  echo 'reporting: "off"' > $HOME/.config/jesseduffield/lazygit/config.yml
 
 # Become desktop environment user
 USER $USER

@@ -1,4 +1,0 @@
-#!/usr/bin/execlineb -P
-
-# Start gotty-clients tmux session as jackson
-gosu jackson tmux new-session -s gotty-clients
