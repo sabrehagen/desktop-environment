@@ -83,6 +83,7 @@ RUN apt-get update -qq && \
   xauth \
   xdotool \
   xinput \
+  xclip \
   xsel \
   zsh
 
