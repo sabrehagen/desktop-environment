@@ -65,13 +65,3 @@ docker run \
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
-
-# Start desktop services
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/gotty
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/keychain
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/rescuetime
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-desktop-environment
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/tmux-gotty-clients
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/transmission
-# $REPO_ROOT/docker/scripts/exec-root.sh s6-svc -u /run/s6/services/webrelay
-$REPO_ROOT/docker/scripts/exec.sh $DESKTOP_ENVIRONMENT_USER_HOME/.config/scripts/startup.sh

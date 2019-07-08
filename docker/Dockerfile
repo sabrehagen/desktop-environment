@@ -35,6 +35,7 @@ RUN apt-get update -qq && \
   alsa-utils \
   arandr \
   asciinema \
+  bitlbee \
   build-essential \
   cmake \
   cmatrix \
@@ -65,6 +66,7 @@ RUN apt-get update -qq && \
   openssl \
   perl \
   python \
+  python-pip \
   ruby \
   software-properties-common \
   ssh \
@@ -156,6 +158,10 @@ RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/
 RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Install lazygit
+RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
+  tar -C /usr/local/bin -xzf -
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -200,6 +206,12 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
+# Install weechat slack plugin
+RUN mkdir -p $HOME/.weechat/python/autoload && \
+  curl -fsSL "https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py" -o $HOME/.weechat/python/wee_slack.py && \
+  ln -s $HOME/.weechat/python/wee_slack.py $HOME/.weechat/python/autoload && \
+  pip install websocket-client
+
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
@@ -238,6 +250,9 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
+# Take ownership of user's home and applications directory
+RUN chown -R $USER:$USER $HOME /opt
+
 # Clone dotfiles configuration
 RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
@@ -260,17 +275,15 @@ RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alac
   gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait && echo 1
 
-# Take ownership of user's home and applications directory
-RUN chown -R $USER:$USER $HOME /opt
-
 # Cache zsh plugins
 RUN gosu $USER zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
 RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
 
-# Add static container filesystem
-COPY root /
+# Configure lazygit
+RUN mkdir -p $HOME/.config/jesseduffield/lazygit && \
+  echo 'reporting: "off"' > $HOME/.config/jesseduffield/lazygit/config.yml
 
 # Become desktop environment user
 USER $USER

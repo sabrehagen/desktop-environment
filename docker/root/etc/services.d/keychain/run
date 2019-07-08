@@ -1,4 +1,0 @@
-#!/usr/bin/execlineb -P
-
-# Start ssh keychain as jackson
-gosu jackson keychain
