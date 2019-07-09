@@ -142,6 +142,10 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
   /opt/fzf/install --bin
 
+# Install gotop
+RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+  dpkg -i gotop-deb
+
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
