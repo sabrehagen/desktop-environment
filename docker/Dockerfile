@@ -71,6 +71,7 @@ RUN apt-get update -qq && \
   software-properties-common \
   ssh \
   sudo \
+  sxhkd \
   tmux \
   transmission-cli \
   transmission-common \
