@@ -177,6 +177,11 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
 
+# Install polo
+RUN wget -O polo.deb -nv https://github.com/teejee2008/polo/releases/download/v18.8-beta/polo-file-manager-v18.8.2-amd64.deb && \
+  dpkg -i polo.deb || apt-get install -qq --fix-broken && \
+  rm polo.deb
+
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
