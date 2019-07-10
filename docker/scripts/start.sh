@@ -15,7 +15,7 @@ docker run \
   --detach \
   --device /dev/snd \
   --env DESKTOP_ENVIRONMENT_USER \
-  --env DISPLAY \
+  --env DISPLAY=:0 \
   --env GIT_COMMITTER_EMAIL="$DESKTOP_ENVIRONMENT_GIT_EMAIL" \
   --env GIT_COMMITTER_NAME="$DESKTOP_ENVIRONMENT_GIT_NAME" \
   --group-add audio \
