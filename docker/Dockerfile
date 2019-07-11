@@ -42,6 +42,7 @@ RUN apt-get update -qq && \
   curl \
   dnsutils \
   docker.io \
+  feh \
   figlet \
   g++ \
   gcc \
@@ -55,6 +56,7 @@ RUN apt-get update -qq && \
   keychain \
   libnss3-tools \
   lsb-core \
+  maim \
   make \
   man-db \
   nano \
@@ -90,6 +92,10 @@ RUN apt-get update -qq && \
 
 # Install antigen
 RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
+
+# Install arc
+RUN wget -O /usr/local/bin/arc -qnv https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
+  chmod +x /usr/local/bin/arc
 
 # Install bat
 RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
@@ -129,11 +135,6 @@ RUN apt-get update -qq && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
-
-# Install compose-on-kubernetes
-RUN wget -O compose-on-kubernetes -qnv https://github.com/docker/compose-on-kubernetes/releases/download/v0.4.23/installer-linux && \
-  chmod +x compose-on-kubernetes && \
-  mv compose-on-kubernetes /usr/local/bin
 
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
