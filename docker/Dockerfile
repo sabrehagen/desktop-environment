@@ -174,6 +174,9 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
