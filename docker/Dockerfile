@@ -268,39 +268,39 @@ RUN useradd \
 # Take ownership of user's home and applications directory
 RUN chown -R $USER:$USER $HOME /opt
 
+# Become desktop environment user
+USER $USER
+WORKDIR $HOME
+
 # Clone dotfiles configuration
-RUN gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-polo.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rofi.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rpi.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
-  gosu $USER vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
+RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-polo.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rofi.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rpi.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
+ vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
 
 # Cache zsh plugins
-RUN gosu $USER zsh -c "source $HOME/.zshrc"
+RUN zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
-RUN gosu $USER zsh -c /opt/tpm/bin/install_plugins
+RUN zsh -c /opt/tpm/bin/install_plugins
 
 # Configure lazygit
 RUN mkdir -p $HOME/.config/jesseduffield/lazygit && \
   echo 'reporting: "off"' > $HOME/.config/jesseduffield/lazygit/config.yml
-
-# Become desktop environment user
-USER $USER
-WORKDIR $HOME
 
 # Record container build information
 ARG DESKTOP_CONTAINER_BUILD_DATE
