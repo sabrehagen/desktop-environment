@@ -8,7 +8,7 @@ ENV LANGUAGE $LANG
 ENV LC_ALL $LANG
 ENV LC_CTYPE $LANG
 ENV SHELL /bin/zsh
-ENV TERM xterm-256color
+ENV TERM tmux-256color
 ENV TZ Australia/Sydney
 
 # Restore minimized distribution content e.g. man pages
