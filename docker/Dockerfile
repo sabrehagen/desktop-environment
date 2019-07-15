@@ -207,8 +207,7 @@ RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardari
   chmod +x /usr/local/bin/tormix
 
 # Install tmux plugin manager
-RUN git clone https://github.com/tmux-plugins/tpm /opt/tpm --depth 1 && \
-  ln -s /opt/tpm/tpm /usr/local/bin
+RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tmuxinator
 RUN gem install tmuxinator
