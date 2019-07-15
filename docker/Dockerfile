@@ -296,7 +296,7 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
 RUN zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
-RUN zsh -c /opt/tpm/bin/install_plugins
+RUN zsh -c $HOME/.tmux/plugins/tpm/bin/install_plugins
 
 # Configure lazygit
 RUN mkdir -p $HOME/.config/jesseduffield/lazygit && \
