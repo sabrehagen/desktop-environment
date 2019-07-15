@@ -272,24 +272,28 @@ RUN chown -R $USER:$USER $HOME /opt
 USER $USER
 WORKDIR $HOME
 
+# If the DOTFILES_CACHEBUST build arg is supplied, rebuild from dotfiles onwards
+ARG DOTFILES_CACHEBUST
+RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
+
 # Clone dotfiles configuration
 RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-polo.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rofi.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rpi.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
- vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alpine.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-polo.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rofi.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-rpi.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
 
 # Cache zsh plugins
