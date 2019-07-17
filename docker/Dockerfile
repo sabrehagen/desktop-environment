@@ -148,6 +148,10 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
 RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
   dpkg -i gotop-deb
 
+# Install gotty
+RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
+  tar -C /usr/local/bin -xzf -
+
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
