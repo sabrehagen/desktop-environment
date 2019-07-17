@@ -146,8 +146,8 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
 
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
-  apt-get update && \
-  apt-get install golang-go
+  apt-get update -qq && \
+  apt-get install -qq golang-go
 
 # Install gotop
 RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
