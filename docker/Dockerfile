@@ -144,6 +144,11 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
   /opt/fzf/install --bin
 
+# Install go
+RUN add-apt-repository ppa:longsleep/golang-backports && \
+  apt-get update && \
+  apt-get install golang-go
+
 # Install gotop
 RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
   dpkg -i gotop-deb
@@ -151,6 +156,9 @@ RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.
 # Install gotty
 RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
   tar -C /usr/local/bin -xzf -
+
+# Install gotty-client
+RUN go get github.com/moul/gotty-client/cmd/gotty-client
 
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
