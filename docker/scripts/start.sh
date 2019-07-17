@@ -15,6 +15,7 @@ docker run \
   --detach \
   --device /dev/snd \
   --device /dev/hidraw1 \
+  --env DBUS_SESSION_BUS_ADDRESS \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=:0 \
   --env GIT_COMMITTER_EMAIL="$DESKTOP_ENVIRONMENT_GIT_EMAIL" \
@@ -35,6 +36,7 @@ docker run \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume $DBUS_SESSION_BUS_ADDRESS:$DBUS_SESSION_BUS_ADDRESS \
   --volume DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES:$DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
