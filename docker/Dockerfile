@@ -44,6 +44,7 @@ RUN apt-get update -qq && \
   docker.io \
   feh \
   figlet \
+  fzf \
   g++ \
   gcc \
   git \
@@ -139,10 +140,6 @@ RUN apt-get update -qq && \
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
-
-# Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
-  /opt/fzf/install --bin
 
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
@@ -271,8 +268,8 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
-# Take ownership of user's home and applications directory
-RUN chown -R $USER:$USER $HOME /opt
+# Take ownership of user's home directory
+RUN chown -R $USER:$USER $HOME
 
 # Become desktop environment user
 USER $USER
