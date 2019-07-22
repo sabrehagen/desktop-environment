@@ -44,6 +44,7 @@ RUN apt-get update -qq && \
   docker.io \
   feh \
   figlet \
+  fzf \
   g++ \
   gcc \
   git \
@@ -140,10 +141,6 @@ RUN apt-get update -qq && \
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
-# Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git /opt/fzf && \
-  /opt/fzf/install --bin
-
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
@@ -192,11 +189,6 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
-
-# Install polo
-RUN wget -O polo.deb -nv https://github.com/teejee2008/polo/releases/download/v18.8-beta/polo-file-manager-v18.8.2-amd64.deb && \
-  dpkg -i polo.deb || apt-get install -qq --fix-broken && \
-  rm polo.deb
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
@@ -276,8 +268,8 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
-# Take ownership of user's home and applications directory
-RUN chown -R $USER:$USER $HOME /opt
+# Take ownership of user's home directory
+RUN chown -R $USER:$USER $HOME
 
 # Become desktop environment user
 USER $USER
