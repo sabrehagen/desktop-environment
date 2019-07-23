@@ -14,7 +14,6 @@ docker run \
   --cap-add SYS_PTRACE \
   --detach \
   --device /dev/snd \
-  --device /dev/hidraw1 \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=:0 \
   --env GIT_COMMITTER_EMAIL="$DESKTOP_ENVIRONMENT_GIT_EMAIL" \
