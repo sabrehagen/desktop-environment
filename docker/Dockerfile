@@ -141,7 +141,8 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
   chmod +x /usr/local/bin/docker-compose
 
 # Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
+  $HOME/.fzf/install --bin
 
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
