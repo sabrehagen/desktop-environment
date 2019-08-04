@@ -50,6 +50,7 @@ RUN apt-get update -qq && \
   gtk+3.0 \
   gosu \
   htop \
+  httpie \
   iftop \
   iputils-ping \
   jq \
