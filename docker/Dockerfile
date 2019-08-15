@@ -103,12 +103,6 @@ RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0
   dpkg -i bat.deb && \
   rm bat.deb
 
-# Install code
-RUN curl -fsSL https://github.com/cdr/code-server/releases/download/1.1119-vsc1.33.1/code-server1.1119-vsc1.33.1-linux-x64.tar.gz | \
-  tar -C /tmp -xzf - && \
-  mv /tmp/code-server*/code-server /usr/local/bin && \
-  rm -rf /tmp/code-server*
-
 # Install alacritty
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
@@ -206,7 +200,7 @@ RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   apt-get install -qq signal-desktop
 
 # Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-3.4.2-amd64.deb && \
+RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.1-amd64.deb && \
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
@@ -246,6 +240,7 @@ RUN yarn global add \
   http-server \
   imgur-uploader-cli \
   rebase-editor \
+  speed-test \
   tldr
 
 # Install zoom conferencing
@@ -290,7 +285,6 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-polo.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
