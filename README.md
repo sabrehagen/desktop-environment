@@ -12,10 +12,6 @@ As `root`:
 # Clone desktop environment
 git clone https://github.com/sabrehagen/desktop-environment
 
-# Supply cloud provider credentials
-export DESKTOP_ENVIRONMENT_CLOUDFLARE_TOKEN=
-export DESKTOP_ENVIRONMENT_GOOGLE_CREDENTIALS=
-
 # Start desktop environment
 desktop-environment/host/bootstrap.sh
 ```
