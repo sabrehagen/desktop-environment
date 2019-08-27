@@ -53,6 +53,7 @@ RUN apt-get update -qq && \
   httpie \
   iftop \
   iputils-ping \
+  irssi \
   jq \
   keychain \
   libnss3-tools \
