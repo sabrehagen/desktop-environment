@@ -255,7 +255,7 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
   rm zoom.deb
 
 # Use cloudflare dns
-RUN echo "nameserver 1.1.1.1" > /etc/resolv.conf
+RUN echo "prepend domain-name-servers 1.1.1.1" >> /etc/dhcp/dhclient.conf
 
 # Enable password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
