@@ -68,6 +68,7 @@ RUN apt-get update -qq && \
   nnn \
   numlockx \
   openssl \
+  pcmanfm \
   perl \
   python \
   python-pip \
