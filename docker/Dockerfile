@@ -35,7 +35,7 @@ RUN apt-get update -qq && \
   alsa-utils \
   arandr \
   asciinema \
-  bitlbee \
+  autojump \
   build-essential \
   cmake \
   cmatrix \
@@ -164,11 +164,6 @@ RUN go get github.com/moul/gotty-client/cmd/gotty-client
 
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-
-# Install jump directory navigator
-RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
-  dpkg -i jump.deb && \
-  rm jump.deb
 
 # Install kind
 RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/v0.3.0/kind-linux-amd64 && \
