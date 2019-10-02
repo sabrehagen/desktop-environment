@@ -22,6 +22,7 @@ docker run \
   --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
+  --network host \
   --rm \
   --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
   --tty \
