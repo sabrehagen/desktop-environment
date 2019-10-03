@@ -42,6 +42,7 @@ RUN apt-get update -qq && \
   curl \
   dnsutils \
   docker.io \
+  evince \
   feh \
   figlet \
   g++ \
