@@ -14,7 +14,14 @@ docker run \
   --cap-add SYS_PTRACE \
   --cap-add NET_ADMIN \
   --detach \
+  --device /dev/dri \
   --device /dev/snd \
+  --device /dev/tty0 \
+  --device /dev/tty1 \
+  --device /dev/tty2 \
+  --device /dev/tty3 \
+  --device /dev/tty4 \
+  --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=:0 \
   --group-add audio \
