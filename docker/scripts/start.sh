@@ -26,6 +26,7 @@ docker run \
   --env DISPLAY=:0 \
   --group-add audio \
   --group-add docker \
+  --group-add tty \
   --group-add video \
   --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
   --interactive \

@@ -266,8 +266,11 @@ RUN mkdir /dev/net && \
   wget -O /etc/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn && \
   wget -O /etc/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn \
 
-# Enable password-less sudo for the sudo group
+# Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Configure X11 permissions
+RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
 
 # Create the docker group with the host os group id, backing up any existing group with docker group id
 ENV DOCKER_GROUP 999
@@ -280,7 +283,7 @@ RUN groupmod --gid $DOCKER_GROUP docker
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,sudo,video \
+  --groups $DOCKER_GROUP,audio,chrome,sudo,tty,video \
   --password $USER \
   --shell /bin/zsh \
   $USER
