@@ -264,7 +264,7 @@ RUN mkdir /dev/net && \
   chmod 600 /dev/net/tun && \
   wget -O /etc/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4349.nordvpn.com.tcp443.ovpn && \
   wget -O /etc/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn && \
-  wget -O /etc/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn \
+  wget -O /etc/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
