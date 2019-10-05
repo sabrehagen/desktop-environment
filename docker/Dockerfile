@@ -92,7 +92,9 @@ RUN apt-get update -qq && \
   xdotool \
   xinput \
   xclip \
+  xorg \
   xsel \
+  xserver-xorg \
   zsh
 
 # Install antigen
