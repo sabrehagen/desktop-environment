@@ -12,6 +12,7 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 # Start the desktop environment container
 docker run \
   --cap-add SYS_PTRACE \
+  --cap-add NET_ADMIN \
   --detach \
   --device /dev/snd \
   --env DESKTOP_ENVIRONMENT_USER \
