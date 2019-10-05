@@ -52,6 +52,7 @@ RUN apt-get update -qq && \
   gosu \
   htop \
   httpie \
+  i3 \
   iftop \
   iputils-ping \
   irssi \
