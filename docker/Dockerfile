@@ -69,6 +69,7 @@ RUN apt-get update -qq && \
   nnn \
   numlockx \
   openssl \
+  openvpn \
   pcmanfm \
   perl \
   python \
@@ -253,6 +254,12 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
 
 # Use cloudflare dns
 RUN echo "prepend domain-name-servers 1.1.1.1" >> /etc/dhcp/dhclient.conf
+
+# Configure openvpn
+RUN mkdir /dev/net && \
+  mknod /dev/net/tun c 10 200 && \
+  chmod 600 /dev/net/tun && \
+  wget -O /etc/openvpn/nordvpn.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn
 
 # Enable password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
