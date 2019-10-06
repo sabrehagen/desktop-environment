@@ -33,6 +33,7 @@ docker run \
   --network host \
   --rm \
   --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
+  --user $DESKTOP_ENVIRONMENT_USER \
   --volume /dev/shm:/dev/shm \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
