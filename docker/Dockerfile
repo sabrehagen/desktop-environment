@@ -271,7 +271,9 @@ RUN mkdir /dev/net && \
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
 # Configure X11 permissions
-RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
+RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
+  echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
+  chmod u+s /usr/bin/xinit
 
 # Create the docker group with the host os group id, backing up any existing group with docker group id
 ENV DOCKER_GROUP 999
@@ -284,7 +286,7 @@ RUN groupmod --gid $DOCKER_GROUP docker
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,sudo,tty,video \
+  --groups $DOCKER_GROUP,audio,chrome,input,sudo,tty,video \
   --password $USER \
   --shell /bin/zsh \
   $USER
@@ -305,6 +307,7 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \

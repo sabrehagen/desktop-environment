@@ -11,21 +11,20 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 
 # Start the desktop environment container
 docker run \
+  --privileged \
   --cap-add SYS_PTRACE \
   --cap-add NET_ADMIN \
   --detach \
   --device /dev/dri \
+  --device /dev/input \
   --device /dev/snd \
-  --device /dev/tty0 \
   --device /dev/tty1 \
-  --device /dev/tty2 \
-  --device /dev/tty3 \
-  --device /dev/tty4 \
   --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=:0 \
   --group-add audio \
   --group-add docker \
+  --group-add input \
   --group-add tty \
   --group-add video \
   --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
@@ -34,9 +33,8 @@ docker run \
   --network host \
   --rm \
   --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
-  --tty \
+  --volume /run/udev:/run/udev \
   --volume /dev/shm:/dev/shm \
-  --volume /tmp/.X11-unix:/tmp/.X11-unix \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES:$DESKTOP_ENVIRONMENT_CACHE_CERTIFICATES \
