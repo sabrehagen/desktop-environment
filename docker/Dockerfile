@@ -33,6 +33,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
+  alttab \
   arandr \
   asciinema \
   autojump \
@@ -286,7 +287,7 @@ RUN groupmod --gid $DOCKER_GROUP docker
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,input,sudo,tty,video \
+  --groups $DOCKER_GROUP,audio,chrome,input,netdev,sudo,tty,video \
   --password $USER \
   --shell /bin/zsh \
   $USER
