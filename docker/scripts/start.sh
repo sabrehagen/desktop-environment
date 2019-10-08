@@ -12,12 +12,8 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 # Start the desktop environment container
 docker run \
   --cap-add NET_ADMIN \
-  --cap-add SYS_PTRACE \
-  --cap-add CHOWN \
-  --cap-add MKNOD \
-  --cap-add SETGID \
-  --cap-add SETUID \
   --cap-add SYS_ADMIN \
+  --cap-add SYS_PTRACE \
   --cap-add SYS_TTY_CONFIG \
   --detach \
   --device /dev/dri \
@@ -31,6 +27,7 @@ docker run \
   --group-add audio \
   --group-add docker \
   --group-add input \
+  --group-add plugdev \
   --group-add tty \
   --group-add video \
   --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
