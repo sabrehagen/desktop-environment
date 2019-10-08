@@ -1,6 +1,7 @@
 FROM ubuntu:19.04
 
 ENV USER jackson
+ENV DISPLAY :0
 ENV EDITOR nano
 ENV HOME /home/$USER
 ENV LANG en_US.UTF-8
@@ -139,6 +140,24 @@ RUN apt-get update -qq && \
   rm /etc/apt/sources.list.d/google.list && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
+
+# Install cloudstorage
+RUN apt-get install -qq \
+  autoconf \
+  fuse3 \
+  libcurl4-openssl-dev \
+  libfuse3-dev \
+  libjsoncpp-dev \
+  libmicrohttpd-dev \
+  libtinyxml2-dev \
+  libtool \
+  pkg-config && \
+  git clone https://github.com/cloud-computer/libcloudstorage && \
+  cd libcloudstorage && \
+  ./bootstrap && \
+  ./configure --with-curl --with-microhttpd --with-fuse && \
+  make -j$(nproc) && \
+  make install
 
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
