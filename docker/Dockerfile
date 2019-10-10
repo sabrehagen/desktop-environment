@@ -38,6 +38,7 @@ RUN apt-get update -qq && \
   arandr \
   asciinema \
   autojump \
+  autorandr \
   build-essential \
   cmake \
   cmatrix \
@@ -91,6 +92,7 @@ RUN apt-get update -qq && \
   vim \
   weechat \
   wmctrl \
+  x11vnc \
   xauth \
   xdotool \
   xinit \
@@ -213,6 +215,9 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 
+# Install novnc
+RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
+
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
@@ -326,6 +331,7 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 # Clone dotfiles configuration
 RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
