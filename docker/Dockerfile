@@ -296,6 +296,9 @@ RUN mkdir -p $HOME/.config/openvpn && \
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
+# Configure udev rules
+RUN echo 'ACTION=="change", KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/usr/bin/autorandr --change --batch"' > /etc/udev/rules.d/95-monitor-switch.rules
+
 # Configure X11 permissions
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
