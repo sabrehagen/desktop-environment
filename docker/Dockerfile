@@ -38,6 +38,7 @@ RUN apt-get update -qq && \
   arandr \
   asciinema \
   autojump \
+  autorandr \
   build-essential \
   cmake \
   cmatrix \
@@ -91,6 +92,7 @@ RUN apt-get update -qq && \
   vim \
   weechat \
   wmctrl \
+  x11vnc \
   xauth \
   xdotool \
   xinit \
@@ -157,7 +159,8 @@ RUN apt-get install -qq \
   ./bootstrap && \
   ./configure --with-curl --with-microhttpd --with-fuse && \
   make -j$(nproc) && \
-  make install
+  make install && \
+  echo user_allow_other >> /etc/fuse.conf
 
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
@@ -211,6 +214,9 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+
+# Install novnc
+RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
 
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
@@ -276,16 +282,16 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
   dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
   rm zoom.deb
 
-# Use cloudflare dns
+# Configure dns to use cloudflare
 RUN echo "prepend domain-name-servers 1.1.1.1" >> /etc/dhcp/dhclient.conf
 
 # Configure openvpn
-RUN mkdir /dev/net && \
-  mknod /dev/net/tun c 10 200 && \
-  chmod 600 /dev/net/tun && \
-  wget -O /etc/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4349.nordvpn.com.tcp443.ovpn && \
-  wget -O /etc/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn && \
-  wget -O /etc/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn
+RUN mkdir -p $HOME/.config/openvpn && \
+  mknod $HOME/.config/openvpn/tun c 10 200 && \
+  chmod 600 $HOME/.config/openvpn/tun && \
+  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4349.nordvpn.com.tcp443.ovpn && \
+  wget -O $HOME/.config/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn && \
+  wget -O $HOME/.config/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
@@ -325,6 +331,7 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 # Clone dotfiles configuration
 RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
