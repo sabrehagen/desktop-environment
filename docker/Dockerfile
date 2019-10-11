@@ -61,6 +61,7 @@ RUN apt-get update -qq && \
   irssi \
   jq \
   keychain \
+  libnotify-bin \
   libnss3-tools \
   lsb-core \
   maim \
@@ -336,6 +337,7 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
