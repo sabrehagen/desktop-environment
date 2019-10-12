@@ -262,7 +262,7 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 
 # Install weechat slack plugin
 RUN mkdir -p $HOME/.weechat/python/autoload && \
-  curl -fsSL "https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py" -o $HOME/.weechat/python/wee_slack.py && \
+  curl -fsSL https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py -o $HOME/.weechat/python/wee_slack.py && \
   ln -s $HOME/.weechat/python/wee_slack.py $HOME/.weechat/python/autoload && \
   pip install websocket-client
 
