@@ -286,9 +286,6 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
   dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
   rm zoom.deb
 
-# Configure dns to use cloudflare
-RUN echo "prepend domain-name-servers 1.1.1.1" >> /etc/dhcp/dhclient.conf
-
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
@@ -299,9 +296,6 @@ RUN mkdir -p $HOME/.config/openvpn && \
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
-# Configure udev rules
-RUN echo 'ACTION=="change", KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/usr/bin/autorandr --change --batch"' > /etc/udev/rules.d/95-monitor-switch.rules
 
 # Configure X11 permissions
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
