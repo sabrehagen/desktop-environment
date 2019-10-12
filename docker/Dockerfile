@@ -155,7 +155,7 @@ RUN apt-get install -qq \
   libtinyxml2-dev \
   libtool \
   pkg-config && \
-  git clone https://github.com/cloud-computer/libcloudstorage && \
+  git clone https://github.com/lemourin/libcloudstorage && \
   cd libcloudstorage && \
   ./bootstrap && \
   ./configure --with-curl --with-microhttpd --with-fuse && \
