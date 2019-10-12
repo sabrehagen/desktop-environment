@@ -24,7 +24,7 @@ docker run \
   --device /dev/video0 \
   --dns 1.1.1.1 \
   --env DESKTOP_ENVIRONMENT_USER \
-  --env DISPLAY=:0 \
+  --env DISPLAY=:1 \
   --group-add audio \
   --group-add docker \
   --group-add input \
