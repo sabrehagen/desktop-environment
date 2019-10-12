@@ -22,6 +22,7 @@ docker run \
   --device /dev/snd \
   --device /dev/tty1 \
   --device /dev/video0 \
+  --dns 1.1.1.1 \
   --env DESKTOP_ENVIRONMENT_USER \
   --env DISPLAY=:0 \
   --group-add audio \
