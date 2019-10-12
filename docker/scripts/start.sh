@@ -36,7 +36,7 @@ docker run \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network host \
   --rm \
-  --security-opt seccomp:$REPO_ROOT/docker/config/chrome/chrome.json \
+  --security-opt apparmor:unconfined \
   --user $DESKTOP_ENVIRONMENT_USER \
   --volume /dev/shm:/dev/shm \
   --volume /run/udev:/run/udev \
