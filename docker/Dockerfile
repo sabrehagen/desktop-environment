@@ -176,6 +176,9 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
+# Install gist
+RUN gem install gist
+
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
@@ -296,6 +299,9 @@ RUN mkdir -p $HOME/.config/openvpn && \
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Install pi-hole
+RUN curl -L https://install.pi-hole.net | bash /dev/stdin --unattended
 
 # Configure udev rules
 RUN echo 'ACTION=="change", KERNEL=="card0", SUBSYSTEM=="drm", RUN+="/usr/bin/autorandr --change --batch"' > /etc/udev/rules.d/95-monitor-switch.rules
