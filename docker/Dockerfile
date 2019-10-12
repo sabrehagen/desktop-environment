@@ -1,7 +1,7 @@
 FROM ubuntu:19.04
 
 ENV USER jackson
-ENV DISPLAY :0
+ENV DISPLAY :1
 ENV EDITOR nano
 ENV HOME /home/$USER
 ENV LANG en_US.UTF-8
