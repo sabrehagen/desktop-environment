@@ -3,9 +3,6 @@ REPO_ROOT=$(dirname $(readlink -f $0))/../..
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
-# Ensure volumes that can be removed are owned before starting
-$REPO_ROOT/docker/scripts/clean.sh
-
 # Ensure the desktop environment network exists
 docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 
@@ -46,7 +43,6 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_CACHE_CHROME:$DESKTOP_ENVIRONMENT_CACHE_CHROME \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_GDRIVE:$DESKTOP_ENVIRONMENT_CACHE_GDRIVE \
-  --volume DESKTOP_ENVIRONMENT_CACHE_SECRETS:$DESKTOP_ENVIRONMENT_CACHE_SECRETS \
   --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \
   --volume DESKTOP_ENVIRONMENT_CACHE_STEMN:$DESKTOP_ENVIRONMENT_CACHE_STEMN \
   --volume DESKTOP_ENVIRONMENT_CACHE_TMUX:$DESKTOP_ENVIRONMENT_CACHE_TMUX \
@@ -79,3 +75,4 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m
 
 # Start the desktop environment inside the container
 $REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
+$REPO_ROOT/docker/scripts/alacritty.sh
