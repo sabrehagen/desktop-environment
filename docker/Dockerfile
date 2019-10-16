@@ -78,6 +78,8 @@ RUN apt-get update -qq && \
   perl \
   python \
   python-pip \
+  python3 \
+  python3-pip \
   ruby \
   software-properties-common \
   ssh \
@@ -161,7 +163,8 @@ RUN apt-get install -qq \
   make -j$(nproc) && \
   make install && \
   echo user_allow_other >> /etc/fuse.conf && \
-  mkdir -p $HOME/.config/cloudstorage
+  mkdir -p $HOME/.config/cloudstorage && \
+  mkdir $HOME/cloudstorage
 
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
@@ -198,6 +201,14 @@ RUN go get github.com/moul/gotty-client/cmd/gotty-client
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
+# Install i3-gaps
+RUN add-apt-repository ppa:kgilmer/speed-ricer && \
+  apt-get update -qq && \
+  apt-get install -qq i3-gaps
+
+# Install i3-resurrect
+RUN pip3 install --user --upgrade i3-resurrect
+
 # Install jump directory navigator
 RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
@@ -217,7 +228,7 @@ RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1
   tar -C /usr/local/bin -xzf -
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.1/musikcube_0.65.1_ubuntu_cosmic_amd64.deb && \
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.0/musikcube_0.65.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
