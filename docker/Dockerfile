@@ -160,7 +160,8 @@ RUN apt-get install -qq \
   ./configure --with-curl --with-microhttpd --with-fuse && \
   make -j$(nproc) && \
   make install && \
-  echo user_allow_other >> /etc/fuse.conf
+  echo user_allow_other >> /etc/fuse.conf && \
+  mkdir -p $HOME/.config/cloudstorage
 
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
@@ -216,7 +217,7 @@ RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1
   tar -C /usr/local/bin -xzf -
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.62.0/musikcube_0.62.0_ubuntu_cosmic_amd64.deb && \
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.1/musikcube_0.65.1_ubuntu_cosmic_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
