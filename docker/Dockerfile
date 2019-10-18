@@ -41,6 +41,7 @@ RUN apt-get update -qq && \
   build-essential \
   cmake \
   cmatrix \
+  compton \
   curl \
   dnsutils \
   docker.io \
@@ -54,7 +55,6 @@ RUN apt-get update -qq && \
   gosu \
   htop \
   httpie \
-  i3 \
   iftop \
   iputils-ping \
   irssi \
@@ -201,13 +201,11 @@ RUN go get github.com/moul/gotty-client/cmd/gotty-client
 # Install helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
-# Install i3-gaps
+# Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps
-
-# Install i3-resurrect
-RUN pip3 install --user --upgrade i3-resurrect
+  apt-get install -qq i3-gaps && \
+  pip3 install --user --upgrade i3-resurrect
 
 # Install jump directory navigator
 RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
@@ -350,6 +348,7 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-compton.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
