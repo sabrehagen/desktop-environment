@@ -26,4 +26,3 @@ Set your [user configuration](docker/scripts/environment.sh#L3) and go.
 - [x] Only one command required to start.
 - [x] Accessible from anywhere.
 
-test.
