@@ -1,6 +1,8 @@
 FROM ubuntu:19.04
 
-ENV USER jackson
+ARG DESKTOP_ENVIRONMENT_USER
+
+ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV DISPLAY :1
 ENV EDITOR nano
 ENV HOME /home/$USER
@@ -68,6 +70,7 @@ RUN apt-get update -qq && \
   man-db \
   nano \
   ncdu \
+  neovim \
   net-tools \
   netcat-openbsd \
   nnn \
@@ -85,6 +88,8 @@ RUN apt-get update -qq && \
   ssh \
   sudo \
   sxhkd \
+  tigervnc-scraping-server \
+  tigervnc-standalone-server \
   tmux \
   transmission-cli \
   transmission-common \
@@ -92,9 +97,7 @@ RUN apt-get update -qq && \
   tree \
   vcsh \
   vim \
-  weechat \
   wmctrl \
-  x11vnc \
   xauth \
   xdotool \
   xinit \
@@ -276,12 +279,6 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
-# Install weechat slack plugin
-RUN mkdir -p $HOME/.weechat/python/autoload && \
-  curl -fsSL https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py -o $HOME/.weechat/python/wee_slack.py && \
-  ln -s $HOME/.weechat/python/wee_slack.py $HOME/.weechat/python/autoload && \
-  pip install websocket-client
-
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
@@ -335,8 +332,8 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
-# Take ownership of user's home directory
-RUN chown -R $USER:$USER $HOME
+# Take ownership of user's home directory and applications
+RUN chown -R $USER:$USER $HOME /opt
 
 # Become desktop environment user
 USER $USER
@@ -355,13 +352,13 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-irssi.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
