@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sabrehagen/desktop-environment.svg?branch=master)](https://travis-ci.org/sabrehagen/desktop-environment)
 
-My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) on the cloud and desktop.
+My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) on the cloud and on desktop.
 
 ## Getting Started
 
@@ -25,4 +25,3 @@ Set your [user configuration](docker/scripts/environment.sh#L3) and go.
 - [x] A computer wholly defined in code.
 - [x] Only one command required to start.
 - [x] Accessible from anywhere.
-

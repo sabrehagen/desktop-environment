@@ -1,6 +1,8 @@
 FROM ubuntu:19.04
 
-ENV USER jackson
+ARG DESKTOP_ENVIRONMENT_USER
+
+ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV DISPLAY :1
 ENV EDITOR nano
 ENV HOME /home/$USER
@@ -68,6 +70,7 @@ RUN apt-get update -qq && \
   man-db \
   nano \
   ncdu \
+  neovim \
   net-tools \
   netcat-openbsd \
   nnn \
@@ -85,6 +88,8 @@ RUN apt-get update -qq && \
   ssh \
   sudo \
   sxhkd \
+  tigervnc-scraping-server \
+  tigervnc-standalone-server \
   tmux \
   transmission-cli \
   transmission-common \
@@ -92,9 +97,7 @@ RUN apt-get update -qq && \
   tree \
   vcsh \
   vim \
-  weechat \
   wmctrl \
-  x11vnc \
   xauth \
   xdotool \
   xinit \
@@ -242,6 +245,10 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
 
+# Install python packages
+RUN pip install \
+  speedtest-cli
+
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
@@ -275,12 +282,6 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
-
-# Install weechat slack plugin
-RUN mkdir -p $HOME/.weechat/python/autoload && \
-  curl -fsSL https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py -o $HOME/.weechat/python/wee_slack.py && \
-  ln -s $HOME/.weechat/python/wee_slack.py $HOME/.weechat/python/autoload && \
-  pip install websocket-client
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -331,12 +332,14 @@ RUN groupmod --gid $DOCKER_GROUP docker
 RUN useradd \
   --create-home \
   --groups $DOCKER_GROUP,audio,chrome,input,netdev,sudo,tty,video \
-  --password $USER \
   --shell /bin/zsh \
   $USER
 
-# Take ownership of user's home directory
-RUN chown -R $USER:$USER $HOME
+# Set non-root user password
+RUN echo 'jackson:$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::' >> /etc/shadow
+
+# Take ownership of user's home directory and applications
+RUN chown -R $USER:$USER $HOME /opt
 
 # Become desktop environment user
 USER $USER
@@ -361,7 +364,6 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-weechat.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
