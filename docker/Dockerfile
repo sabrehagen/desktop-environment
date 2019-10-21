@@ -254,7 +254,7 @@ RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   apt-get install -qq signal-desktop
 
 # Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.0.1-amd64.deb && \
+RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb && \
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
