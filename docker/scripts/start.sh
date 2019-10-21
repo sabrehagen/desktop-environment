@@ -28,7 +28,7 @@ docker run \
   --group-add plugdev \
   --group-add tty \
   --group-add video \
-  --hostname $DESKTOP_ENVIRONMENT_REGISTRY-$DESKTOP_ENVIRONMENT_CONTAINER_NAME-$(hostname) \
+  --hostname $HOSTNAME \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network host \
