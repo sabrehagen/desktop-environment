@@ -204,7 +204,9 @@ RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | 
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps && \
+  apt-get install -qq i3-gaps i3lock-fancy && \
+  sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
+  wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user --upgrade i3-resurrect
 
 # Install jump directory navigator
@@ -283,7 +285,8 @@ RUN mkdir -p $HOME/.weechat/python/autoload && \
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-  apt-get update -qq && apt-get install -qq yarn
+  apt-get update -qq && \
+  apt-get install -qq yarn
 
 # Install yarn based utilities
 RUN yarn global add \
