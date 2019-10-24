@@ -336,7 +336,7 @@ RUN useradd \
   $USER
 
 # Set non-root user password
-RUN echo 'jackson:$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::' >> /etc/shadow
+RUN sed -i 's;^jackson.*$;jackson:$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::;' /etc/shadow
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
