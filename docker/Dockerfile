@@ -68,8 +68,10 @@ RUN apt-get update -qq && \
   maim \
   make \
   man-db \
+  mpd \
   nano \
   ncdu \
+  ncmpcpp \
   neovim \
   net-tools \
   netcat-openbsd \
@@ -99,6 +101,7 @@ RUN apt-get update -qq && \
   vim \
   wmctrl \
   xauth \
+  xautolock \
   xdotool \
   xinit \
   xinput \
@@ -169,6 +172,22 @@ RUN apt-get install -qq \
   mkdir -p $HOME/.config/cloudstorage && \
   mkdir $HOME/cloudstorage
 
+# Install cool retro term
+RUN add-apt-repository ppa:vantuz/cool-retro-term && \
+  apt-get update -qq && \
+  apt-get install -qq cool-retro-term
+
+# Install ctop
+RUN wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop && \
+  chmod +x /usr/local/bin/ctop
+
+# Install define
+RUN wget -O /usr/local/bin/define -qnv https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
+  chmod +x /usr/local/bin/define
+
+# Install desktop environment
+RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment
+
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
@@ -234,6 +253,9 @@ RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.0/musikcube_0.65.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
+
+# Install netdata
+RUN bash -c "$(curl -Ss https://my-netdata.io/kickstart.sh)" --dont-wait --dont-start-it
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
@@ -315,6 +337,11 @@ RUN mkdir -p $HOME/.config/openvpn && \
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
+# Install skype
+RUN wget -O skype.deb -qnv https://go.skype.com/skypeforlinux-64.deb && \
+  dpkg -i skype.deb && \
+  rm skype.deb
+
 # Configure X11 permissions
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
@@ -355,11 +382,14 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-compton.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-crt.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mpd.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
