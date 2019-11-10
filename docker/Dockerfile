@@ -37,6 +37,7 @@ RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
   alttab \
+  apt-utils \
   arandr \
   asciinema \
   autorandr \
@@ -64,6 +65,7 @@ RUN apt-get update -qq && \
   keychain \
   libnotify-bin \
   libnss3-tools \
+  libterm-readkey-perl \
   lsb-core \
   maim \
   make \
@@ -128,6 +130,21 @@ RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/downlo
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
+# Install cava
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libfftw3-dev \
+  libasound2-dev \
+  libncursesw5-dev \
+  libpulse-dev \
+  libtool && \
+  git clone --depth 1 https://github.com/karlstav/cava && \
+  cd cava && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install
+
 # Install chrome
 RUN apt-get update -qq && \
   apt-get install -qq \
@@ -162,7 +179,7 @@ RUN apt-get install -qq \
   libtinyxml2-dev \
   libtool \
   pkg-config && \
-  git clone https://github.com/cloud-computer/libcloudstorage && \
+  git clone --depth 1 https://github.com/cloud-computer/libcloudstorage && \
   cd libcloudstorage && \
   ./bootstrap && \
   ./configure --with-curl --with-microhttpd --with-fuse && \
@@ -226,10 +243,15 @@ RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | 
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps i3lock-fancy && \
+  apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user --upgrade i3-resurrect
+
+# Install jobber
+RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
+  dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
+  rm jobber.deb
 
 # Install jump directory navigator
 RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
@@ -292,7 +314,7 @@ RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardari
   chmod +x /usr/local/bin/tormix
 
 # Install tmux plugin manager
-RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tmuxinator
 RUN gem install tmuxinator
@@ -386,13 +408,13 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-jobber.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mpd.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-sxhkd.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
