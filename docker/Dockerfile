@@ -51,6 +51,7 @@ RUN apt-get update -qq && \
   evince \
   feh \
   figlet \
+  fonts-font-awesome \
   g++ \
   gcc \
   git \
@@ -129,21 +130,6 @@ RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
-
-# Install cava
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libfftw3-dev \
-  libasound2-dev \
-  libncursesw5-dev \
-  libpulse-dev \
-  libtool && \
-  git clone --depth 1 https://github.com/karlstav/cava && \
-  cd cava && \
-  ./autogen.sh && \
-  ./configure && \
-  make && \
-  make install
 
 # Install chrome
 RUN apt-get update -qq && \
@@ -246,7 +232,8 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
-  pip3 install --user --upgrade i3-resurrect
+  pip install --user i3-workspace-names-daemon && \
+  pip3 install --user i3-resurrect
 
 # Install jobber
 RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
@@ -257,11 +244,6 @@ RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download
 RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
-
-# Install kind
-RUN wget -qnv -O kind https://github.com/kubernetes-sigs/kind/releases/download/v0.3.0/kind-linux-amd64 && \
-  chmod +x kind && \
-  mv kind /usr/local/bin
 
 # Install lazydocker
 RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
@@ -289,9 +271,8 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
 
-# Install python packages
-RUN pip install \
-  speedtest-cli
+# Install pywal
+RUN pip3 install --user pywal
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
@@ -304,10 +285,22 @@ RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   apt-get update -qq && \
   apt-get install -qq signal-desktop
 
+# Install skype
+RUN wget -O skype.deb -qnv https://go.skype.com/skypeforlinux-64.deb && \
+  dpkg -i skype.deb && \
+  rm skype.deb
+
 # Install slack
 RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb && \
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
+
+# Install speedtest
+RUN pip install --user speedtest-cli
+
+# Install timeago
+RUN wget -O /usr/local/bin/timeago -nv https://gist.githubusercontent.com/sabrehagen/e0af311b729a92fe6af2e8417abd25a6/raw/8fe8b6da90e6d96a04ce8d169422f616085fc07f/timeago && \
+  chmod +x /usr/local/bin/timeago
 
 # Install tormix
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
@@ -327,6 +320,22 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
+# Install xava
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libfftw3-dev \
+  libasound2-dev \
+  libpulse-dev \
+  libx11-dev \
+  libsdl2-dev && \
+  git clone --depth 1 https://github.com/nikp123/xava && \
+  git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
+  mkdir xava/build && \
+  cd xava/build && \
+  cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src && \
+  make -j$(nproc) && \
+  make install || true
+
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
@@ -340,7 +349,6 @@ RUN yarn global add \
   http-server \
   imgur-uploader-cli \
   rebase-editor \
-  speed-test \
   tldr
 
 # Install zoom conferencing
@@ -358,11 +366,6 @@ RUN mkdir -p $HOME/.config/openvpn && \
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
-# Install skype
-RUN wget -O skype.deb -qnv https://go.skype.com/skypeforlinux-64.deb && \
-  dpkg -i skype.deb && \
-  rm skype.deb
 
 # Configure X11 permissions
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
