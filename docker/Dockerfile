@@ -299,7 +299,7 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
 RUN pip install --user speedtest-cli
 
 # Install timeago
-RUN wget -O /usr/local/bin/timeago -nv https://gist.githubusercontent.com/sabrehagen/e0af311b729a92fe6af2e8417abd25a6/raw/8fe8b6da90e6d96a04ce8d169422f616085fc07f/timeago && \
+RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
 # Install tormix
