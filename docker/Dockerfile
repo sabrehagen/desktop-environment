@@ -232,8 +232,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
-  pip install --user i3-workspace-names-daemon && \
-  pip3 install --user i3-resurrect
+  pip3 install --user i3-resurrect i3-workspace-names-daemon
 
 # Install jobber
 RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
@@ -299,7 +298,7 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
 RUN pip install --user speedtest-cli
 
 # Install timeago
-RUN wget -O /usr/local/bin/timeago -nv https://gist.githubusercontent.com/sabrehagen/e0af311b729a92fe6af2e8417abd25a6/raw/8fe8b6da90e6d96a04ce8d169422f616085fc07f/timeago && \
+RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
 # Install tormix
