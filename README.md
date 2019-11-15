@@ -6,14 +6,12 @@ My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-
 
 ## Getting Started
 
-As `root`:
-
 ```sh
 # Clone desktop environment
 git clone https://github.com/sabrehagen/desktop-environment
 
 # Start desktop environment
-desktop-environment/host/bootstrap.sh
+./desktop-environment/docker/scripts/recycle.sh
 ```
 
 ## Forking
