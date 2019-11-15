@@ -10,8 +10,8 @@ jobs:
         DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
       run: docker/scripts/build.sh
     - name: Publish to Registry
-      uses: HurricanKai/Publish-Docker-Github-Action@master
+      uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: ${{ secrets.DESKTOP_ENVIRONMENT_REGISTRY }}/desktop-environment
+        name: ${{ secrets.DESKTOP_ENVIRONMENT_REGISTRY }}/desktop-environment:latest
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
