@@ -6,6 +6,8 @@ My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-
 
 ## Getting Started
 
+The only dependency required for this environment is [Docker](https://docs.docker.com/install).
+
 ```sh
 # Clone desktop environment
 git clone https://github.com/sabrehagen/desktop-environment
