@@ -12,6 +12,6 @@ jobs:
     - name: Publish to Registry
       uses: HurricanKai/Publish-Docker-Github-Action@master
       with:
-        name: myDocker/repository
+        name: ${{ secrets.DESKTOP_ENVIRONMENT_REGISTRY }}/desktop-environment
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
