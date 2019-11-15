@@ -4,11 +4,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
     - name: Build Environment
       env:
         DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
-      run: ./docker/scripts/build.sh
-    - uses: actions/checkout@master
+      run: docker/scripts/build.sh
     - name: Publish to Registry
       uses: HurricanKai/Publish-Docker-Github-Action@master
       with:
