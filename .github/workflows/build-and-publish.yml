@@ -7,7 +7,7 @@ jobs:
     - name: Build Environment
       env:
         DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
-      run: docker/scripts/build.sh
+      run: ./docker/scripts/build.sh
     - uses: actions/checkout@master
     - name: Publish to Registry
       uses: HurricanKai/Publish-Docker-Github-Action@master
