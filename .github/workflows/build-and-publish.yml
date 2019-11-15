@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build Environment
-      env: 
+      env:
         DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
       run: docker/scripts/build.sh
     - uses: actions/checkout@master
