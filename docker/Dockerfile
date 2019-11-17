@@ -47,6 +47,7 @@ RUN apt-get update -qq && \
   compton \
   curl \
   dnsutils \
+  dnsmasq \
   docker.io \
   evince \
   feh \
