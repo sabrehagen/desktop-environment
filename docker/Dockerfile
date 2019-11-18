@@ -36,7 +36,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
-  alttab \
   apt-utils \
   arandr \
   asciinema \
@@ -79,7 +78,6 @@ RUN apt-get update -qq && \
   neovim \
   net-tools \
   netcat-openbsd \
-  nnn \
   numlockx \
   openssl \
   openvpn \
@@ -89,6 +87,7 @@ RUN apt-get update -qq && \
   python-pip \
   python3 \
   python3-pip \
+  ranger \
   ruby \
   software-properties-common \
   ssh \
@@ -128,7 +127,7 @@ RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0
   rm bat.deb
 
 # Install alacritty
-RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.2.9/Alacritty-v0.2.9_amd64.deb && \
+RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.3.3/Alacritty-v0.3.3-ubuntu_18_04_amd64.deb && \
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
@@ -230,7 +229,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
-  pip3 install --user i3-resurrect && \
+  pip3 install --user i3-resurrect==1.3.2 && \
   pip3 install --force --user i3-workspace-names-daemon
 
 # Install jobber
@@ -318,6 +317,11 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
+# Install warnai
+RUN apt-get update -qq && \
+  apt-get install -qq inkscape optipng xfconf && \
+  git clone --depth 1 https://github.com/reorr/warnai /opt/warnai
+
 # Install xava
 RUN apt-get update -qq && \
   apt-get install -qq \
@@ -395,30 +399,10 @@ RUN chown -R $USER:$USER $HOME /opt
 USER $USER
 WORKDIR $HOME
 
-# If the DOTFILES_CACHEBUST build arg is supplied, rebuild from dotfiles onwards
-ARG DOTFILES_CACHEBUST
-RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
-
-# Clone dotfiles configuration
-RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-compton.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-crt.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-jobber.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mpd.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+# Clone large dotfiles and those that require post install
+RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-gtk.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
 
@@ -428,13 +412,36 @@ RUN zsh -c "source $HOME/.zshrc"
 # Cache tmux plugins
 RUN zsh -c $HOME/.tmux/plugins/tpm/bin/install_plugins
 
-# Configure lazygit
-RUN mkdir -p $HOME/.config/jesseduffield/lazygit && \
-  echo 'reporting: "off"' > $HOME/.config/jesseduffield/lazygit/config.yml
+# If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
+ARG DOTFILES_CACHEBUST
+RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
+
+# Clone static dotfiles
+RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-compton.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-crt.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dnsmasq.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-jobber.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mpd.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-pcmanfm.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ranger.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
+  wait
 
 # Record container build information
-ARG DESKTOP_CONTAINER_BUILD_DATE
 ARG DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_BUILD_DATE $DESKTOP_CONTAINER_BUILD_DATE
 ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
