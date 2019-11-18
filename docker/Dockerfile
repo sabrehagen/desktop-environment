@@ -224,9 +224,6 @@ RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/g
 # Install gotty-client
 RUN go get github.com/moul/gotty-client/cmd/gotty-client
 
-# Install helm
-RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
