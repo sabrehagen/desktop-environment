@@ -55,8 +55,9 @@ RUN apt-get update -qq && \
   g++ \
   gcc \
   git \
-  gtk+3.0 \
   gosu \
+  gtk-theme-switch \
+  gtk+3.0 \
   htop \
   httpie \
   iftop \
@@ -89,6 +90,7 @@ RUN apt-get update -qq && \
   python3-pip \
   ranger \
   ruby \
+  rofi \
   software-properties-common \
   ssh \
   sudo \
@@ -228,6 +230,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
+  sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.3.2 && \
   pip3 install --force --user i3-workspace-names-daemon
@@ -320,7 +323,8 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 # Install warnai
 RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf && \
-  git clone --depth 1 https://github.com/reorr/warnai /opt/warnai
+  git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
+  sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install xava
 RUN apt-get update -qq && \
@@ -400,8 +404,7 @@ USER $USER
 WORKDIR $HOME
 
 # Clone large dotfiles and those that require post install
-RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-gtk.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
+RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
@@ -411,6 +414,9 @@ RUN zsh -c "source $HOME/.zshrc"
 
 # Cache tmux plugins
 RUN zsh -c $HOME/.tmux/plugins/tpm/bin/install_plugins
+
+# Install vs code settings sync extension
+RUN code --install-extension Shan.code-settings-sync
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
@@ -426,6 +432,7 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dnsmasq.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-gtk.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-jobber.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
