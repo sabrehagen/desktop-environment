@@ -1,8 +1,10 @@
 FROM ubuntu:19.04
 
+ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 
 ENV USER $DESKTOP_ENVIRONMENT_USER
+ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
 ENV DISPLAY :1
 ENV EDITOR nano
 ENV HOME /home/$USER
@@ -42,13 +44,11 @@ RUN apt-get update -qq && \
   autorandr \
   build-essential \
   cmake \
-  cmatrix \
   compton \
   curl \
   dnsutils \
   dnsmasq \
   docker.io \
-  evince \
   feh \
   figlet \
   fonts-font-awesome \
@@ -84,6 +84,7 @@ RUN apt-get update -qq && \
   openvpn \
   pcmanfm \
   perl \
+  pulseaudio \
   python \
   python-pip \
   python3 \
@@ -114,7 +115,8 @@ RUN apt-get update -qq && \
   xorg \
   xsel \
   xserver-xorg \
-  zsh
+  zsh \
+  zathura
 
 # Install antigen
 RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
@@ -177,6 +179,15 @@ RUN apt-get install -qq \
   mkdir -p $HOME/.config/cloudstorage && \
   mkdir $HOME/cloudstorage
 
+# Install cmatrix
+RUN apt-get install -qq libncurses5-dev && \
+  git clone --depth 1 https://github.com/abishekvashok/cmatrix && \
+  mkdir -p cmatrix/build && \
+  cd cmatrix/build && \
+  cmake .. && \
+  make && \
+  make install
+
 # Install cool retro term
 RUN add-apt-repository ppa:vantuz/cool-retro-term && \
   apt-get update -qq && \
@@ -232,7 +243,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
-  pip3 install --user i3-resurrect==1.3.2 && \
+  pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon
 
 # Install jobber
@@ -244,6 +255,17 @@ RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download
 RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
+
+# Install keynav
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libcairo2-dev \
+  libxdo-dev \
+  libxinerama-dev && \
+  git clone --depth 1 https://github.com/jordansissel/keynav && \
+  cd keynav && \
+  make -j$(nproc) && \
+  make install
 
 # Install lazydocker
 RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
@@ -258,9 +280,6 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
-# Install netdata
-RUN bash -c "$(curl -Ss https://my-netdata.io/kickstart.sh)" --dont-wait --dont-start-it
-
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 
@@ -270,6 +289,10 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
   chmod +x /usr/local/bin/onedrive
+
+# Install pulseaudio mixer
+RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
+  chmod +x /usr/local/bin/pulsemixer
 
 # Install pywal
 RUN pip3 install --user pywal
@@ -295,8 +318,11 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
-# Install speedtest
 RUN pip install --user speedtest-cli
+
+# Install telegram
+RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
+  tar -C /opt -xJf -
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -389,12 +415,12 @@ RUN groupmod --gid $DOCKER_GROUP docker
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,input,netdev,sudo,tty,video \
+  --groups $DOCKER_GROUP,audio,chrome,input,netdev,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
 # Set non-root user password
-RUN sed -i 's;^jackson.*$;jackson:$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::;' /etc/shadow
+RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
@@ -440,12 +466,11 @@ RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git &
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-pcmanfm.git & \
+  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-pulseaudio.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ranger.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
   vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
   wait
 
 # Record container build information
