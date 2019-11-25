@@ -2,6 +2,8 @@
 
 My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) on the cloud and on desktop.
 
+![desktop](https://i.imgur.com/cEBbzyu.png)
+
 ## Getting Started
 
 The only dependency required is [Docker](https://docs.docker.com/install).
