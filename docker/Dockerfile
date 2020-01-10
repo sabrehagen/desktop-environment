@@ -1,8 +1,10 @@
 FROM ubuntu:19.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
+ARG DESKTOP_ENVIRONMENT_REGISTRY
 ARG DESKTOP_ENVIRONMENT_USER
 
+ENV USER $DESKTOP_ENVIRONMENT_REGISTRY
 ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
 ENV DISPLAY :1
@@ -429,49 +431,13 @@ RUN chown -R $USER:$USER $HOME /opt
 USER $USER
 WORKDIR $HOME
 
-# Clone large dotfiles and those that require post install
-RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-tmux.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-x11.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-zsh.git & \
-  wait
-
-# Cache zsh plugins
-RUN zsh -c "source $HOME/.zshrc"
-
-# Cache tmux plugins
-RUN zsh -c $HOME/.tmux/plugins/tpm/bin/install_plugins
-
-# Install vs code settings sync extension
-RUN code --install-extension Shan.code-settings-sync
-
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
-# Clone static dotfiles
-RUN vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alacritty.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-alsa.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-autorandr.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-code.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-compton.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-crt.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dnsmasq.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-dunst.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-git.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-gtk.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-i3.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-jobber.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mime.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-mpd.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-musikcube.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ncmpcpp.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-pcmanfm.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-pulseaudio.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ranger.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-scripts.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-ssh.git & \
-  vcsh clone https://sabrehagen@github.com/sabrehagen/dotfiles-xdg.git & \
-  wait
+# Clone user dotfiles
+RUN vcsh clone git@github.com:$DESKTOP_ENVIRONMENT_REGISTRY/dotfiles && \
+  ~/.dotfiles-bootstrap.sh
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
