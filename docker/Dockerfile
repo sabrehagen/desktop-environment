@@ -435,9 +435,11 @@ WORKDIR $HOME
 ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
+RUN curl ip-api.com
+
 # Clone user dotfiles
-RUN vcsh clone git@github.com:$DESKTOP_ENVIRONMENT_REGISTRY/dotfiles && \
-  ~/.dotfiles-bootstrap.sh
+RUN vcsh clone https://$DESKTOP_ENVIRONMENT_REGISTRY@github.com/$DESKTOP_ENVIRONMENT_REGISTRY/dotfiles.git && \
+  $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
