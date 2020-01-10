@@ -9,9 +9,10 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@master
       env:
         DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
+        DESKTOP_ENVIRONMENT_REGISTRY: $GITHUB_ACTOR
       with:
         dockerfile: docker/Dockerfile
         name: ${{ secrets.DESKTOP_ENVIRONMENT_REGISTRY }}/desktop-environment:latest
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        buildargs: DESKTOP_ENVIRONMENT_USER
+        buildargs: DESKTOP_ENVIRONMENT_USER,DESKTOP_ENVIRONMENT_REGISTRY
