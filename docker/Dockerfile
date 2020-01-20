@@ -121,6 +121,11 @@ RUN apt-get update -qq && \
   zsh \
   zathura
 
+# Install alacritty
+RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.3.3/Alacritty-v0.3.3-ubuntu_18_04_amd64.deb && \
+  dpkg -i alacritty.deb && \
+  rm alacritty.deb
+
 # Install antigen
 RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
 
@@ -128,15 +133,14 @@ RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
 RUN wget -O /usr/local/bin/arc -qnv https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
+# Install bandwhich
+RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.10.0/bandwhich-v0.10.0-x86_64-unknown-linux-musl.tar.gz | \
+  tar -C /usr/local/bin -xzf -
+
 # Install bat
 RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
-
-# Install alacritty
-RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.3.3/Alacritty-v0.3.3-ubuntu_18_04_amd64.deb && \
-  dpkg -i alacritty.deb && \
-  rm alacritty.deb
 
 # Install chrome
 RUN apt-get update -qq && \
