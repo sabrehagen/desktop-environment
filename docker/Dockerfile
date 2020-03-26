@@ -66,6 +66,7 @@ RUN apt-get update -qq && \
   iftop \
   iputils-ping \
   irssi \
+  jmeter \
   jq \
   keychain \
   libnotify-bin \
@@ -325,11 +326,8 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
+# Install speedtest
 RUN pip install --user speedtest-cli
-
-# Install telegram
-RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
-  tar -C /opt -xJf -
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -344,6 +342,11 @@ RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
 
 # Install tmuxinator
 RUN gem install tmuxinator
+
+# Install unity
+RUN wget -O /tmp/unity-setup -nv http://beta.unity3d.com/download/292b93d75a2c/UnitySetup-2019.1.0f2 && \
+  chmod +x /tmp/unity-setup && \
+  yes | /tmp/unity-setup --install-location /opt/unity --unattended
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
