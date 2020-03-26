@@ -66,7 +66,6 @@ RUN apt-get update -qq && \
   iftop \
   iputils-ping \
   irssi \
-  jmeter \
   jq \
   keychain \
   libnotify-bin \
@@ -253,6 +252,10 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon
+
+# Install jmeter
+RUN apt-get install -qq jmeter && \
+  echo proxy.cert.directory=$HOME/downloads > /usr/share/jmeter/bin/user.properties
 
 # Install jobber
 RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
