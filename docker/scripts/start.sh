@@ -34,6 +34,7 @@ docker run \
   --rm \
   --security-opt apparmor:unconfined \
   --user $DESKTOP_ENVIRONMENT_USER \
+  --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
