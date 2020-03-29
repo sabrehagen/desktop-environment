@@ -157,7 +157,7 @@ RUN apt-get update -qq && \
   libv4l-0 \
   fonts-symbola \
   --no-install-recommends && \
-  curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+  curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
   echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
   apt-get update -qq && \
   apt-get install -qq google-chrome-stable --no-install-recommends && \
@@ -286,13 +286,18 @@ RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.
 RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Install maza
+RUN curl -fsSL -o maza https://raw.githubusercontent.com/tanrax/maza-ad-blocking/master/maza && \
+  chmod +x maza && \
+  mv maza /usr/local/bin
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.0/musikcube_0.65.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
@@ -314,7 +319,7 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   rm rescuetime.deb
 
 # Install signal messenger
-RUN curl -s https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
+RUN curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
   echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
   apt-get update -qq && \
   apt-get install -qq signal-desktop
