@@ -41,6 +41,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
+  apt-file \
   apt-utils \
   arandr \
   asciinema \
@@ -85,6 +86,7 @@ RUN apt-get update -qq && \
   numlockx \
   openssl \
   openvpn \
+  pavucontrol-qt \
   pcmanfm \
   perl \
   pulseaudio \
@@ -119,7 +121,8 @@ RUN apt-get update -qq && \
   xsel \
   xserver-xorg \
   zsh \
-  zathura
+  zathura && \
+  apt-file update
 
 # Install alacritty
 RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/download/v0.3.3/Alacritty-v0.3.3-ubuntu_18_04_amd64.deb && \
@@ -141,6 +144,22 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.10.0/band
 RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
+
+# Install cadence
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  jack-capture \
+  libjack-jackd2-dev && \
+  pulseaudio-module-jack \
+  pyqt5-dev-tools \
+  python3-pyqt5 \
+  python3-pyqt5.qtsvg \
+  qtbase5-dev \
+  qtbase5-dev-tools && \
+  git clone --depth 1 https://github.com/falkTX/Cadence.git /opt/cadence && \
+  cd /opt/cadence && \
+  make && \
+  make install
 
 # Install chrome
 RUN apt-get update -qq && \
@@ -253,10 +272,6 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon
 
-# Install jmeter
-RUN apt-get install -qq jmeter && \
-  echo proxy.cert.directory=$HOME/downloads > /usr/share/jmeter/bin/user.properties
-
 # Install jobber
 RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
@@ -285,11 +300,6 @@ RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.
 # Install lazygit
 RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
-
-# Install maza
-RUN curl -fsSL -o maza https://raw.githubusercontent.com/tanrax/maza-ad-blocking/master/maza && \
-  chmod +x maza && \
-  mv maza /usr/local/bin
 
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.0/musikcube_0.65.0_ubuntu_disco_amd64.deb && \
