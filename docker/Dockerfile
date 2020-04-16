@@ -302,7 +302,7 @@ RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1
   tar -C /usr/local/bin -xzf -
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.65.0/musikcube_0.65.0_ubuntu_disco_amd64.deb && \
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
@@ -388,7 +388,7 @@ RUN apt-get update -qq && \
   libpulse-dev \
   libx11-dev \
   libsdl2-dev && \
-  git clone --depth 1 https://github.com/nikp123/xava && \
+  git clone --depth 1 https://github.com/sabrehagen/xava && \
   git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
   mkdir xava/build && \
   cd xava/build && \
