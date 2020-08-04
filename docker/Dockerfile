@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:19.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_REGISTRY
@@ -18,6 +18,9 @@ ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV TZ Australia/Sydney
 
 ENV HOME /home/$USER
+
+# Ensure container image sources are always available by using 'old' repositories
+RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 
 # Restore minimized distribution content e.g. man pages
 RUN yes | unminimize
