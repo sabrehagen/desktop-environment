@@ -148,22 +148,6 @@ RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0
   dpkg -i bat.deb && \
   rm bat.deb
 
-# Install cadence
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  jack-capture \
-  libjack-jackd2-dev && \
-  pulseaudio-module-jack \
-  pyqt5-dev-tools \
-  python3-pyqt5 \
-  python3-pyqt5.qtsvg \
-  qtbase5-dev \
-  qtbase5-dev-tools && \
-  git clone --depth 1 https://github.com/falkTX/Cadence.git /opt/cadence && \
-  cd /opt/cadence && \
-  make && \
-  make install
-
 # Install chrome
 RUN apt-get update -qq && \
   apt-get install -qq \
@@ -262,9 +246,6 @@ RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.
 RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
-# Install gotty-client
-RUN go get github.com/moul/gotty-client/cmd/gotty-client
-
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
@@ -362,7 +343,7 @@ RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardari
 RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tmuxinator
-RUN gem install tmuxinator
+RUN gem install tmuxinator -v 1.1.5
 
 # Install unity
 RUN wget -O /tmp/unity-setup -nv http://beta.unity3d.com/download/292b93d75a2c/UnitySetup-2019.1.0f2 && \
@@ -423,9 +404,9 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
   chmod 600 $HOME/.config/openvpn/tun && \
-  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4349.nordvpn.com.tcp443.ovpn && \
-  wget -O $HOME/.config/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au296.nordvpn.com.tcp443.ovpn && \
-  wget -O $HOME/.config/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in33.nordvpn.com.tcp443.ovpn
+  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4231.nordvpn.com.tcp443.ovpn && \
+  wget -O $HOME/.config/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au698.nordvpn.com.tcp443.ovpn && \
+  wget -O $HOME/.config/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in82.nordvpn.com.tcp443.ovpn
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
