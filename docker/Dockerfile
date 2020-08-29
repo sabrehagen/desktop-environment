@@ -217,6 +217,13 @@ RUN wget -O /usr/local/bin/define -qnv https://github.com/Rican7/define/releases
 # Install desktop environment
 RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment
 
+# Install discord
+RUN apt-get update && \
+  apt-get install -qq libc++1 && \
+  wget -qnv -O discord.deb https://discordapp.com/api/download?platform=linux&format=deb && \
+  dpkg -i discord.deb && \
+  rm discord.deb
+
 # Install dive docker image explorer
 RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
