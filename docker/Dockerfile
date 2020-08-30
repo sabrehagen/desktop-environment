@@ -350,11 +350,6 @@ RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
 
-# Install unity
-RUN wget -O /tmp/unity-setup -nv http://beta.unity3d.com/download/292b93d75a2c/UnitySetup-2019.1.0f2 && \
-  chmod +x /tmp/unity-setup && \
-  yes | /tmp/unity-setup --install-location /opt/unity --unattended
-
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
