@@ -136,7 +136,7 @@ RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/downlo
 RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
 
 # Install arc
-RUN wget -O /usr/local/bin/arc -qnv https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
+RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install bandwhich
@@ -144,7 +144,7 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.10.0/band
   tar -C /usr/local/bin -xzf -
 
 # Install bat
-RUN wget -O bat.deb -qnv https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
+RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
 
@@ -211,19 +211,19 @@ RUN wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linu
   chmod +x /usr/local/bin/ctop
 
 # Install define
-RUN wget -O /usr/local/bin/define -qnv https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
+RUN wget -O /usr/local/bin/define -q https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
   chmod +x /usr/local/bin/define
 
 # Install desktop environment
 RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment
 
 # Install discord
-RUN wget -O discord.deb -qnv https://discordapp.com/api/download?platform=linux&format=deb && \
+RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
 # Install dive docker image explorer
-RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
+RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -244,7 +244,7 @@ RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get install -qq golang-go
 
 # Install gotop
-RUN wget -qnv -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
   dpkg -i gotop-deb
 
 # Install gotty
@@ -257,30 +257,19 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
-  wget -qnv -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
+  wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon
 
 # Install jobber
-RUN wget -O jobber.deb -qnv https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
+RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
   rm jobber.deb
 
 # Install jump directory navigator
-RUN wget -qnv -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
+RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
-
-# Install keynav
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libcairo2-dev \
-  libxdo-dev \
-  libxinerama-dev && \
-  git clone --depth 1 https://github.com/jordansissel/keynav && \
-  cd keynav && \
-  make -j$(nproc) && \
-  make install
 
 # Install lazydocker
 RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
@@ -324,7 +313,7 @@ RUN curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | apt-key add - &
   apt-get install -qq signal-desktop
 
 # Install skype
-RUN wget -O skype.deb -qnv https://go.skype.com/skypeforlinux-64.deb && \
+RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   dpkg -i skype.deb && \
   rm skype.deb
 
