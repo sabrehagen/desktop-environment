@@ -9,7 +9,6 @@ DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD=$(sudo cat /etc/shadow | grep $DESKTOP_EN
 docker build \
   --build-arg DESKTOP_CONTAINER_GIT_SHA=$(git --git-dir $REPO_ROOT/.git rev-parse HEAD | cut -b 1-7) \
   --build-arg DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD="$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD" \
-  --build-arg DESKTOP_ENVIRONMENT_REGISTRY="$DESKTOP_ENVIRONMENT_REGISTRY" \
   --build-arg DESKTOP_ENVIRONMENT_USER="$DESKTOP_ENVIRONMENT_USER" \
   --build-arg DOTFILES_CACHEBUST=$(cat $REPO_ROOT/.dotfiles-cachebust 2>/dev/null) \
   --file $REPO_ROOT/docker/Dockerfile \

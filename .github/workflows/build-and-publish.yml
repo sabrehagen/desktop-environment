@@ -4,15 +4,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      env:
-        DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
-        DESKTOP_ENVIRONMENT_REGISTRY: ${{ github.actor }}
-      with:
-        dockerfile: docker/Dockerfile
-        name: ${{ github.actor }}/desktop-environment:latest
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        buildargs: DESKTOP_ENVIRONMENT_USER,DESKTOP_ENVIRONMENT_REGISTRY
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Push to GitHub Container Registry
+        uses: docker/build-push-action@v1
+        env:
+          DESKTOP_ENVIRONMENT_USER: ${{ github.actor }}
+        with:
+          buildargs: DESKTOP_ENVIRONMENT_USER
+          dockerfile: docker/Dockerfile
+          registry: ghcr.io/${{ github.actor }}
+          repository: desktop-environment
+          tag_with_ref: true
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
