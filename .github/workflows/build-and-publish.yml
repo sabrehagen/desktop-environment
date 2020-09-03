@@ -8,10 +8,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v1
-        env:
-          DESKTOP_ENVIRONMENT_USER: ${{ github.actor }}
         with:
-          buildargs: DESKTOP_ENVIRONMENT_USER
+          build_args: DESKTOP_ENVIRONMENT_USER=${{ github.actor }}
           dockerfile: docker/Dockerfile
           registry: ghcr.io/${{ github.actor }}
           repository: desktop-environment
