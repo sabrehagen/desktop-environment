@@ -433,7 +433,7 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles
-RUN vcsh clone https://$DESKTOP_ENVIRONMENT_USER@github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git && \
+RUN vcsh clone https://github.com/sabrehagen/dotfiles.git && \
   $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
