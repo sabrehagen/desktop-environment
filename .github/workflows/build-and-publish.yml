@@ -10,6 +10,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           build_args: DESKTOP_ENVIRONMENT_USER=${{ github.actor }}
+          cache_froms: ghcr.io/${{ github.actor }}/desktop-environment
           dockerfile: docker/Dockerfile
           registry: ghcr.io/${{ github.actor }}
           repository: desktop-environment
