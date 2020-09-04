@@ -23,7 +23,7 @@ Set your [user configuration](docker/scripts/environment.sh#L3) and go.
 ## Keybindings
 
 ```sh
-# Launch alacritty
+# Launch terminal
 Mod + Return
 
 # Launch chrome
