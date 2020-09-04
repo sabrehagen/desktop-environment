@@ -22,3 +22,5 @@ until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m
 
 # Start the desktop environment inside the container
 $REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/vnc.sh
+
+#
