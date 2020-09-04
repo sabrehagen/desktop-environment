@@ -10,9 +10,9 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           build_args: BUILDKIT_INLINE_CACHE=1,DESKTOP_ENVIRONMENT_USER=${{ github.actor }}
-          cache_froms: ghcr.io/${{ github.actor }}/desktop-environment
+          cache_froms: docker.pkg.github.com/${{ github.repository }}/desktop-environment
           dockerfile: docker/Dockerfile
-          registry: ghcr.io/${{ github.actor }}
+          registry: docker.pkg.github.com/${{ github.repository }}
           repository: desktop-environment
           tag_with_ref: true
           username: ${{ github.actor }}
