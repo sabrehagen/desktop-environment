@@ -15,3 +15,5 @@ jobs:
           registry: ghcr.io/${{ github.actor }}
           repository: desktop-environment
           tag_with_ref: true
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
