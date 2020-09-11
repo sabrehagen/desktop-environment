@@ -1,21 +1,30 @@
 name: Publish Desktop Environment
 on: [push]
+env:
+  DOCKER_BUILDKIT: 1
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+
+      - name: Sanitise Repository Name
+        run: echo ::set-env name=GITHUB_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+
+      - name: Sanitise Repository Owner
+        run: echo ::set-env name=REPOSITORY_OWNER::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+
       - name: Push to GitHub Container Registry
         uses: docker/build-push-action@v1
         with:
-          build_args: BUILDKIT_INLINE_CACHE=1,DESKTOP_ENVIRONMENT_USER=${{ github.actor }}
-          cache_froms: docker.pkg.github.com/${{ github.repository }}/desktop-environment:${{ github.ref }}
+          build_args: BUILDKIT_INLINE_CACHE=1,DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
+          cache_froms: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}/desktop-environment:${{ github.ref }}
           dockerfile: docker/Dockerfile
-          registry: docker.pkg.github.com/${{ github.repository }}
+          registry: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
           repository: desktop-environment
           tag_with_ref: true
-          username: ${{ github.actor }}
+          username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run desktop environment tests
         run: ./docker/scripts/test.sh
