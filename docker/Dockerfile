@@ -403,18 +403,10 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
   chmod u+s /usr/bin/xinit
 
-# Create the docker group with the host os group id, backing up any existing group with docker group id
-ENV DOCKER_GROUP 999
-RUN getent group $DOCKER_GROUP | \
-  grep -v docker | \
-  cut -d: -f1 | \
-  xargs groupmod --gid 9999 2>/dev/null || true
-RUN groupmod --gid $DOCKER_GROUP docker
-
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,input,netdev,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,netdev,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
