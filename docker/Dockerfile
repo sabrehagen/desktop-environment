@@ -38,7 +38,7 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Install cloud computer utilities
+# Install desktop environment utilities
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
