@@ -55,4 +55,4 @@ Mod + slash
 ## Project Goals
 
 - [x] A computer wholly defined in code.
-- [x] Only one command required to start from scratch.
+- [x] Only one command required to start from scratch.  
