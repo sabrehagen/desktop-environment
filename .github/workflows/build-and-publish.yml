@@ -26,5 +26,8 @@ jobs:
           tag_with_ref: true
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run desktop environment tests
         run: ./docker/scripts/test.sh
+        env:
+          DESKTOP_ENVIRONMENT_REGISTRY: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
