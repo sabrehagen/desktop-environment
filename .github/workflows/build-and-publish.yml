@@ -31,3 +31,5 @@ jobs:
         run: ./docker/scripts/test.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.ref }}
+        continue-on-error: true
