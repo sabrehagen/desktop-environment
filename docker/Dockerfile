@@ -337,13 +337,15 @@ RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
 
-# Install vs code, vs live share dependencies, and shfmt extension dependency
+# Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
+  chmod +x /usr/local/bin/shfmt && \
+  git clone https://github.com/Bluedrack28/vscode-wal.git ~/.vscode/extensions/vscode-wal && \
+  cd ~/.vscode/extensions/vscode-wal && ./script.sh
 
 # Install warnai
 RUN apt-get update -qq && \
