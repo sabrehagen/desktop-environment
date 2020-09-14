@@ -15,10 +15,11 @@ docker run \
   --env DESKTOP_ENVIRONMENT_USER \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --rm \
-  --user $DESKTOP_ENVIRONMENT_USER \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
   sleep infinity
+
+exit 1
 
 # Wait until the desktop environment test container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
