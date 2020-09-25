@@ -21,6 +21,7 @@ jobs:
           build_extra_args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
           dockerfile: docker/Dockerfile
           image_name: desktop-environment
+          push_git_tag: true
           registry: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
