@@ -277,6 +277,10 @@ RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.
 RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Intall microsoft teams
+RUN wget -O MsTeams.deb https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_1.3.00.5153_amd64.deb && \
+    apt install ./MsTeams.deb -q -y
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -336,11 +340,6 @@ RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
 
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
-
-# Install unity
-  RUN wget -O /tmp/unity-setup -nv http://beta.unity3d.com/download/e025938fdedc/UnitySetup-2020.1.5f1 && \
-  chmod +x /tmp/unity-setup && \
-  yes | /tmp/unity-setup --components=Unity,Android,WebGL,Windows-Mono --install-location /opt/unity --unattended
 
 # Install vs code, vs live share dependencies, and shfmt extension dependency
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
