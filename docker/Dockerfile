@@ -1,11 +1,9 @@
 FROM ubuntu:19.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
-ARG DESKTOP_ENVIRONMENT_REGISTRY
 ARG DESKTOP_ENVIRONMENT_USER
 
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
-ENV DESKTOP_ENVIRONMENT_REGISTRY $DESKTOP_ENVIRONMENT_REGISTRY
 ENV DISPLAY :1
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
@@ -40,7 +38,7 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Install cloud computer utilities
+# Install desktop environment utilities
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   alsa-utils \
@@ -339,13 +337,15 @@ RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
 
-# Install vs code, vs live share dependencies, and shfmt extension dependency
+# Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
+  chmod +x /usr/local/bin/shfmt && \
+  git clone https://github.com/Bluedrack28/vscode-wal.git ~/.vscode/extensions/vscode-wal && \
+  cd ~/.vscode/extensions/vscode-wal && ./script.sh
 
 # Install warnai
 RUN apt-get update -qq && \
@@ -405,18 +405,10 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
   chmod u+s /usr/bin/xinit
 
-# Create the docker group with the host os group id, backing up any existing group with docker group id
-ENV DOCKER_GROUP 999
-RUN getent group $DOCKER_GROUP | \
-  grep -v docker | \
-  cut -d: -f1 | \
-  xargs groupmod --gid 9999 2>/dev/null || true
-RUN groupmod --gid $DOCKER_GROUP docker
-
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups $DOCKER_GROUP,audio,chrome,input,netdev,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,netdev,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
@@ -435,10 +427,11 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles
-RUN vcsh clone https://$DESKTOP_ENVIRONMENT_REGISTRY@github.com/$DESKTOP_ENVIRONMENT_REGISTRY/dotfiles.git && \
+RUN vcsh clone https://github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git && \
   $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
+ARG DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
+ENV DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME

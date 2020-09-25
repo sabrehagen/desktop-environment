@@ -3,16 +3,32 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@master
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      env:
-        DESKTOP_ENVIRONMENT_USER: ${{ secrets.DESKTOP_ENVIRONMENT_USER }}
-        DESKTOP_ENVIRONMENT_REGISTRY: ${{ github.actor }}
-      with:
-        dockerfile: docker/Dockerfile
-        name: ${{ github.actor }}/desktop-environment:latest
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        buildargs: DESKTOP_ENVIRONMENT_USER,DESKTOP_ENVIRONMENT_REGISTRY
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Sanitise Repository Name
+        run: echo ::set-env name=GITHUB_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+
+      - name: Sanitise Repository Owner
+        run: echo ::set-env name=REPOSITORY_OWNER::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+
+      - name: Build and Push to GitHub Container Registry
+        uses: whoan/docker-build-with-cache-action@master
+        with:
+          build_extra_args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
+          dockerfile: docker/Dockerfile
+          image_name: desktop-environment
+          push_git_tag: true
+          registry: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
+          username: ${{ env.REPOSITORY_OWNER }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run desktop environment tests
+        run: ./docker/scripts/test.sh
+        env:
+          DESKTOP_ENVIRONMENT_REGISTRY: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.ref }}
+        continue-on-error: true

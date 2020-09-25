@@ -33,7 +33,6 @@ docker run \
   --network host \
   --rm \
   --security-opt apparmor:unconfined \
-  --user $DESKTOP_ENVIRONMENT_USER \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
   --volume /run/udev:/run/udev \
@@ -67,11 +66,14 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_TORRENTS:$DESKTOP_ENVIRONMENT_USER_TORRENTS \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
-  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_NAME:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
   sleep infinity
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+
+# Make the container docker group id the same as the host docker group id so mounted docker socket permissions match
+$REPO_ROOT/docker/scripts/exec-root.sh groupmod -g $(grep docker /etc/group | cut -f3 -d:) docker
 
 # Start the desktop environment inside the container
 $REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
