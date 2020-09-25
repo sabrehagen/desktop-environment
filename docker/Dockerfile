@@ -277,6 +277,10 @@ RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.
 RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Intall microsoft teams
+RUN wget -O MsTeams.deb https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_1.3.00.5153_amd64.deb && \
+    apt install ./MsTeams.deb -q -y
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
