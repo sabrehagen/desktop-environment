@@ -316,7 +316,7 @@ RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   rm skype.deb
 
 # Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.9.1-amd64.deb && \
+RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb && \
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
@@ -427,10 +427,11 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles
-RUN vcsh clone https://github.com/sabrehagen/dotfiles.git && \
+RUN vcsh clone https://github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git && \
   $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
 ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_IMAGE_NAME sabrehagen/desktop-environment
+ARG DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
+ENV DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
