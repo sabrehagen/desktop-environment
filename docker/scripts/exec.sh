@@ -6,5 +6,4 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker exec \
   --interactive \
   --tty \
-  --user $DESKTOP_ENVIRONMENT_USER \
-  $DESKTOP_ENVIRONMENT_CONTAINER_NAME zsh -c "$*"
+  $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE zsh -c "$*"

@@ -7,7 +7,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker exec \
   --interactive \
   --tty \
-  $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
+  $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   tmux new-session \
   -s desktop-environment-shell-$(date +%s) \
   -t desktop-environment-shell

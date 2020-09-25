@@ -23,7 +23,7 @@ Set your [user configuration](docker/scripts/environment.sh#L3) and go.
 ## Keybindings
 
 ```sh
-# Launch alacritty
+# Launch terminal
 Mod + Return
 
 # Launch chrome
@@ -55,4 +55,5 @@ Mod + slash
 ## Project Goals
 
 - [x] A computer wholly defined in code.
-- [x] Only one command required to start from scratch.  
+- [x] Only one command required to start from scratch.
+
