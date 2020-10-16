@@ -4,7 +4,6 @@ ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
-ENV DISPLAY :1
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
 ENV LANGUAGE $LANG
@@ -218,7 +217,7 @@ RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /o
 # Install discord
 RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
-  rm discord.deb
+  rm discord.deb && echo cachebusts
 
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
@@ -257,7 +256,10 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
   wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
-  pip3 install --force --user i3-workspace-names-daemon
+  pip3 install --force --user i3-workspace-names-daemon && \
+  git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
+  cd ~/.config/i3/i3-focus-last && \
+  go install
 
 # Install jobber
 RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
@@ -316,7 +318,7 @@ RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   rm skype.deb
 
 # Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb && \
+RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.9.1-amd64.deb && \
   dpkg -i slack.deb || apt-get install -qq --fix-broken && \
   rm slack.deb
 
@@ -391,7 +393,7 @@ RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
   chmod 600 $HOME/.config/openvpn/tun && \
-  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4231.nordvpn.com.tcp443.ovpn && \
+  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4672.nordvpn.com.tcp443.ovpn && \
   wget -O $HOME/.config/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au698.nordvpn.com.tcp443.ovpn && \
   wget -O $HOME/.config/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in82.nordvpn.com.tcp443.ovpn
 
