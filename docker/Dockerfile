@@ -381,6 +381,7 @@ RUN yarn global add \
   github-email \
   http-server \
   imgur-uploader-cli \
+  ngrok \
   rebase-editor \
   tldr
 
@@ -428,7 +429,10 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN git ls-remote git@github.com:$DESKTOP_ENVIRONMENT_USER/dotfiles.git && vcsh clone https://github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git && $HOME/.dotfiles-bootstrap.sh
+  vcsh clone https://github.com/sabrehagen/dotfiles.git
+
+# Bootstrap dotfiles
+RUN $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
