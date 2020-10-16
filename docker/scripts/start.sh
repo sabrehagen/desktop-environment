@@ -20,7 +20,6 @@ docker run \
   --device /dev/tty2 \
   --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_USER \
-  --env DISPLAY=:1 \
   --group-add audio \
   --group-add docker \
   --group-add input \
