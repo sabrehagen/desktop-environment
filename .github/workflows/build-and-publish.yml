@@ -9,9 +9,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Sanitise Repository Name
-        run: echo ::set-env name=GITHUB_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
-
       - name: Sanitise Repository Owner
         run: echo ::set-env name=REPOSITORY_OWNER::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
 
@@ -22,13 +19,13 @@ jobs:
           dockerfile: docker/Dockerfile
           image_name: desktop-environment
           push_git_tag: true
-          registry: ghcr.io/${{ env.GITHUB_REPOSITORY }}
+          registry: ghcr.io/${{ env.REPOSITORY_OWNER }}
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Run desktop environment tests
         run: ./docker/scripts/test.sh
         env:
-          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.GITHUB_REPOSITORY }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
           DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.ref }}
         continue-on-error: true
