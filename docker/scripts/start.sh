@@ -17,7 +17,7 @@ docker run \
   --device /dev/fuse \
   --device /dev/input \
   --device /dev/snd \
-  --device /dev/tty2 \
+  --device /dev/tty3 \
   --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \

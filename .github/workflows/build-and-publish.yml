@@ -22,13 +22,13 @@ jobs:
           dockerfile: docker/Dockerfile
           image_name: desktop-environment
           push_git_tag: true
-          registry: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
+          registry: ghcr.io/${{ env.GITHUB_REPOSITORY }}
           username: ${{ env.REPOSITORY_OWNER }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Run desktop environment tests
         run: ./docker/scripts/test.sh
         env:
-          DESKTOP_ENVIRONMENT_REGISTRY: docker.pkg.github.com/${{ env.GITHUB_REPOSITORY }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.GITHUB_REPOSITORY }}
           DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.ref }}
         continue-on-error: true
