@@ -285,7 +285,8 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 
 # Install novnc
-RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC
+RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
+  git clone https://github.com/novnc/websockify /opt/noVNC/utils
 
 # Install onedrive client
 RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
