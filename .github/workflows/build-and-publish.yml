@@ -27,5 +27,4 @@ jobs:
         run: ./docker/scripts/test.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
-          DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.sha }}
         continue-on-error: true
