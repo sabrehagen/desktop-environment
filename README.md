@@ -1,6 +1,6 @@
 # ☁️ Cloud Desktop Environment
 
-My [daily driver](https://cloud.docker.com/repository/docker/sabrehagen/desktop-environment) on the cloud and on desktop.
+My [daily driver](https://github.com/users/sabrehagen/packages/container/package/desktop-environment) on the cloud and on desktop.
 
 ![desktop](https://i.imgur.com/cEBbzyu.png)
 
@@ -16,9 +16,9 @@ git clone https://github.com/sabrehagen/desktop-environment
 ./desktop-environment/docker/scripts/recycle.sh
 ```
 
-## Forking
+## Running in the Cloud
 
-Set your [user configuration](docker/scripts/environment.sh#L3) and go.
+Fork the [github-computer/github-computer](https://github.com/github-computer/github-computer) repository and this desktop environment will be deployed to GitHub's cloud.
 
 ## Keybindings
 
@@ -56,4 +56,3 @@ Mod + slash
 
 - [x] A computer wholly defined in code.
 - [x] Only one command required to start from scratch.
-
