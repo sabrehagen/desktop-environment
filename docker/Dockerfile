@@ -129,9 +129,6 @@ RUN wget -O alacritty.deb -nv https://github.com/jwilm/alacritty/releases/downlo
   dpkg -i alacritty.deb && \
   rm alacritty.deb
 
-# Install antigen
-RUN curl -fsSL git.io/antigen > /usr/local/bin/antigen.zsh
-
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
   chmod +x /usr/local/bin/arc
@@ -332,9 +329,6 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 # Install tormix
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
-
-# Install tmux plugin manager
-RUN git clone --depth 1 https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
