@@ -214,7 +214,7 @@ RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /o
 # Install discord
 RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
-  rm discord.deb && echo cachebusts
+  rm discord.deb
 
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \

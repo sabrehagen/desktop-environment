@@ -1,0 +1,31 @@
+name: Publish Desktop Environment
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Sanitise Repository Owner
+        run: echo ::set-env name=REPOSITORY_OWNER::$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+
+      - name: Build and Push to GitHub Container Registry
+        uses: whoan/docker-build-with-cache-action@master
+        with:
+          build_extra_args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }} --build-arg=DOTFILES_CACHEBUST=${{ github.sha }}
+          dockerfile: docker/Dockerfile
+          image_name: desktop-environment
+          push_git_tag: true
+          registry: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          username: ${{ env.REPOSITORY_OWNER }}
+          password: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Run desktop environment tests
+        run: ./docker/scripts/test.sh
+        env:
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: ${{ github.sha }}
+        continue-on-error: true
