@@ -376,9 +376,11 @@ RUN yarn global add \
   github-email \
   http-server \
   imgur-uploader-cli \
+  localtunnel \
   ngrok \
   rebase-editor \
-  tldr
+  tldr && \
+  tldr --update
 
 # Install zoom conferencing
 RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
