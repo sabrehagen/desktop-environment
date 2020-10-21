@@ -1,5 +1,5 @@
-name: Publish Desktop Environment
-on: [push]
+name: Build Desktop Environment From Dotfiles
+on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +14,7 @@ jobs:
       - name: Build and Push to GitHub Container Registry
         uses: whoan/docker-build-with-cache-action@master
         with:
-          build_extra_args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
+          build_extra_args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }} --build-arg=DOTFILES_CACHEBUST=${{ github.sha }}
           dockerfile: docker/Dockerfile
           image_name: desktop-environment
           push_git_tag: true
