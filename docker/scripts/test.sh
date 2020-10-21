@@ -16,13 +16,11 @@ docker run \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --rm \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
-  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   sleep infinity
 
-exit 1
-
 # Wait until the desktop environment test container is running before proceeding
-until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+timeout 10 $(until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done)
 
 # Start the vnc server inside the desktop environment test container
 $REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
