@@ -17,13 +17,8 @@ docker run \
   --device /dev/fuse \
   --device /dev/input \
   --device /dev/snd \
-<<<<<<< HEAD
-  --device /dev/tty2 \
-  --device /dev/vsock \
-=======
   --device /dev/tty3 \
-  --device /dev/video0 \
->>>>>>> 7fba7a54d51ca7aea35411a174a3b1042aaa6916
+  --device /dev/vsock \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \
   --group-add docker \
