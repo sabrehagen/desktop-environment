@@ -5,7 +5,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 # Get host user password to apply to container user
 DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD=$(sudo cat /etc/shadow | grep $DESKTOP_ENVIRONMENT_USER | cut -d: -f2)
-DESKTOP_ENVIRONMENT_GITHUB_USERNAME=$(git --git-dir $REPO_ROOT/.git remote get-url origin | sed -E  's;.*github.com.(.*)/.*;\1;')
+DESKTOP_ENVIRONMENT_GITHUB_USER=$(git --git-dir $REPO_ROOT/.git remote get-url origin | sed -E  's;.*github.com.(.*)/.*;\1;')
 
 docker build \
   --build-arg DESKTOP_CONTAINER_GIT_SHA=$(git --git-dir $REPO_ROOT/.git rev-parse HEAD | cut -b 1-7) \

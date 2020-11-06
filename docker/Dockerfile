@@ -430,7 +430,7 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
-RUN git ls-remote git@github.com:$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git && vcsh clone https://github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git || \
+RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_USER/dotfiles.git || \
   vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
