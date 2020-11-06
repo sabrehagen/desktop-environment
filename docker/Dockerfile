@@ -60,7 +60,6 @@ RUN apt-get update -qq && \
   g++ \
   gcc \
   git \
-  gosu \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
@@ -269,18 +268,6 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
-# Install lazydocker
-RUN curl -fsSL https://github.com/jesseduffield/lazydocker/releases/download/v0.2.4/lazydocker_0.2.4_Linux_x86_64.tar.gz | \
-  tar -C /usr/local/bin -xzf -
-
-# Install lazygit
-RUN curl -fsSL https://github.com/jesseduffield/lazygit/releases/download/v0.8.1/lazygit_0.8.1_Linux_x86_64.tar.gz | \
-  tar -C /usr/local/bin -xzf -
-
-# Intall microsoft teams
-RUN wget -O MsTeams.deb https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_1.3.00.5153_amd64.deb && \
-    apt install ./MsTeams.deb -q -y
-
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -292,10 +279,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
-
-# Install onedrive client
-RUN wget -O /usr/local/bin/onedrive -nv https://github.com/sabrehagen/onedrive/raw/master/onedrive && \
-  chmod +x /usr/local/bin/onedrive
 
 # Install pulseaudio mixer
 RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
@@ -382,23 +365,15 @@ RUN yarn global add \
   http-server \
   imgur-uploader-cli \
   localtunnel \
-  ngrok \
+  nodemon \
   rebase-editor \
   tldr && \
   tldr --update
 
-# Install zoom conferencing
-RUN wget -O zoom.deb -nv https://zoom.us/client/latest/zoom_amd64.deb && \
-  dpkg -i zoom.deb || apt-get install -qq --fix-broken && \
-  rm zoom.deb
-
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
-  chmod 600 $HOME/.config/openvpn/tun && \
-  wget -O $HOME/.config/openvpn/america.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/us4672.nordvpn.com.tcp443.ovpn && \
-  wget -O $HOME/.config/openvpn/sydney.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/au698.nordvpn.com.tcp443.ovpn && \
-  wget -O $HOME/.config/openvpn/india.ovpn -nv https://downloads.nordcdn.com/configs/files/ovpn_legacy/servers/in82.nordvpn.com.tcp443.ovpn
+  chmod 600 $HOME/.config/openvpn/tun
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
