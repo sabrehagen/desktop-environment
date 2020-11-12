@@ -208,9 +208,6 @@ RUN wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linu
 RUN wget -O /usr/local/bin/define -q https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
   chmod +x /usr/local/bin/define
 
-# Install desktop environment
-RUN git clone --depth 1 https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment
-
 # Install discord
 RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
