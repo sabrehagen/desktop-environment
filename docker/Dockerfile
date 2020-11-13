@@ -49,7 +49,6 @@ RUN apt-get update -qq && \
   autorandr \
   build-essential \
   cmake \
-  compton \
   curl \
   dnsutils \
   dnsmasq \
@@ -250,6 +249,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
   wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
+  pip3 install --user autotiling && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
@@ -276,6 +276,37 @@ RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+
+# Install picom
+RUN apt-get install -qq \
+  libconfig-dev \
+  libdbus-1-dev \
+  libev-dev \
+  libevdev-dev \
+  libgl1-mesa-dev \
+  libpcre2-dev \
+  libpixman-1-dev \
+  libx11-xcb-dev \
+  libxcb-composite0-dev \
+  libxcb-damage0-dev \
+  libxcb-glx0-dev \
+  libxcb-image0-dev \
+  libxcb-present-dev \
+  libxcb-randr0-dev \
+  libxcb-render-util0-dev \
+  libxcb-render0-dev \
+  libxcb-shape0-dev \
+  libxcb-xfixes0-dev \
+  libxcb-xinerama0-dev \
+  libxcb1-dev \
+  libxext-dev \
+  meson \
+  uthash-dev && \
+  git clone --depth 1 https://github.com/yshui/picom /opt/picom && cd /opt/picom \
+  git submodule update --init --recursive && \
+  meson --buildtype=release . build && \
+  ninja -C build && \
+  ninja -C build install
 
 # Install pulseaudio mixer
 RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
