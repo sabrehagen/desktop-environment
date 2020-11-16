@@ -124,20 +124,28 @@ RUN apt-get update -qq && \
   apt-file update
 
 # Install alacritty
-RUN wget -O alacritty.deb -nv https://github.com/alacritty/alacritty/releases/download/v0.4.3/Alacritty-v0.4.3-ubuntu_18_04_amd64.deb && \
-  dpkg -i alacritty.deb && \
-  rm alacritty.deb
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  pkg-config \
+  libfreetype6-dev \
+  libfontconfig1-dev \
+  libxcb-xfixes0-dev && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y && \
+  export PATH=$PATH:$HOME/.cargo/bin && \
+  rustup override set stable && \
+  rustup update stable && \
+  cargo install --git https://github.com/alacritty/alacritty --tag v0.5.0
 
 # Install arc
-RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.1.1/arc_linux_amd64 && \
+RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install bandwhich
-RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.10.0/bandwhich-v0.10.0-x86_64-unknown-linux-musl.tar.gz | \
+RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
 # Install bat
-RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.9.0/bat_0.9.0_amd64.deb && \
+RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
 
@@ -200,7 +208,7 @@ RUN add-apt-repository ppa:vantuz/cool-retro-term && \
   apt-get install -qq cool-retro-term
 
 # Install ctop
-RUN wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop && \
+RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
   chmod +x /usr/local/bin/ctop
 
 # Install define
@@ -213,7 +221,7 @@ RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&f
   rm discord.deb
 
 # Install dive docker image explorer
-RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.7.2/dive_0.7.2_linux_amd64.deb && \
+RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -256,17 +264,17 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   go install
 
 # Install jobber
-RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber_1.4.0-1_amd64.deb && \
+RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
   rm jobber.deb
 
 # Install jump directory navigator
-RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.22.0/jump_0.22.0_amd64.deb && \
+RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.90.0/musikcube_0.90.0_ubuntu_disco_amd64.deb && \
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
@@ -355,7 +363,7 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v2.6.3/shfmt_v2.6.3_linux_amd64 && \
+  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install warnai
