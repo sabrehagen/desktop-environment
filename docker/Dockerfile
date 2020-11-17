@@ -328,12 +328,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
-# Install signal messenger
-RUN curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | apt-key add - && \
-  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | tee -a /etc/apt/sources.list.d/signal-xenial.list && \
-  apt-get update -qq && \
-  apt-get install -qq signal-desktop
-
 # Install skype
 RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   dpkg -i skype.deb && \
