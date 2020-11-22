@@ -1,43 +1,3 @@
-FROM ubuntu:19.04
-
-ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
-ARG DESKTOP_ENVIRONMENT_USER
-ARG DESKTOP_ENVIRONMENT_GITHUB_USER
-
-ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
-ENV EDITOR nano
-ENV LANG en_US.UTF-8
-ENV LANGUAGE $LANG
-ENV LC_ALL $LANG
-ENV LC_CTYPE $LANG
-ENV SHELL /bin/zsh
-ENV TERM xterm-256color
-ENV USER $DESKTOP_ENVIRONMENT_USER
-ENV TZ Australia/Sydney
-
-ENV HOME /home/$USER
-
-# Ensure container image sources are always available by using 'old' repositories
-RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
-
-# Restore minimized distribution content e.g. man pages
-RUN yes | unminimize
-
-# Install locales and timezone data
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  locales \
-  tzdata
-
-# Generate locales
-RUN locale-gen $LANG && \
-  update-locale LC_ALL=$LC_ALL LANG=$LANG && \
-  dpkg-reconfigure --frontend=noninteractive locales
-
-# Set timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-  echo $TZ > /etc/timezone
-
 # Install desktop environment utilities
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
@@ -350,17 +310,6 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
 
-# Install tmuxinator
-RUN gem install tmuxinator -v 1.1.5
-
-# Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
-  rm code.deb && \
-  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
-
 # Install warnai
 RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf && \
@@ -405,45 +354,3 @@ RUN yarn global add \
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
   chmod 600 $HOME/.config/openvpn/tun
-
-# Configure password-less sudo for the sudo group
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
-# Configure X11 permissions
-RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
-  echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
-  chmod u+s /usr/bin/xinit
-
-# Create a non-root user for safe operation
-RUN useradd \
-  --create-home \
-  --groups audio,chrome,docker,input,netdev,shadow,sudo,tty,video \
-  --shell /bin/zsh \
-  $USER
-
-# Set non-root user password
-RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
-
-# Take ownership of user's home directory and applications
-RUN chown -R $USER:$USER $HOME /opt
-
-# Become desktop environment user
-USER $USER
-WORKDIR $HOME
-
-# If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
-ARG DOTFILES_CACHEBUST
-RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
-
-# Clone user dotfiles or fallback to sabrehagen dotfiles
-RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git
-
-# Bootstrap dotfiles
-RUN $HOME/.dotfiles-bootstrap.sh
-
-# Record container build information
-ARG DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
-ARG DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
-ENV DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
