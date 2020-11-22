@@ -35,17 +35,55 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Configure password-less sudo for the sudo group
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
 # Install essential utilities
 RUN apt-get update -qq && \
-  apt-get install -qq \
+  apt-get install -y \
+  build-essential \
+  cmake \
   curl \
+  dnsutils \
+  docker.io \
+  figlet \
+  fonts-font-awesome \
+  g++ \
+  gcc \
+  git \
+  gtk-theme-switch \
+  htop \
+  iputils-ping \
+  jq \
+  keychain \
+  libnss3-tools \
+  libterm-readkey-perl \
+  lsb-core \
+  maim \
+  make \
+  man-db \
+  nano \
+  ncdu \
+  net-tools \
+  numlockx \
+  openssl \
+  perl \
+  software-properties-common \
+  ssh \
+  sudo \
   tmux \
+  tree \
   vcsh \
-  wget \
+  xauth \
+  xinput \
+  xclip \
+  xsel \
   zsh
+
+# Clone desktop environment repository
+RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt || \
+  git clone https://github.com/sabrehagen/desktop-environment.git && \
+  ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
+
+# Configure password-less sudo for the sudo group
+RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
 # Create a non-root user for safe operation
 RUN useradd \
@@ -70,7 +108,7 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git && echo
+  vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
