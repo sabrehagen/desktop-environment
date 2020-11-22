@@ -35,17 +35,108 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Configure password-less sudo for the sudo group
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
 # Install essential utilities
 RUN apt-get update -qq && \
-  apt-get install -qq \
+  apt-get install -y \
+  build-essential \
+  cmake \
   curl \
+  dnsutils \
+  docker.io \
+  figlet \
+  fonts-font-awesome \
+  g++ \
+  gcc \
+  git \
+  gtk-theme-switch \
+  htop \
+  iputils-ping \
+  jq \
+  keychain \
+  libnss3-tools \
+  libterm-readkey-perl \
+  lsb-core \
+  maim \
+  make \
+  man-db \
+  nano \
+  ncdu \
+  net-tools \
+  numlockx \
+  openssl \
+  perl \
+  software-properties-common \
+  ssh \
+  sudo \
   tmux \
+  tree \
   vcsh \
-  wget \
+  xauth \
+  xclip \
+  xdotool \
+  xinput \
+  xsel \
   zsh
+
+# Install arc
+RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+  chmod +x /usr/local/bin/arc
+
+# Install bandwhich
+RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
+  tar -C /usr/local/bin -xzf -
+
+# Install bat
+RUN wget -q -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
+  dpkg -i bat.deb && \
+  rm bat.deb
+
+# Install ctop
+RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
+  chmod +x /usr/local/bin/ctop
+
+# Install fzf
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
+  $HOME/.fzf/install --bin
+
+# Install gotop
+RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+  dpkg -i gotop-deb
+
+# Install jump directory navigator
+RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
+  dpkg -i jump.deb && \
+  rm jump.deb
+
+# Install timeago
+RUN wget -q -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+  chmod +x /usr/local/bin/timeago
+
+# Install yarn
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+  apt-get update -qq && \
+  apt-get install -qq yarn
+
+# Install yarn based utilities
+RUN yarn global add \
+  clipboard-cli \
+  github-email \
+  http-server \
+  imgur-uploader-cli \
+  localtunnel \
+  nodemon \
+  rebase-editor \
+  tldr && \
+  tldr --update
+
+# Clone desktop environment repository
+RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt || \
+  git clone https://github.com/sabrehagen/desktop-environment.git && \
+  ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run && echo
+
+# Configure password-less sudo for the sudo group
+RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
 # Create a non-root user for safe operation
 RUN useradd \
@@ -70,7 +161,7 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git && echo
+  vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh

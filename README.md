@@ -41,9 +41,6 @@ Mod + e
 # Launch slack
 Mod + m
 
-# Launch signal
-Mod + y
-
 # Launch maim
 Mod + x
 
