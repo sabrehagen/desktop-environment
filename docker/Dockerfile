@@ -255,6 +255,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
+  sed -ie '79i~/.config/scripts/screensaver.sh' /usr/bin/i3lock-fancy && \
   wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --user autotiling && \
