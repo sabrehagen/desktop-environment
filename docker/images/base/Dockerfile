@@ -103,7 +103,8 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
 
 # Install gotop
 RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-  dpkg -i gotop.deb
+  dpkg -i gotop.deb && \
+  rm gotop.deb
 
 # Install jump directory navigator
 RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
