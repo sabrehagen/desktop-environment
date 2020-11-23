@@ -81,7 +81,7 @@ RUN apt-get update -qq && \
   zsh
 
 # Install arc
-RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+RUN wget -q -O /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install bandwhich
@@ -89,12 +89,12 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
   tar -C /usr/local/bin -xzf -
 
 # Install bat
-RUN wget -q -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
+RUN wget -q -O bat.deb https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
 
 # Install ctop
-RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
+RUN wget -q -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
   chmod +x /usr/local/bin/ctop
 
 # Install fzf
@@ -102,8 +102,8 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
 # Install gotop
-RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-  dpkg -i gotop-deb
+RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+  dpkg -i gotop.deb
 
 # Install jump directory navigator
 RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
