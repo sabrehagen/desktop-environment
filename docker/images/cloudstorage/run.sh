@@ -1,8 +1,14 @@
-REPO_ROOT=$(dirname $(readlink -f $0))/../..
+REPO_ROOT=$(dirname $(readlink -f $0))/../../..
+IMAGE=$(basename $(dirname $0))
 
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
-$REPO_ROOT/docker/scripts/run.sh tmux
-$REPO_ROOT/docker/scripts/run.sh x11
-$REPO_ROOT/docker/scripts/run.sh i3
+# Start the desktop environment container
+docker run \
+  --detach \
+  --device /dev/fuse \
+  --interactive \
+  --network host \
+  --rm \
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG

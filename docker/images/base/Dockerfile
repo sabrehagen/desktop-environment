@@ -135,6 +135,11 @@ RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environm
   git clone https://github.com/sabrehagen/desktop-environment.git && \
   ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run && echo
 
+# Configure openvpn
+RUN mkdir -p $HOME/.config/openvpn && \
+  mknod $HOME/.config/openvpn/tun c 10 200 && \
+  chmod 600 $HOME/.config/openvpn/tun
+
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
