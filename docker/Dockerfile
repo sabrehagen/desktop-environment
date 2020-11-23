@@ -1,4 +1,6 @@
-RUN apt-get install -qq libncurses5-dev && \
+# Install cmatrix
+RUN apt-get install -qq \
+  libncurses5-dev && \
   git clone --depth 1 https://github.com/abishekvashok/cmatrix && \
   mkdir -p cmatrix/build && \
   cd cmatrix/build && \
@@ -14,14 +16,6 @@ RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
-
-# Install gist
-RUN gem install gist
-
-# Install go
-RUN add-apt-repository ppa:longsleep/golang-backports && \
-  apt-get update -qq && \
-  apt-get install -qq golang-go
 
 # Install gotty
 RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
@@ -52,9 +46,6 @@ RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/Geor
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
-
-# Install speedtest
-RUN pip install --user speedtest-cli
 
 # Install tormix
 RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \

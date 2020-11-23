@@ -45,6 +45,7 @@ RUN apt-get update -qq && \
   cmake \
   curl \
   dnsutils \
+  dnsmasq \
   docker.io \
   figlet \
   fonts-font-awesome \
@@ -67,6 +68,7 @@ RUN apt-get update -qq && \
   net-tools \
   numlockx \
   openssl \
+  openvpn \
   perl \
   python3 \
   python3-pip \
