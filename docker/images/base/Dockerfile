@@ -123,7 +123,7 @@ RUN wget -q -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabr
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+  echo deb https://dl.yarnpkg.com/debian stable main | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update -qq && \
   apt-get install -qq yarn
 
@@ -138,12 +138,12 @@ RUN yarn global add \
   rebase-editor
 
 # Configure password-less sudo for the sudo group
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+RUN echo %sudo ALL=(ALL) NOPASSWD:ALL > /etc/sudoers
 
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups audio,shadow,sudo,tty,video \
+  --groups audio,docker,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
@@ -169,7 +169,7 @@ RUN mkdir -p $HOME/.config/openvpn && \
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
-RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
+RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo Building from dotfiles...
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \

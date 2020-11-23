@@ -17,7 +17,7 @@ RUN sudo apt-get update -qq && \
   fonts-symbola \
   --no-install-recommends && \
   curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && \
-  echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list && \
+  echo deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main | sudo tee /etc/apt/sources.list.d/google.list && \
   sudo apt-get update -qq && \
   sudo apt-get install -qq google-chrome-stable --no-install-recommends || sudo apt-get install -qq --fix-broken && \
   sudo rm /etc/apt/sources.list.d/google-chrome.list && \
