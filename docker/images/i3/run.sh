@@ -7,6 +7,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker run \
   --detach \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   --volume DESKTOP_ENVIRONMENT_STATE_I3:$DESKTOP_ENVIRONMENT_STATE_I3 \

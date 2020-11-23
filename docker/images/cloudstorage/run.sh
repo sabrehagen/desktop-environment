@@ -9,6 +9,7 @@ docker run \
   --detach \
   --device /dev/fuse \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG

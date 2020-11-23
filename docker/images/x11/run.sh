@@ -18,6 +18,7 @@ docker run \
   --group-add tty \
   --group-add video \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   --volume /dev/displaylink:/dev/displaylink \

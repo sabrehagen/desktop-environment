@@ -8,6 +8,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker run \
   --detach \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   --volume /var/lib/docker:/var/lib/docker \

@@ -8,6 +8,7 @@ docker run \
   --cap-add SYS_TTY_CONFIG \
   --detach \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \

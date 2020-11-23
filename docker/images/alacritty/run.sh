@@ -24,6 +24,7 @@ docker run \
   --group-add tty \
   --group-add video \
   --interactive \
+  --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
   --rm \
   --volume /var/lib/docker:/var/lib/docker \
