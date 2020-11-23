@@ -1,10 +1,3 @@
-# Install desktop environment utilities
-RUN apt-get update -qq && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
-  alsa-utils \
-  apt-file \
-  apt-utils
-
 RUN apt-get install -qq libncurses5-dev && \
   git clone --depth 1 https://github.com/abishekvashok/cmatrix && \
   mkdir -p cmatrix/build && \
@@ -59,11 +52,6 @@ RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/Geor
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
-
-# Install skype
-RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
-  dpkg -i skype.deb && \
-  rm skype.deb
 
 # Install speedtest
 RUN pip install --user speedtest-cli
