@@ -132,9 +132,7 @@ RUN yarn global add \
   imgur-uploader-cli \
   localtunnel \
   nodemon \
-  rebase-editor \
-  tldr && \
-  tldr --update
+  rebase-editor
 
 # Clone desktop environment repository
 RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt || \
