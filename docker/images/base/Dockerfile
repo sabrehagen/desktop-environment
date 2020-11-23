@@ -78,6 +78,7 @@ RUN apt-get update -qq && \
   tmux \
   tree \
   vcsh \
+  x11-xserver-utils \
   xauth \
   xclip \
   xdotool \
@@ -136,16 +137,6 @@ RUN yarn global add \
   nodemon \
   rebase-editor
 
-# Clone desktop environment repository
-RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt || \
-  git clone https://github.com/sabrehagen/desktop-environment.git && \
-  ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run && echo
-
-# Configure openvpn
-RUN mkdir -p $HOME/.config/openvpn && \
-  mknod $HOME/.config/openvpn/tun c 10 200 && \
-  chmod 600 $HOME/.config/openvpn/tun
-
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
@@ -165,6 +156,16 @@ RUN chown -R $USER:$USER $HOME /opt
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
+
+# Clone desktop environment repository
+RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt/desktop-environment || \
+  git clone https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment && \
+  ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
+
+# Configure openvpn
+RUN mkdir -p $HOME/.config/openvpn && \
+  mknod $HOME/.config/openvpn/tun c 10 200 && \
+  chmod 600 $HOME/.config/openvpn/tun
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
