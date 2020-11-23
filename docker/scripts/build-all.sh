@@ -1,7 +1,7 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../..
 
 # Build the base image
-# $REPO_ROOT/scripts/build.sh
+$REPO_ROOT/docker/scripts/build.sh
 
 # Build all images in parallel
 ls $REPO_ROOT/docker/images | \
