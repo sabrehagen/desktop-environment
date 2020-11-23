@@ -7,7 +7,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 $REPO_ROOT/docker/scripts/run.sh tmux
 
 # Wait until the desktop environment container is running before proceeding
-until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+until docker inspect $(docker ps | grep desktop-environment | grep tmux | cut -f1 -d' ') | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
 
 # Start the desktop environment inside the container
 $REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
