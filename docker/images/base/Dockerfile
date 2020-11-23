@@ -40,7 +40,7 @@ RUN apt-get update -qq && \
   apt-get install -y \
   alsa-utils \
   apt-file \
-  apt-utils
+  apt-utils \
   build-essential \
   cmake \
   curl \
