@@ -4,30 +4,12 @@ IMAGE=$(basename $(dirname $0))
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
-# Start the desktop environment container
 docker run \
-  --cap-add NET_ADMIN \
-  --cap-add SYS_ADMIN \
-  --cap-add SYS_PTRACE \
   --cap-add SYS_TTY_CONFIG \
   --detach \
-  --device /dev/dri \
-  --device /dev/fuse \
-  --device /dev/input \
-  --device /dev/snd \
-  --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
-  --device /dev/video0 \
-  --group-add audio \
-  --group-add docker \
-  --group-add input \
-  --group-add plugdev \
-  --group-add tty \
-  --group-add video \
   --interactive \
   --network host \
   --rm \
-  --volume /var/lib/docker:/var/lib/docker \
-  --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \
   --volume DESKTOP_ENVIRONMENT_CACHE_YARN:$DESKTOP_ENVIRONMENT_CACHE_YARN \
   --volume DESKTOP_ENVIRONMENT_CACHE_ZSH:$DESKTOP_ENVIRONMENT_CACHE_ZSH \
@@ -42,5 +24,4 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_MUSIC:$DESKTOP_ENVIRONMENT_USER_MUSIC \
   --volume DESKTOP_ENVIRONMENT_USER_PICTURES:$DESKTOP_ENVIRONMENT_USER_PICTURES \
   --volume DESKTOP_ENVIRONMENT_USER_REPOSITORIES:$DESKTOP_ENVIRONMENT_USER_REPOSITORIES \
-  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
-  $@
+  $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE-$IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG

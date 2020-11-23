@@ -65,6 +65,8 @@ RUN apt-get update -qq && \
   numlockx \
   openssl \
   perl \
+  python3 \
+  python3-pip \
   software-properties-common \
   ssh \
   sudo \

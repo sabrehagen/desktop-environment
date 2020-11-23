@@ -10,7 +10,7 @@ docker run \
   --device /dev/dri \
   --device /dev/input \
   --device /dev/snd \
-  --device /dev/tty4 \
+  --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
   --device /dev/video0 \
   --group-add audio \
   --group-add input \
