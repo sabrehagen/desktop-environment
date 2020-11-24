@@ -1,5 +1,6 @@
 FROM ubuntu:20.04
 
+ARG DESKTOP_ENVIRONMENT_HOST_DOCKER_GID
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
@@ -149,6 +150,9 @@ RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Configure container docker group id to be the same as the host docker group id so the mounted docker socket permissions match
+RUN groupmod -g $DESKTOP_ENVIRONMENT_HOST_DOCKER_GID docker
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
