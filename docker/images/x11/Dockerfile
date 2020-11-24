@@ -31,4 +31,4 @@ RUN sudo sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapp
   echo sleep infinity > ~/.xinitrc
 
 # Start x11
-CMD xinit -- :1 vt0$DESKTOP_ENVIRONMENT_HOST_TTY
+CMD xinit -- $DISPLAY vt0$DESKTOP_ENVIRONMENT_HOST_TTY

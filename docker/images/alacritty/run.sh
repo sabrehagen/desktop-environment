@@ -17,6 +17,7 @@ docker run \
   --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
   --device /dev/video0 \
+  --env DISPLAY \
   --group-add audio \
   --group-add docker \
   --group-add input \

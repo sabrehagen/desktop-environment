@@ -7,6 +7,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 # Start the desktop environment container
 docker run \
   --detach \
+  --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
