@@ -137,9 +137,6 @@ RUN yarn global add \
   nodemon \
   rebase-editor
 
-# Configure password-less sudo for the sudo group
-RUN echo %sudo ALL=(ALL) NOPASSWD:ALL > /etc/sudoers
-
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
@@ -149,6 +146,9 @@ RUN useradd \
 
 # Set non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
+
+# Configure password-less sudo for the sudo group
+RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
@@ -160,12 +160,12 @@ WORKDIR $HOME
 # Clone desktop environment repository
 RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt/desktop-environment || \
   git clone https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment && \
-  ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
+  sudo ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
-  mknod $HOME/.config/openvpn/tun c 10 200 && \
-  chmod 600 $HOME/.config/openvpn/tun
+  sudo mknod $HOME/.config/openvpn/tun c 10 200 && \
+  sudo chmod 600 $HOME/.config/openvpn/tun
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST

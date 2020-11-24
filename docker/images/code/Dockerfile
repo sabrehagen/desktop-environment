@@ -15,10 +15,13 @@ RUN wget -q -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 RUN sudo apt-get install -qq \
   tigervnc-scraping-server \
   tigervnc-standalone-server && \
-  vncserver DISPLAY=:2 \
+  echo sleep infinity >> /tmp/xstartup && \
+  chmod +x /tmp/xstartup && \
+  export DISPLAY=:2 && \
+  vncserver $DISPLAY \
   -autokill \
   -SecurityTypes none \
-  -xstartup /usr/bin/i3 & && \
+  -xstartup /tmp/xstartup && \
   code --install-extension Shan.code-settings-sync && \
   sed -i '/lastDownload/d' $HOME/.config/Code/User/syncLocalSettings.json && \
   code && sleep 90 && pkill -f code && \
