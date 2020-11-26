@@ -4,7 +4,7 @@ REPO_ROOT=$(dirname $(readlink -f $0))/../..
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 # Build image supplied as the first argument, or default to the base image
-IMAGE=${1:-base}
+IMAGE=${1-base}
 
 # Get host user password to apply to container user
 DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD=$(sudo cat /etc/shadow | grep $DESKTOP_ENVIRONMENT_USER | cut -d: -f2)

@@ -3,7 +3,7 @@ FROM $DESKTOP_ENVIRONMENT_BASE:latest
 
 # Install skype
 RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
-  dpkg -i skype.deb && \
+  sudo dpkg -i skype.deb || sudo apt-get install -qq --fix-broken && \
   rm skype.deb
 
 # Start skype

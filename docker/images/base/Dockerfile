@@ -79,9 +79,11 @@ RUN apt-get update -qq && \
   tmux \
   tree \
   vcsh \
+  wmctrl \
   x11-xserver-utils \
   xauth \
   xclip \
+  xdg-utils \
   xdotool \
   xinput \
   xsel \
@@ -181,3 +183,6 @@ RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git ||
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
+
+# Start the sd
+CMD ~/.config/scripts/startup.sh
