@@ -16,6 +16,7 @@ RUN sudo add-apt-repository ppa:kgilmer/speed-ricer && \
 # Install i3 utilities
 RUN sudo apt-get install -qq \
   golang-go \
+  wmctrl \
   xautolock && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --user autotiling && \
