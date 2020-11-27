@@ -6,6 +6,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 docker run \
   --detach \
+  --env DESKTOP_ENVIRONMENT_HOST_HOSTNAME \
   --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \

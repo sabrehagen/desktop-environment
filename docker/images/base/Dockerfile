@@ -145,11 +145,15 @@ RUN yarn global add \
   rebase-editor
 
 # Create a non-root user for safe operation
-RUN useradd \
+RUN groupadd input && \
+  useradd \
   --create-home \
-  --groups audio,docker,shadow,sudo,tty,video \
+  --groups audio,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
+
+# Configure container docker group id to be the same as the host docker group id so the mounted docker socket permissions match
+RUN groupmod -g $DESKTOP_ENVIRONMENT_HOST_DOCKER_GID docker
 
 # Configure non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
@@ -160,9 +164,6 @@ RUN mknod /dev/tun c 10 200 && \
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
-
-# Configure container docker group id to be the same as the host docker group id so the mounted docker socket permissions match
-RUN groupmod -g $DESKTOP_ENVIRONMENT_HOST_DOCKER_GID docker
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt

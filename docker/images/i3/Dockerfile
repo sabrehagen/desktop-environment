@@ -55,5 +55,17 @@ RUN sudo apt-get install -qq \
   sudo ninja -C build && \
   sudo ninja -C build install
 
+# Install pywal utility
+RUN pip3 install --user pywal
+
+# Install warnai utility
+RUN sudo apt-get update -qq && \
+  sudo apt-get install -qq \
+  inkscape \
+  optipng \
+  xfconf && \
+  git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
+  sed -i '/notify-send/d' /opt/warnai/warnai
+
 # Start i3
 CMD i3

@@ -11,12 +11,10 @@ docker run \
   --cap-add SYS_PTRACE \
   --cap-add SYS_TTY_CONFIG \
   --detach \
-  --device /dev/dri \
   --device /dev/fuse \
-  --device /dev/input \
   --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
-  --device /dev/video0 \
+  --env DESKTOP_ENVIRONMENT_HOST_HOSTNAME \
   --env DISPLAY \
   --group-add audio \
   --group-add docker \
