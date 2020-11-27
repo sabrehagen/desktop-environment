@@ -5,6 +5,7 @@ IMAGE=$(basename $(dirname $0))
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 docker run \
+  --cap-add SYS_ADMIN \
   --cap-add SYS_TTY_CONFIG \
   --detach \
   --device /dev/dri \
