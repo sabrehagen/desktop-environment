@@ -8,6 +8,7 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker run \
   --detach \
   --device /dev/fuse \
+  --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network host \
