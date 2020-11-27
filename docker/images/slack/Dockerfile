@@ -7,4 +7,4 @@ RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-
   rm slack.deb
 
 # Start slack
-CMD slack
+ENTRYPOINT ["/usr/bin/slack"]

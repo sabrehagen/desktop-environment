@@ -7,12 +7,14 @@ RUN sudo apt-get update -qq && \
   pkg-config \
   libfreetype6-dev \
   libfontconfig1-dev \
+  libgl1-mesa-dev \
   libxcb-xfixes0-dev && \
   curl https://sh.rustup.rs -sSf | sh -s -- -y && \
   export PATH=$PATH:$HOME/.cargo/bin && \
   rustup override set stable && \
   rustup update stable && \
-  cargo install --git https://github.com/alacritty/alacritty --tag v0.5.0
+  cargo install --git https://github.com/alacritty/alacritty --tag v0.6.0 && \
+  sudo ln -s ~/.cargo/bin/alacritty /usr/bin/alacritty
 
 # Run alacritty
-ENTRYPOINT alacritty
+ENTRYPOINT ["/usr/bin/alacritty"]

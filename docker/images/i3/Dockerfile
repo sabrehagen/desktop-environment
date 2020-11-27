@@ -15,7 +15,9 @@ RUN sudo add-apt-repository ppa:kgilmer/speed-ricer && \
 
 # Install i3 utilities
 RUN sudo apt-get install -qq \
+  feh \
   golang-go \
+  pango1.0-tools \
   xautolock && \
   pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --user autotiling && \
@@ -55,17 +57,26 @@ RUN sudo apt-get install -qq \
   sudo ninja -C build && \
   sudo ninja -C build install
 
-# Install pywal utility
-RUN pip3 install --user pywal
-
 # Install warnai utility
 RUN sudo apt-get update -qq && \
   sudo apt-get install -qq \
   inkscape \
   optipng \
+  python2 \
   xfconf && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
+# Generate wal cache
+RUN echo sleep infinity >> /tmp/xstartup && \
+  chmod +x /tmp/xstartup && \
+  export DISPLAY=:2 && \
+  vncserver $DISPLAY \
+  -autokill \
+  -SecurityTypes none \
+  -xstartup /tmp/xstartup && \
+  ~/.config/scripts/wal.sh && \
+  kill -HUP $(pgrep Xtigervnc)
+
 # Start i3
-CMD i3
+ENTRYPOINT ["zsh", "-c", "/usr/bin/i3"]

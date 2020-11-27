@@ -81,6 +81,7 @@ RUN apt-get update -qq && \
   tigervnc-standalone-server \
   tmux \
   tree \
+  unzip \
   vcsh \
   wmctrl \
   x11-xkb-utils \
@@ -111,8 +112,8 @@ RUN wget -q -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/downl
   chmod +x /usr/local/bin/ctop
 
 # Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
-  $HOME/.fzf/install --bin
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
+  ~/.fzf/install --bin
 
 # Install gotop
 RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
@@ -124,6 +125,17 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
+# Install nerd fonts
+RUN curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DroidSansMono.zip --create-dirs -o ~/.local/share/fonts/DroidSansMono.zip && \
+  unzip ~/.local/share/fonts/DroidSansMono.zip -d ~/.local/share/fonts && \
+  rm ~/.local/share/fonts/DroidSansMono.zip && \
+  fc-cache -fv
+
+# Install pywal
+RUN apt-get update -qq && \
+  apt-get install -qq imagemagick && \
+  pip3 install --user pywal
+
 # Install timeago
 RUN wget -q -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
@@ -134,7 +146,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   apt-get update -qq && \
   apt-get install -qq yarn
 
-# Install yarn based utilities
+# Install yarn applications
 RUN yarn global add \
   clipboard-cli \
   github-email \
@@ -145,7 +157,7 @@ RUN yarn global add \
   rebase-editor
 
 # Create a non-root user for safe operation
-RUN groupadd input && \
+RUN groupadd --system input && \
   useradd \
   --create-home \
   --groups audio,docker,input,shadow,sudo,tty,video \
@@ -179,14 +191,12 @@ RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo Building from dotfiles...
 # Clone desktop environment repository
 RUN git clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment.git /opt/desktop-environment || \
   git clone https://github.com/sabrehagen/desktop-environment.git /opt/desktop-environment && \
-  sudo ln -s /opt/desktop-environment/docker/scripts/run.sh /usr/local/bin/docker_run
+  /opt/desktop-environment/docker/scripts/install-containers.sh
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
-RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
+RUN wget https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git --no-check-certificate -o /dev/null && \
+  vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
   vcsh clone https://github.com/sabrehagen/dotfiles.git
 
 # Bootstrap dotfiles
-RUN $HOME/.dotfiles-bootstrap.sh
-
-# Start the desktop environment
-CMD $HOME/.config/scripts/startup.sh
+RUN ~/.dotfiles-bootstrap.sh

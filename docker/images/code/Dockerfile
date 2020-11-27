@@ -20,8 +20,11 @@ RUN echo sleep infinity >> /tmp/xstartup && \
   -SecurityTypes none \
   -xstartup /tmp/xstartup && \
   code --install-extension Shan.code-settings-sync && \
-  sed -i '/lastDownload/d' $HOME/.config/Code/User/syncLocalSettings.json && \
+  sed -i '/lastDownload/d' ~/.config/Code/User/syncLocalSettings.json && \
   code && sleep 90 && pkill -f code && \
   code && sleep 5 && pkill -f code && \
   ~/.config/scripts/wal.sh && \
   kill -HUP $(pgrep Xtigervnc) && sleep 2
+
+# Start code
+ENTRYPOINT ["/usr/bin/code"]

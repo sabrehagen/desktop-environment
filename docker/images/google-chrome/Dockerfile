@@ -23,3 +23,6 @@ RUN sudo apt-get update -qq && \
   sudo rm /etc/apt/sources.list.d/google-chrome.list && \
   sudo wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   sudo groupadd --system chrome
+
+# Start google-chrome
+ENTRYPOINT ["/usr/bin/google-chrome"]

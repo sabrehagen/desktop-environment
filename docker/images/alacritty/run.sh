@@ -1,10 +1,10 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../../..
-IMAGE=$(basename $(dirname $0))
+IMAGE=$(basename $(dirname $(readlink -f $0)))
 
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
-# Start the desktop environment container
+# Start the alacritty container
 docker run \
   --cap-add NET_ADMIN \
   --cap-add SYS_ADMIN \
@@ -13,8 +13,7 @@ docker run \
   --detach \
   --device /dev/fuse \
   --device /dev/snd \
-  --device /dev/tty$DESKTOP_ENVIRONMENT_HOST_TTY \
-  --env DESKTOP_ENVIRONMENT_HOST_HOSTNAME \
+  --device /dev/video0 \
   --env DISPLAY \
   --group-add audio \
   --group-add docker \
@@ -29,6 +28,7 @@ docker run \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume DESKTOP_ENVIRONMENT_CACHE_SSH:$DESKTOP_ENVIRONMENT_CACHE_SSH \
+  --volume DESKTOP_ENVIRONMENT_CACHE_WAL:$DESKTOP_ENVIRONMENT_CACHE_WAL \
   --volume DESKTOP_ENVIRONMENT_CACHE_YARN:$DESKTOP_ENVIRONMENT_CACHE_YARN \
   --volume DESKTOP_ENVIRONMENT_CACHE_ZSH:$DESKTOP_ENVIRONMENT_CACHE_ZSH \
   --volume DESKTOP_ENVIRONMENT_STATE_JUMP:$DESKTOP_ENVIRONMENT_STATE_JUMP \

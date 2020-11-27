@@ -19,8 +19,7 @@ RUN sudo apt-get install -qq \
   make -j$(nproc) && \
   sudo make install && \
   echo user_allow_other | sudo tee -a /etc/fuse.conf && \
-  mkdir -p $HOME/.config/cloudstorage && \
-  mkdir $HOME/cloudstorage
+  mkdir -p ~/.config/cloudstorage ~/cloudstorage
 
 # Start cloudstorage
-ENTRYPOINT cloudstorage-fuse
+ENTRYPOINT ["/usr/local/bin/cloudstorage-fuse"]

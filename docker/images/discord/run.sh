@@ -1,11 +1,12 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../../..
-IMAGE=$(basename $(dirname $0))
+IMAGE=$(basename $(dirname $(readlink -f $0)))
 
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
-# Start the desktop environment container
+# Start the discord container
 docker run \
+  --cap-add SYS_ADMIN \
   --detach \
   --env DISPLAY \
   --interactive \

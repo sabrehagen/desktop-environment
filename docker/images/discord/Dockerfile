@@ -7,4 +7,4 @@ RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&f
   rm discord.deb
 
 # Start discord
-CMD discord
+ENTRYPOINT ["/usr/bin/discord"]

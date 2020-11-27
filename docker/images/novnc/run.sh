@@ -1,12 +1,13 @@
 REPO_ROOT=$(dirname $(readlink -f $0))/../../..
-IMAGE=$(basename $(dirname $0))
+IMAGE=$(basename $(dirname $(readlink -f $0)))
 
 # Export desktop environment shell configuration
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
+# Start the novnc container
 docker run \
   --detach \
-  --env DISPLAY=${DISPLAY-:1} \
+  --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \

@@ -7,4 +7,4 @@ RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   rm skype.deb
 
 # Start skype
-CMD skypeforlinux
+ENTRYPOINT ["/usr/bin/skypeforlinux"]
