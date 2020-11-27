@@ -151,8 +151,12 @@ RUN useradd \
   --shell /bin/zsh \
   $USER
 
-# Set non-root user password
+# Configure non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
+
+# Configure openvpn
+RUN mknod /dev/tun c 10 200 && \
+  chmod 600 /dev/tun
 
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
@@ -166,11 +170,6 @@ RUN chown -R $USER:$USER $HOME /opt
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
-
-# Configure openvpn
-RUN mkdir -p $HOME/.config/openvpn && \
-  sudo mknod $HOME/.config/openvpn/tun c 10 200 && \
-  sudo chmod 600 $HOME/.config/openvpn/tun
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
