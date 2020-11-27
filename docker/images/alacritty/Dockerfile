@@ -14,4 +14,5 @@ RUN sudo apt-get update -qq && \
   rustup update stable && \
   cargo install --git https://github.com/alacritty/alacritty --tag v0.5.0
 
+# Run alacritty
 ENTRYPOINT alacritty

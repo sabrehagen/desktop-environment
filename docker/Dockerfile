@@ -34,14 +34,6 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
 
-# Install novnc
-RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
-
-# Install pulseaudio mixer
-RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
-  chmod +x /usr/local/bin/pulsemixer
-
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \

@@ -11,7 +11,7 @@ docker run \
   --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
-  --network host \
+  --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume DESKTOP_ENVIRONMENT_STATE_TMUX:$DESKTOP_ENVIRONMENT_STATE_TMUX \

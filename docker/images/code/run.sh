@@ -10,7 +10,7 @@ docker run \
   --env DISPLAY \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
-  --network host \
+  --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \

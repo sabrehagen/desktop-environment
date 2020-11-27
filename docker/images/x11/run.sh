@@ -22,7 +22,7 @@ docker run \
   --group-add video \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME-$IMAGE \
-  --network host \
+  --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \

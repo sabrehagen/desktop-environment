@@ -71,11 +71,14 @@ RUN apt-get update -qq && \
   openssl \
   openvpn \
   perl \
+  python-is-python3 \
   python3 \
   python3-pip \
   software-properties-common \
   ssh \
   sudo \
+  tigervnc-scraping-server \
+  tigervnc-standalone-server \
   tmux \
   tree \
   vcsh \

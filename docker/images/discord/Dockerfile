@@ -5,3 +5,6 @@ FROM $DESKTOP_ENVIRONMENT_BASE:latest
 RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
   sudo dpkg -i discord.deb || sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-broken && \
   rm discord.deb
+
+# Start discord
+CMD discord

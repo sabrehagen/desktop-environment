@@ -12,10 +12,7 @@ RUN wget -q -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 # Start an x server for applications that require one to function (wal, code)
 # Install code settings sync extension, clear extension download history, start code so extensions install, forcibly terminate code after extensions install (race condition), generate wal cache
 # Terminate x server and wait for shutdown
-RUN sudo apt-get install -qq \
-  tigervnc-scraping-server \
-  tigervnc-standalone-server && \
-  echo sleep infinity >> /tmp/xstartup && \
+RUN echo sleep infinity >> /tmp/xstartup && \
   chmod +x /tmp/xstartup && \
   export DISPLAY=:2 && \
   vncserver $DISPLAY \

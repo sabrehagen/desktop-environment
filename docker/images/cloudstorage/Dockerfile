@@ -21,3 +21,6 @@ RUN sudo apt-get install -qq \
   echo user_allow_other | sudo tee -a /etc/fuse.conf && \
   mkdir -p $HOME/.config/cloudstorage && \
   mkdir $HOME/cloudstorage
+
+# Start cloudstorage
+ENTRYPOINT cloudstorage-fuse
