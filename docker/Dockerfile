@@ -401,6 +401,21 @@ RUN yarn global add \
   tldr && \
   tldr --update
 
+# Install gantt
+RUN wget -O /usr/local/bin/gantt -q https://raw.githubusercontent.com/andrew-ls/gantt/master/bin/gantt && \
+  chmod +x /usr/local/bin/gantt
+
+# install taskwarrior
+RUN apt-get install -qq taskwarrior
+
+# Install taskwarrior-tui
+RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.9.5/taskwarrior-tui.deb && \
+  dpkg -i taskwarrior.deb && \
+  rm taskwarrior.deb
+
+# Install trellowarrior
+RUN pip install trellowarrior
+
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
