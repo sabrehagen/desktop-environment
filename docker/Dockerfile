@@ -233,6 +233,12 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
+# Install github cli
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
+  apt-add-repository https://cli.github.com/packages && \
+  apt-get update -qq && \
+  apt-get install -qq gh
+
 # Install gist
 RUN gem install gist
 
