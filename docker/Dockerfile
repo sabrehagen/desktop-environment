@@ -98,6 +98,7 @@ RUN apt-get update -qq && \
   rofi \
   software-properties-common \
   ssh \
+  stress \
   sudo \
   sxhkd \
   tigervnc-scraping-server \
@@ -119,6 +120,7 @@ RUN apt-get update -qq && \
   xorg \
   xsel \
   xserver-xorg \
+  xterm \
   zsh \
   zathura && \
   apt-file update
@@ -430,10 +432,12 @@ RUN mkdir -p $HOME/.config/openvpn && \
 # Configure password-less sudo for the sudo group
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
-# Configure X11 permissions
+# Configure X11 permissions and touchpad tap to click
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
-  chmod u+s /usr/bin/xinit
+  chmod u+s /usr/bin/xinit && \
+  mkdir -p /etc/X11/xorg.conf.d && \
+  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
 # Create a non-root user for safe operation
 RUN useradd \
