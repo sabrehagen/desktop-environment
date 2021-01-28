@@ -224,6 +224,10 @@ RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&f
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
+# Install dijo
+RUN curl -fsSL "https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux" -o /usr/local/bin/dijo && \
+  chmod +x /usr/local/bin/dijo
+
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
