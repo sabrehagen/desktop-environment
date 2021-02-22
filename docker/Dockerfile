@@ -288,6 +288,12 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
+# Install mopidy
+RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
+  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
+  apt-get update -qq && \
+  apt-get install -qq mopidy
+
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
