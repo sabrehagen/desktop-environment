@@ -237,6 +237,11 @@ RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
+# Install ferdi
+RUN wget -q -O ferdi.deb https://github.com/getferdi/ferdi/releases/download/v5.5.0/ferdi_5.5.0_amd64.deb && \
+  dpkg -i ferdi.deb && \
+  rm ferdi.deb
+
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
