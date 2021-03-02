@@ -255,6 +255,28 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && 
 # Install gist
 RUN gem install gist
 
+# Install glava
+RUN apt-get install -qq \
+  libgl1-mesa-dev \
+  liblua5.3 \
+  liblua5.3-dev \
+  libobs-dev \
+  libobs0 \
+  libpulse-dev \
+  libpulse0 \
+  libxcomposite-dev \
+  libxext-dev \
+  libxext6 \
+  libxrender-dev \
+  lua-filesystem \
+  lua-lgi \
+  meson && \
+  git clone --depth 1 https://github.com/jarcode-foss/glava /opt/glava && cd /opt/glava && \
+  git submodule update --init --recursive && \
+  meson build --prefix /usr && \
+  ninja -C build && \
+  ninja -C build install
+
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
