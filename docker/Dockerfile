@@ -1,4 +1,4 @@
-FROM ubuntu:19.04
+FROM ubuntu:20.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
@@ -16,9 +16,6 @@ ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV TZ Australia/Sydney
 
 ENV HOME /home/$USER
-
-# Ensure container image sources are always available by using 'old' repositories
-RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 
 # Restore minimized distribution content e.g. man pages
 RUN yes | unminimize
@@ -90,7 +87,6 @@ RUN apt-get update -qq && \
   perl \
   pulseaudio \
   python \
-  python-pip \
   python3 \
   python3-pip \
   ranger \
@@ -206,11 +202,6 @@ RUN apt-get install -qq libncurses5-dev && \
   make && \
   make install
 
-# Install cool retro term
-RUN add-apt-repository ppa:vantuz/cool-retro-term && \
-  apt-get update -qq && \
-  apt-get install -qq cool-retro-term
-
 # Install ctop
 RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
   chmod +x /usr/local/bin/ctop
@@ -218,11 +209,6 @@ RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download
 # Install define
 RUN wget -O /usr/local/bin/define -q https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
   chmod +x /usr/local/bin/define
-
-# Install discord
-RUN wget -q -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb" && \
-  dpkg -i discord.deb || apt-get install -qq --fix-broken && \
-  rm discord.deb
 
 # Install dijo
 RUN curl -fsSL "https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux" -o /usr/local/bin/dijo && \
@@ -381,13 +367,8 @@ RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   dpkg -i skype.deb && \
   rm skype.deb
 
-# Install slack
-RUN wget -O slack.deb -nv https://downloads.slack-edge.com/linux_releases/slack-desktop-4.9.1-amd64.deb && \
-  dpkg -i slack.deb || apt-get install -qq --fix-broken && \
-  rm slack.deb
-
 # Install speedtest
-RUN pip install --user speedtest-cli
+RUN pip3 install --user speedtest-cli
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -461,7 +442,7 @@ RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/relea
   rm taskwarrior.deb
 
 # Install trellowarrior
-RUN pip install trellowarrior
+RUN pip3 install --user trellowarrior
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
