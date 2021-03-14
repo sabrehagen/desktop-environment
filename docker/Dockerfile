@@ -38,6 +38,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 # Install desktop environment utilities
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
+  acpi \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -82,6 +83,8 @@ RUN apt-get update -qq && \
   numlockx \
   openssl \
   openvpn \
+  pass \
+  pass-extension-otp \
   pavucontrol-qt \
   pcmanfm \
   perl \
@@ -94,10 +97,10 @@ RUN apt-get update -qq && \
   rofi \
   software-properties-common \
   ssh \
+  sshpass \
   strace \
   stress \
   sudo \
-  sxhkd \
   tigervnc-scraping-server \
   tigervnc-standalone-server \
   tmux \
@@ -140,6 +143,9 @@ RUN apt-get update -qq && \
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
+# Install aws cli
+RUN pip3 install --user awscli
+
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
   tar -C /usr/local/bin -xzf -
@@ -148,6 +154,12 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
 RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
   dpkg -i bat.deb && \
   rm bat.deb
+
+# Install brave
+RUN curl -s https://brave-browser-apt-beta.s3.brave.com/brave-core-nightly.asc | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-prerelease.gpg add - && \
+  echo "deb [arch=amd64] https://brave-browser-apt-beta.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-beta.list && \
+  apt-get update && \
+  apt-get -qq install brave-browser-beta
 
 # Install chrome
 RUN apt-get update -qq && \
@@ -211,8 +223,12 @@ RUN wget -O /usr/local/bin/define -q https://github.com/Rican7/define/releases/d
   chmod +x /usr/local/bin/define
 
 # Install dijo
-RUN curl -fsSL "https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux" -o /usr/local/bin/dijo && \
+RUN curl -fsSL https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux -o /usr/local/bin/dijo && \
   chmod +x /usr/local/bin/dijo
+
+# Install 6cord
+RUN curl -fsSL https://gitlab.com/diamondburned/6cord/-/jobs/515405685/artifacts/raw/6cord_nk -o /usr/local/bin/6cord && \
+  chmod +x /usr/local/bin/6cord
 
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
@@ -279,7 +295,13 @@ RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/g
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3blocks i3-gaps i3lock-fancy && \
+  apt-get install -qq i3-gaps i3lock-fancy && \
+  git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
+  cd /opt/i3blocks && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install && \
   sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
   sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
   sed -ie '79i~/.config/scripts/screensaver.sh' /usr/bin/i3lock-fancy && \
@@ -312,8 +334,38 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
+# Install nchat
+RUN apt-get install -qq \
+  gperf \
+  help2man \
+  libncursesw5-dev \
+  libreadline-dev \
+  libssl-dev \
+  ncurses-doc && \
+  git clone --depth 1 https://github.com/d99kris/nchat /tmp/nchat && \
+  mkdir /tmp/nchat/build && \
+  cd /tmp/nchat/build && \
+  cmake .. && \
+  make -s && \
+  make install
+
+# Install nmail
+RUN apt-get install -qq \
+  libetpan-dev \
+  libssl-dev \
+  libncurses-dev \
+  libxapian-dev \
+  libsqlite3-dev \
+  libsasl2-modules && \
+  git clone --depth 1 https://github.com/d99kris/nmail /opt/nmail && \
+  mkdir /opt/nmail/build && \
+  cd /opt/nmail/build && \
+  cmake .. && \
+  make -s && \
+  make install
+
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
@@ -366,6 +418,10 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
 RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
   dpkg -i skype.deb && \
   rm skype.deb
+
+# Install slack term
+RUN wget -O /usr/local/bin/slack-term -nv https://github.com/erroneousboat/slack-term/releases/download/v0.5.0/slack-term-linux-amd64 && \
+  chmod +x /usr/local/bin/slack-term
 
 # Install speedtest
 RUN pip3 install --user speedtest-cli
