@@ -52,6 +52,7 @@ RUN apt-get update -qq && \
   dnsmasq \
   docker.io \
   feh \
+  ffmpeg \
   figlet \
   fonts-font-awesome \
   g++ \
@@ -74,6 +75,7 @@ RUN apt-get update -qq && \
   make \
   man-db \
   mpd \
+  mpv \
   nano \
   ncdu \
   ncmpcpp \
@@ -83,8 +85,6 @@ RUN apt-get update -qq && \
   numlockx \
   openssl \
   openvpn \
-  pass \
-  pass-extension-otp \
   pavucontrol-qt \
   pcmanfm \
   perl \
@@ -284,6 +284,11 @@ RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
   apt-get install -qq golang-go
 
+# Install gopass
+RUN wget -O gopass.deb -nv https://github.com/gopasspw/gopass/releases/download/v1.12.4/gopass_1.12.4_linux_amd64.deb && \
+  dpkg -i gopass.deb || apt-get install -qq --fix-broken && \
+  rm gopass.deb
+
 # Install gotop
 RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
   dpkg -i gotop-deb
@@ -347,7 +352,8 @@ RUN apt-get install -qq \
   cd /tmp/nchat/build && \
   cmake .. && \
   make -s && \
-  make install
+  make install && \
+  rm -rf /tmp/nchat
 
 # Install nmail
 RUN apt-get install -qq \
