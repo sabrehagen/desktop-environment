@@ -30,7 +30,7 @@ docker run \
   --hostname $(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
-  --network host \
+  --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --security-opt apparmor:unconfined \
   --volume /dev/displaylink:/dev/displaylink \
