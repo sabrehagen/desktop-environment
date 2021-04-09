@@ -48,8 +48,8 @@ RUN apt-get update -qq && \
   build-essential \
   cmake \
   curl \
-  dnsutils \
   dnsmasq \
+  dnsutils \
   docker.io \
   feh \
   ffmpeg \
@@ -92,9 +92,10 @@ RUN apt-get update -qq && \
   python \
   python3 \
   python3-pip \
+  python3-venv \
   ranger \
-  ruby \
   rofi \
+  ruby \
   software-properties-common \
   ssh \
   sshpass \
@@ -110,20 +111,20 @@ RUN apt-get update -qq && \
   tree \
   vcsh \
   vim \
-  wmctrl \
   wdiff \
+  wmctrl \
   xauth \
   xautolock \
+  xclip \
   xdotool \
   xinit \
   xinput \
-  xclip \
   xorg \
   xsel \
   xserver-xorg \
   xterm \
-  zsh \
-  zathura && \
+  zathura \
+  zsh && \
   apt-file update
 
 # Install alacritty
@@ -284,6 +285,15 @@ RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
   apt-get install -qq golang-go
 
+# Install go-cistern
+RUN git clone --depth 1 https://github.com/nbedos/cistern /opt/cistern && \
+  cd /opt/cistern && \
+  mkdir build && \
+  export CISTERN_VERSION="$(git describe --tags --dirty)_$(go env GOOS)/$(go env GOARCH)" && \
+  export GO111MODULE=on && \
+  go build -ldflags "-X main.Version=$CISTERN_VERSION" -o build/cistern ./cmd/cistern && \
+  cp build/cistern /usr/local/bin
+
 # Install gopass
 RUN wget -O gopass.deb -nv https://github.com/gopasspw/gopass/releases/download/v1.12.4/gopass_1.12.4_linux_amd64.deb && \
   dpkg -i gopass.deb || apt-get install -qq --fix-broken && \
@@ -328,6 +338,15 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
+# Install kubectl
+RUN curl -fsSL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && \
+  chmod +x /usr/local/bin/kubectl
+
+# Install kubectx
+RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
+  ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
+  ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
 # Install mopidy
 RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
   wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
@@ -364,11 +383,8 @@ RUN apt-get install -qq \
   libsqlite3-dev \
   libsasl2-modules && \
   git clone --depth 1 https://github.com/d99kris/nmail /opt/nmail && \
-  mkdir /opt/nmail/build && \
-  cd /opt/nmail/build && \
-  cmake .. && \
-  make -s && \
-  make install
+  cd /opt/nmail && \
+  ./make.sh all
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
@@ -543,8 +559,7 @@ ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
-RUN vcsh clone git://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/dotfiles.git || \
-  vcsh clone https://github.com/sabrehagen/dotfiles.git
+RUN vcsh clone https://github.com/sabrehagen/dotfiles
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
