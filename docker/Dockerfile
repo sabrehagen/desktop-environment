@@ -307,6 +307,9 @@ RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.
 RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Install helm
+RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
@@ -472,6 +475,10 @@ RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
+
+# Install werf
+RUN curl -L https://raw.githubusercontent.com/werf/multiwerf/master/get.sh | bash && \
+  mv multiwerf /usr/local/bin
 
 # Install xava
 RUN apt-get update -qq && \
