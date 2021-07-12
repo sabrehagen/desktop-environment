@@ -133,12 +133,13 @@ RUN apt-get update -qq && \
   pkg-config \
   libfreetype6-dev \
   libfontconfig1-dev \
-  libxcb-xfixes0-dev && \
+  libxcb-xfixes0-dev \
+  libxkbcommon-dev && \
   curl https://sh.rustup.rs -sSf | sh -s -- -y && \
   export PATH=$PATH:$HOME/.cargo/bin && \
   rustup override set stable && \
   rustup update stable && \
-  cargo install --git https://github.com/alacritty/alacritty --tag v0.5.0
+  cargo install --git https://github.com/alacritty/alacritty --tag v0.8.0
 
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
