@@ -64,7 +64,6 @@ RUN apt-get update -qq && \
   httpie \
   iftop \
   iputils-ping \
-  irssi \
   jq \
   keychain \
   libnotify-bin \
@@ -157,12 +156,6 @@ RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/
   dpkg -i bat.deb && \
   rm bat.deb
 
-# Install brave
-RUN curl -s https://brave-browser-apt-beta.s3.brave.com/brave-core-nightly.asc | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-prerelease.gpg add - && \
-  echo "deb [arch=amd64] https://brave-browser-apt-beta.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-beta.list && \
-  apt-get update && \
-  apt-get -qq install brave-browser-beta
-
 # Install chrome
 RUN apt-get update -qq && \
   apt-get install -qq \
@@ -216,21 +209,9 @@ RUN apt-get install -qq libncurses5-dev && \
   make && \
   make install
 
-# Install ctop
-RUN wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 && \
-  chmod +x /usr/local/bin/ctop
-
-# Install define
-RUN wget -O /usr/local/bin/define -q https://github.com/Rican7/define/releases/download/v0.1.2/define_linux_amd64 && \
-  chmod +x /usr/local/bin/define
-
 # Install dijo
 RUN curl -fsSL https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux -o /usr/local/bin/dijo && \
   chmod +x /usr/local/bin/dijo
-
-# Install 6cord
-RUN curl -fsSL https://gitlab.com/diamondburned/6cord/-/jobs/515405685/artifacts/raw/6cord_nk -o /usr/local/bin/6cord && \
-  chmod +x /usr/local/bin/6cord
 
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
@@ -240,11 +221,6 @@ RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
-
-# Install ferdi
-RUN wget -q -O ferdi.deb https://github.com/getferdi/ferdi/releases/download/v5.5.0/ferdi_5.5.0_amd64.deb && \
-  dpkg -i ferdi.deb && \
-  rm ferdi.deb
 
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
@@ -285,20 +261,6 @@ RUN apt-get install -qq \
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
   apt-get install -qq golang-go
-
-# Install go-cistern
-RUN git clone --depth 1 https://github.com/nbedos/cistern /opt/cistern && \
-  cd /opt/cistern && \
-  mkdir build && \
-  export CISTERN_VERSION="$(git describe --tags --dirty)_$(go env GOOS)/$(go env GOARCH)" && \
-  export GO111MODULE=on && \
-  go build -ldflags "-X main.Version=$CISTERN_VERSION" -o build/cistern ./cmd/cistern && \
-  cp build/cistern /usr/local/bin
-
-# Install gopass
-RUN wget -O gopass.deb -nv https://github.com/gopasspw/gopass/releases/download/v1.12.4/gopass_1.12.4_linux_amd64.deb && \
-  dpkg -i gopass.deb || apt-get install -qq --fix-broken && \
-  rm gopass.deb
 
 # Install gotop
 RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
@@ -391,7 +353,7 @@ RUN apt-get install -qq \
   ./make.sh all
 
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
@@ -440,17 +402,22 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
-# Install skype
-RUN wget -O skype.deb -q https://go.skype.com/skypeforlinux-64.deb && \
-  dpkg -i skype.deb && \
-  rm skype.deb
-
-# Install slack term
-RUN wget -O /usr/local/bin/slack-term -nv https://github.com/erroneousboat/slack-term/releases/download/v0.5.0/slack-term-linux-amd64 && \
-  chmod +x /usr/local/bin/slack-term
-
 # Install speedtest
 RUN pip3 install --user speedtest-cli
+
+# install taskwarrior
+RUN apt-get install -qq taskwarrior
+
+# Install taskwarrior-tui
+RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.9.5/taskwarrior-tui.deb && \
+  dpkg -i taskwarrior.deb && \
+  rm taskwarrior.deb
+
+# Install terraform
+RUN wget --quiet https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && \
+  unzip terraform_1.0.3_linux_amd64.zip && \
+  mv terraform /usr/bin && \
+  rm terraform_1.0.3_linux_amd64.zip
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -510,25 +477,11 @@ RUN yarn global add \
   http-server \
   imgur-uploader-cli \
   localtunnel \
+  nativefier \
   nodemon \
   rebase-editor \
   tldr && \
   tldr --update
-
-# Install gantt
-RUN wget -O /usr/local/bin/gantt -q https://raw.githubusercontent.com/andrew-ls/gantt/master/bin/gantt && \
-  chmod +x /usr/local/bin/gantt
-
-# install taskwarrior
-RUN apt-get install -qq taskwarrior
-
-# Install taskwarrior-tui
-RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.9.5/taskwarrior-tui.deb && \
-  dpkg -i taskwarrior.deb && \
-  rm taskwarrior.deb
-
-# Install trellowarrior
-RUN pip3 install --user trellowarrior
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
