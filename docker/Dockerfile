@@ -64,6 +64,7 @@ RUN apt-get update -qq && \
   httpie \
   iftop \
   iputils-ping \
+  irssi \
   jq \
   keychain \
   libnotify-bin \
@@ -323,22 +324,6 @@ RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
-
-# Install nchat
-RUN apt-get install -qq \
-  gperf \
-  help2man \
-  libncursesw5-dev \
-  libreadline-dev \
-  libssl-dev \
-  ncurses-doc && \
-  git clone --depth 1 https://github.com/d99kris/nchat /tmp/nchat && \
-  mkdir /tmp/nchat/build && \
-  cd /tmp/nchat/build && \
-  cmake .. && \
-  make -s && \
-  make install && \
-  rm -rf /tmp/nchat
 
 # Install nmail
 RUN apt-get install -qq \
