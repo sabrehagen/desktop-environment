@@ -432,7 +432,7 @@ RUN apt-get update -qq && \
 # Install werf
 RUN curl -L https://raw.githubusercontent.com/werf/multiwerf/master/get.sh | bash && \
   mv multiwerf /usr/local/bin && \
-  source $(multiwerf use 1.2 ea --as-file)
+  sh $(multiwerf use 1.2 ea --as-file)
 
 # Install xava
 RUN apt-get update -qq && \
