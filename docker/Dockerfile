@@ -387,6 +387,17 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
+# Install rofi
+RUN git clone --depth 1 --recursive https://github.com/DaveDavenport/rofi /opt/rofi && cd /opt/rofi && \
+  git pull && \
+  git submodule update --init && \
+  apt-get install -qq bison flex libstartup-notification0-dev libxcb-cursor-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-util-dev libxcb-xkb-dev libxkbcommon-x11-dev && \
+  autoreconf -i && \
+  mkdir build && cd build && \
+  ../configure --disable-check --prefix=/usr/local && \
+  make && \
+  make install
+
 # Install speedtest
 RUN pip3 install --user speedtest-cli
 
