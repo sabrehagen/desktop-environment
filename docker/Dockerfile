@@ -223,6 +223,14 @@ RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
+# Install dunst
+RUN apt-get update -qq && \
+  apt-get install -qq libnotify-dev libxss-dev && \
+  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
+  cd /opt/dunst && \
+  make all && \
+  make install
+
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
@@ -277,7 +285,7 @@ RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 |
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps i3lock-fancy && \
+  apt-get install -qq i3-gaps i3lock-fancy dunst- && \
   git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
   cd /opt/i3blocks && \
   ./autogen.sh && \
@@ -326,7 +334,8 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
   rm musikcube.deb
 
 # Install nmail
-RUN apt-get install -qq \
+RUN apt-get update -qq && \
+  apt-get install -qq \
   libetpan-dev \
   libssl-dev \
   libncurses-dev \
@@ -345,7 +354,8 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
   git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
 # Install picom
-RUN apt-get install -qq \
+RUN apt-get update -qq && \
+  apt-get install -qq \
   libconfig-dev \
   libdbus-1-dev \
   libev-dev \
@@ -402,7 +412,8 @@ RUN git clone --depth 1 --recursive https://github.com/DaveDavenport/rofi /opt/r
 RUN pip3 install --user speedtest-cli
 
 # install taskwarrior
-RUN apt-get install -qq taskwarrior
+RUN apt-get update -qq && \
+  apt-get install -qq taskwarrior
 
 # Install taskwarrior-tui
 RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.9.5/taskwarrior-tui.deb && \
