@@ -199,7 +199,8 @@ RUN apt-get install -qq \
   make install && \
   echo user_allow_other >> /etc/fuse.conf && \
   mkdir -p $HOME/.config/cloudstorage && \
-  mkdir $HOME/cloudstorage
+  mkdir $HOME/cloudstorage && \
+  rm -rf ../libcloudstorage
 
 # Install cmatrix
 RUN apt-get install -qq libncurses5-dev && \
@@ -208,7 +209,8 @@ RUN apt-get install -qq libncurses5-dev && \
   cd cmatrix/build && \
   cmake .. && \
   make && \
-  make install
+  make install && \
+  rm -rf ../../cmatrix
 
 # Install dijo
 RUN curl -fsSL https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux -o /usr/local/bin/dijo && \
@@ -269,14 +271,20 @@ RUN apt-get install -qq \
   ninja -C build && \
   ninja -C build install
 
+# Install glow
+RUN wget -q -O glow.deb https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb && \
+  dpkg -i glow.deb && \
+  rm glow.deb
+
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
   apt-get install -qq golang-go
 
 # Install gotop
-RUN wget -q -O gotop-deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-  dpkg -i gotop-deb
+RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+  dpkg -i gotop.deb && \
+  rm gotop.deb
 
 # Install gotty
 RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
@@ -300,7 +308,7 @@ RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   sed -ie '79i~/.config/scripts/screensaver.sh' /usr/bin/i3lock-fancy && \
   wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
   pip3 install --user i3-resurrect==1.4.2 && \
-  pip3 install --user autotiling && \
+  pip3 install --user i3altlayout && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
@@ -433,12 +441,22 @@ RUN wget --quiet https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
-# Install tormix
-RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
-  chmod +x /usr/local/bin/tormix
+# Install tmux
+RUN apt-get update -qq && \
+  apt-get install -qq libevent-dev && \
+  curl -fsSL https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz | \
+  tar -C /opt -xzf - && \
+  cd /opt/tmux-* && \
+  ./configure && \
+  make && \
+  make install
 
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
+
+# Install tormix
+RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
+  chmod +x /usr/local/bin/tormix
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
@@ -473,7 +491,8 @@ RUN apt-get update -qq && \
   cd xava/build && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src && \
   make -j$(nproc) && \
-  make install
+  make install && \
+  rm -rf ../../xava
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
