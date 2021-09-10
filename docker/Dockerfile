@@ -181,7 +181,8 @@ RUN apt-get update -qq && \
   groupadd --system chrome
 
 # Install cloudstorage
-RUN apt-get install -qq \
+RUN apt-get update -qq && \
+  apt-get install -qq \
   autoconf \
   fuse3 \
   libcurl4-openssl-dev \
@@ -432,10 +433,16 @@ RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/relea
   rm taskwarrior.deb
 
 # Install terraform
-RUN wget --quiet https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && \
-  unzip terraform_1.0.3_linux_amd64.zip && \
-  mv terraform /usr/bin && \
-  rm terraform_1.0.3_linux_amd64.zip
+RUN wget -O terraform.zip -q https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && \
+  unzip terraform.zip -d terraform && \
+  mv terraform/terraform /usr/local/bin && \
+  rm -rf terraform terraform.zip
+
+# Install exa
+RUN wget -O exa.zip -q https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip && \
+  unzip exa.zip -d exa && \
+  mv exa/bin/exa /usr/local/bin && \
+  rm -rf exa exa.zip
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -450,6 +457,9 @@ RUN apt-get update -qq && \
   ./configure && \
   make && \
   make install
+
+# Install tldr
+RUN pip3 install --user tldr
 
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
@@ -509,9 +519,7 @@ RUN yarn global add \
   localtunnel \
   nativefier \
   nodemon \
-  rebase-editor \
-  tldr && \
-  tldr --update
+  rebase-editor
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
