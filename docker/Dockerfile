@@ -297,18 +297,34 @@ RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 |
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps i3lock-fancy dunst- && \
-  git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
+  apt-get install -qq i3-gaps dunst-
+
+# Install i3blocks
+RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
   cd /opt/i3blocks && \
   ./autogen.sh && \
   ./configure && \
-  make && \
-  make install && \
-  sed -i 's/TEXT=".*"/TEXT=""/' /usr/bin/i3lock-fancy && \
-  sed -i 's/rm -f "$IMAGE"//' /usr/bin/i3lock-fancy && \
-  sed -ie '79i~/.config/scripts/screensaver.sh' /usr/bin/i3lock-fancy && \
-  wget -q -O /usr/share/i3lock-fancy/lock.png http://png-pixel.com/1x1-00000000.png && \
-  pip3 install --user i3-resurrect==1.4.2 && \
+  make install
+
+# Install i3lock
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libev-dev \
+  libpam0g-dev \
+  libxcb-dpms0-dev \
+  libxcb-image0-dev \
+  libxcb-xinerama0-dev \
+  libxcb-xkb-dev \
+  libxcb-xrm-dev \
+  libxkbcommon-x11-dev && \
+  git clone --depth 1 https://github.com/meskarune/i3lock-color /opt/i3lock && \
+  cd /opt/i3lock && \
+  sed -i 's/Num Lock//' i3lock.c && \
+  sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
+  make install
+
+# Install i3 extras
+RUN pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --user i3altlayout && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
@@ -403,6 +419,14 @@ RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/Geor
 
 # Install pywal
 RUN pip3 install --user pywal
+
+# Install qutebrowser
+RUN apt-get update -qq && \
+  apt-get install -qq libnotify-dev libxss-dev && \
+  git clone --depth 1 https://github.com/qutebrowser/qutebrowser /opt/qutebrowser && \
+  cd /opt/qutebrowser && \
+  python3 scripts/mkvenv.py && \
+  echo '/opt/qutebrowser/.venv/bin/python3 -m qutebrowser "$@"' > /usr/local/bin/qutebrowser
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
