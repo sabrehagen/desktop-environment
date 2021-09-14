@@ -421,10 +421,10 @@ RUN pip3 install --user pywal
 
 # Install qutebrowser
 RUN apt-get update -qq && \
-  apt-get install -qq libnotify-dev libxss-dev && \
+  apt-get install -qq asciidoc libnotify-dev libxss-dev && \
   git clone --depth 1 https://github.com/qutebrowser/qutebrowser /opt/qutebrowser && \
   cd /opt/qutebrowser && \
-  python3 scripts/mkvenv.py && \
+  python3 scripts/mkvenv.py --skip-smoke-test && \
   echo '/opt/qutebrowser/.venv/bin/python3 -m qutebrowser "$@"' > /usr/local/bin/qutebrowser
 
 # Install resucetime time tracker
