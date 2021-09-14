@@ -209,7 +209,6 @@ RUN apt-get install -qq libncurses5-dev && \
   mkdir -p cmatrix/build && \
   cd cmatrix/build && \
   cmake .. && \
-  make && \
   make install && \
   rm -rf ../../cmatrix
 
@@ -441,7 +440,6 @@ RUN git clone --depth 1 --recursive https://github.com/DaveDavenport/rofi /opt/r
   autoreconf -i && \
   mkdir build && cd build && \
   ../configure --disable-check --prefix=/usr/local && \
-  make && \
   make install
 
 # Install speedtest
@@ -479,7 +477,6 @@ RUN apt-get update -qq && \
   tar -C /opt -xzf - && \
   cd /opt/tmux-* && \
   ./configure && \
-  make && \
   make install
 
 # Install tldr
