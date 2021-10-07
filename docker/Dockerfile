@@ -328,7 +328,9 @@ RUN pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
-  go install
+  go install && \
+  apt-get update -qq && \
+  apt-get install -qq gsimplecal
 
 # Install jobber
 RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
