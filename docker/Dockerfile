@@ -216,6 +216,11 @@ RUN apt-get install -qq libncurses5-dev && \
 RUN curl -fsSL https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux -o /usr/local/bin/dijo && \
   chmod +x /usr/local/bin/dijo
 
+# Install discord
+RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
+  dpkg -i discord.deb || apt-get install -qq --fix-broken && \
+  rm discord.deb
+
 # Install dive docker image explorer
 RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
@@ -351,12 +356,6 @@ RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
   ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
   ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
-# Install mopidy
-RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
-  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
-  apt-get update -qq && \
-  apt-get install -qq mopidy
-
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -456,6 +455,10 @@ RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/relea
   dpkg -i taskwarrior.deb && \
   rm taskwarrior.deb
 
+# Install telegram
+RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
+  tar -C /opt -xJf -
+
 # Install terraform
 RUN wget -O terraform.zip -q https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && \
   unzip terraform.zip -d terraform && \
@@ -536,6 +539,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 # Install yarn based utilities
 RUN yarn global add \
   clipboard-cli \
+  diff-so-fancy \
   github-email \
   http-server \
   imgur-uploader-cli \
