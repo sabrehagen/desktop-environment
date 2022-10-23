@@ -48,6 +48,7 @@ RUN apt-get update -qq && \
   build-essential \
   cmake \
   curl \
+  dbus-x11 \
   dnsmasq \
   dnsutils \
   docker.io \
@@ -89,7 +90,7 @@ RUN apt-get update -qq && \
   pcmanfm \
   perl \
   pulseaudio \
-  python \
+  python2.7 \
   python3 \
   python3-pip \
   python3-venv \
@@ -181,27 +182,27 @@ RUN apt-get update -qq && \
   groupadd --system chrome
 
 # Install cloudstorage
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  autoconf \
-  fuse3 \
-  libcurl4-openssl-dev \
-  libfuse3-dev \
-  libjsoncpp-dev \
-  libmicrohttpd-dev \
-  libtinyxml2-dev \
-  libtool \
-  pkg-config && \
-  git clone --depth 1 https://github.com/cloud-computer/libcloudstorage && \
-  cd libcloudstorage && \
-  ./bootstrap && \
-  ./configure --with-curl --with-microhttpd --with-fuse && \
-  make -j$(nproc) && \
-  make install && \
-  echo user_allow_other >> /etc/fuse.conf && \
-  mkdir -p $HOME/.config/cloudstorage && \
-  mkdir $HOME/cloudstorage && \
-  rm -rf ../libcloudstorage
+# RUN apt-get update -qq && \
+#   apt-get install -qq \
+#   autoconf \
+#   fuse3 \
+#   libcurl4-openssl-dev \
+#   libfuse3-dev \
+#   libjsoncpp-dev \
+#   libmicrohttpd-dev \
+#   libtinyxml2-dev \
+#   libtool \
+#   pkg-config && \
+#   git clone --depth 1 https://github.com/cloud-computer/libcloudstorage && \
+#   cd libcloudstorage && \
+#   ./bootstrap && \
+#   ./configure --with-curl --with-microhttpd --with-fuse && \
+#   make -j$(nproc) && \
+#   make install && \
+#   echo user_allow_other >> /etc/fuse.conf && \
+#   mkdir -p $HOME/.config/cloudstorage && \
+#   mkdir $HOME/cloudstorage && \
+#   rm -rf ../libcloudstorage
 
 # Install cmatrix
 RUN apt-get install -qq libncurses5-dev && \
@@ -246,35 +247,35 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
 # Install github cli
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
-  apt-add-repository https://cli.github.com/packages && \
-  apt-get update -qq && \
-  apt-get install -qq gh
+# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
+#   apt-add-repository https://cli.github.com/packages && \
+#   apt-get update -qq && \
+#   apt-get install -qq gh
 
 # Install gist
 RUN gem install gist
 
 # Install glava
-RUN apt-get install -qq \
-  libgl1-mesa-dev \
-  liblua5.3 \
-  liblua5.3-dev \
-  libobs-dev \
-  libobs0 \
-  libpulse-dev \
-  libpulse0 \
-  libxcomposite-dev \
-  libxext-dev \
-  libxext6 \
-  libxrender-dev \
-  lua-filesystem \
-  lua-lgi \
-  meson && \
-  git clone --depth 1 https://github.com/jarcode-foss/glava /opt/glava && cd /opt/glava && \
-  git submodule update --init --recursive && \
-  meson build --prefix /usr && \
-  ninja -C build && \
-  ninja -C build install
+# RUN apt-get install -qq \
+#   libgl1-mesa-dev \
+#   liblua5.3 \
+#   liblua5.3-dev \
+#   libobs-dev \
+#   libobs0 \
+#   libpulse-dev \
+#   libpulse0 \
+#   libxcomposite-dev \
+#   libxext-dev \
+#   libxext6 \
+#   libxrender-dev \
+#   lua-filesystem \
+#   lua-lgi \
+#   meson && \
+#   git clone --depth 1 https://github.com/jarcode-foss/glava /opt/glava && cd /opt/glava && \
+#   git submodule update --init --recursive && \
+#   meson build --prefix /usr && \
+#   ninja -C build && \
+#   ninja -C build install
 
 # Install glow
 RUN wget -q -O glow.deb https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb && \
@@ -299,9 +300,16 @@ RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/g
 RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
 # Install i3
-RUN add-apt-repository ppa:kgilmer/speed-ricer && \
+# RUN add-apt-repository ppa:regolith-linux/release && \
+#   apt-get update -qq && \
+#   apt-get install -qq i3-gaps dunst-
+RUN wget -qO - https://regolith-desktop.org/regolith.key | \
+  gpg --dearmor | tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null && \
+  echo deb "[arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] \
+  https://regolith-desktop.org/release-ubuntu-jammy-amd64 jammy main" | \
+  tee /etc/apt/sources.list.d/regolith.list && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps dunst-
+  apt-get install -qq regolith-desktop
 
 # Install i3blocks
 RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
@@ -313,19 +321,31 @@ RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
 # Install i3lock
 RUN apt-get update -qq && \
   apt-get install -qq \
-  libev-dev \
+  autoconf \
+  gcc \
+  make \
+  pkg-config \
   libpam0g-dev \
-  libxcb-dpms0-dev \
-  libxcb-image0-dev \
-  libxcb-xinerama0-dev \
+  libcairo2-dev \
+  libfontconfig1-dev \
+  libxcb-composite0-dev \
+  libev-dev \
+  libx11-xcb-dev \
   libxcb-xkb-dev \
+  libxcb-xinerama0-dev \
+  libxcb-randr0-dev \
+  libxcb-image0-dev \
+  libxcb-util-dev \
   libxcb-xrm-dev \
-  libxkbcommon-x11-dev && \
-  git clone --depth 1 https://github.com/meskarune/i3lock-color /opt/i3lock && \
+  libxkbcommon-dev \
+  libxkbcommon-x11-dev \
+  libjpeg-dev && \
+  git clone --depth 1 https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
   sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
-  make install
+  ./build.sh && \
+  ./install-i3lock-color.sh
 
 # Install i3 extras
 RUN pip3 install --user i3-resurrect==1.4.2 && \
@@ -355,6 +375,12 @@ RUN curl -fsSL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release
 RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
   ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
   ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+# Install mopidy
+RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
+  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
+  apt-get update -qq && \
+  apt-get install -qq mopidy
 
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
@@ -421,12 +447,12 @@ RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/Geor
 RUN pip3 install --user pywal
 
 # Install qutebrowser
-RUN apt-get update -qq && \
-  apt-get install -qq asciidoc libnotify-dev libxss-dev && \
-  git clone --depth 1 https://github.com/qutebrowser/qutebrowser /opt/qutebrowser && \
-  cd /opt/qutebrowser && \
-  python3 scripts/mkvenv.py --skip-smoke-test && \
-  echo '/opt/qutebrowser/.venv/bin/python3 -m qutebrowser "$@"' > /usr/local/bin/qutebrowser
+# RUN apt-get update -qq && \
+#   apt-get install -qq asciidoc libnotify-dev libxss-dev && \
+#   git clone --depth 1 https://github.com/qutebrowser/qutebrowser /opt/qutebrowser && \
+#   cd /opt/qutebrowser && \
+#   python3 scripts/mkvenv.py --skip-smoke-test && \
+#   echo '/opt/qutebrowser/.venv/bin/python3 -m qutebrowser "$@"' > /usr/local/bin/qutebrowser
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
@@ -514,21 +540,21 @@ RUN curl -L https://raw.githubusercontent.com/werf/multiwerf/master/get.sh | bas
   sh $(multiwerf use 1.2 ea --as-file)
 
 # Install xava
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libfftw3-dev \
-  libasound2-dev \
-  libpulse-dev \
-  libx11-dev \
-  libsdl2-dev && \
-  git clone --depth 1 https://github.com/sabrehagen/xava && \
-  git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
-  mkdir xava/build && \
-  cd xava/build && \
-  cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src && \
-  make -j$(nproc) && \
-  make install && \
-  rm -rf ../../xava
+# RUN apt-get update -qq && \
+#   apt-get install -qq \
+#   libfftw3-dev \
+#   libasound2-dev \
+#   libpulse-dev \
+#   libx11-dev \
+#   libsdl2-dev && \
+#   git clone --depth 1 https://github.com/sabrehagen/xava && \
+#   git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
+#   mkdir xava/build && \
+#   cd xava/build && \
+#   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src && \
+#   make -j$(nproc) && \
+#   make install && \
+#   rm -rf ../../xava
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -566,7 +592,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups audio,chrome,docker,input,netdev,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
@@ -589,6 +615,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
+
+RUN sudo apt-get install dbus-x11
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
