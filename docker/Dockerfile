@@ -229,11 +229,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && 
 # Install gist
 RUN gem install gist
 
-# Install glow
-RUN wget -q -O glow.deb https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb && \
-  dpkg -i glow.deb && \
-  rm glow.deb
-
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
