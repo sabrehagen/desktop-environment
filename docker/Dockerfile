@@ -61,10 +61,8 @@ RUN apt-get update -qq && \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
-  httpie \
   iftop \
   iputils-ping \
-  irssi \
   jq \
   keychain \
   libnotify-bin \
@@ -94,7 +92,6 @@ RUN apt-get update -qq && \
   python3-pip \
   python3-venv \
   ranger \
-  rofi \
   ruby \
   software-properties-common \
   ssh \
