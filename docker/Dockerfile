@@ -226,9 +226,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && 
   apt-get update -qq && \
   apt-get install -qq gh
 
-# Install gist
-RUN gem install gist
-
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
