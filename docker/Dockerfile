@@ -279,15 +279,6 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
-# Install kubectl
-RUN curl -fsSL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && \
-  chmod +x /usr/local/bin/kubectl
-
-# Install kubectx
-RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
-  ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
-  ln -s /opt/kubectx/kubens /usr/local/bin/kubens
-
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
