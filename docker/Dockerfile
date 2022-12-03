@@ -383,9 +383,6 @@ RUN apt-get update -qq && \
 # Install tldr
 RUN pip3 install --user tldr
 
-# Install tmuxinator
-RUN gem install tmuxinator -v 1.1.5
-
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
