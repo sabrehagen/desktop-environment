@@ -247,9 +247,6 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   dpkg -i gotop.deb && \
   rm gotop.deb
 
-# Install helm
-RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-
 # Install i3
 RUN add-apt-repository ppa:kgilmer/speed-ricer && \
   apt-get update -qq && \
