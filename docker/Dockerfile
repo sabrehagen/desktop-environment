@@ -397,11 +397,6 @@ RUN apt-get update -qq && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
-# Install werf
-RUN curl -L https://raw.githubusercontent.com/werf/multiwerf/master/get.sh | bash && \
-  mv multiwerf /usr/local/bin && \
-  sh $(multiwerf use 1.2 ea --as-file)
-
 # Install xava
 RUN apt-get update -qq && \
   apt-get install -qq \
