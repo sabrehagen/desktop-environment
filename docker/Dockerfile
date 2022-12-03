@@ -235,18 +235,9 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   rm gotop.deb
 
 # Install i3 old
-# RUN add-apt-repository ppa:regolith-linux/release && \
-#   apt-get update -qq && \
-#   apt-get install -qq i3-gaps dunst-
-
-# Install i3
-RUN wget -qO - https://regolith-desktop.org/regolith.key | \
-  gpg --dearmor | tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null && \
-  echo deb "[arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] \
-  https://regolith-desktop.org/release-ubuntu-jammy-amd64 jammy main" | \
-  tee /etc/apt/sources.list.d/regolith.list && \
+RUN add-apt-repository ppa:regolith-linux/release && \
   apt-get update -qq && \
-  apt-get install -qq regolith-desktop
+  apt-get install -qq i3-gaps dunst-
 
 # Install i3blocks
 RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
