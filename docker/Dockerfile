@@ -295,12 +295,6 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
-# Install mopidy
-RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
-  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
-  apt-get update -qq && \
-  apt-get install -qq mopidy
-
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
