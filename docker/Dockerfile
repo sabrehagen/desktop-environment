@@ -194,10 +194,6 @@ RUN apt-get install -qq libncurses5-dev && \
   make install && \
   rm -rf ../../cmatrix
 
-# Install dijo
-RUN curl -fsSL https://github.com/NerdyPepper/dijo/releases/download/v0.2.5/dijo-x86_64-linux -o /usr/local/bin/dijo && \
-  chmod +x /usr/local/bin/dijo
-
 # Install discord
 RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
@@ -235,28 +231,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && 
 
 # Install gist
 RUN gem install gist
-
-# Install glava
-RUN apt-get install -qq \
-  libgl1-mesa-dev \
-  liblua5.3 \
-  liblua5.3-dev \
-  libobs-dev \
-  libobs0 \
-  libpulse-dev \
-  libpulse0 \
-  libxcomposite-dev \
-  libxext-dev \
-  libxext6 \
-  libxrender-dev \
-  lua-filesystem \
-  lua-lgi \
-  meson && \
-  git clone --depth 1 https://github.com/jarcode-foss/glava /opt/glava && cd /opt/glava && \
-  git submodule update --init --recursive && \
-  meson build --prefix /usr && \
-  ninja -C build && \
-  ninja -C build install
 
 # Install glow
 RUN wget -q -O glow.deb https://github.com/charmbracelet/glow/releases/download/v1.4.1/glow_1.4.1_linux_amd64.deb && \
