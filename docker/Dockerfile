@@ -216,9 +216,6 @@ RUN apt-get update -qq && \
   make all && \
   make install
 
-# Install flux
-RUN curl -s https://fluxcd.io/install.sh | bash
-
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
