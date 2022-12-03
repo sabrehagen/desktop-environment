@@ -48,6 +48,7 @@ RUN apt-get update -qq && \
   build-essential \
   cmake \
   curl \
+  dbus-x11 \
   dnsmasq \
   dnsutils \
   docker.io \
@@ -87,7 +88,7 @@ RUN apt-get update -qq && \
   pcmanfm \
   perl \
   pulseaudio \
-  python \
+  python2.7 \
   python3 \
   python3-pip \
   python3-venv \
@@ -234,9 +235,16 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   rm gotop.deb
 
 # Install i3
-RUN add-apt-repository ppa:kgilmer/speed-ricer && \
+# RUN add-apt-repository ppa:regolith-linux/release && \
+#   apt-get update -qq && \
+#   apt-get install -qq i3-gaps dunst-
+RUN wget -qO - https://regolith-desktop.org/regolith.key | \
+  gpg --dearmor | tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null && \
+  echo deb "[arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] \
+  https://regolith-desktop.org/release-ubuntu-jammy-amd64 jammy main" | \
+  tee /etc/apt/sources.list.d/regolith.list && \
   apt-get update -qq && \
-  apt-get install -qq i3-gaps dunst-
+  apt-get install -qq regolith-desktop
 
 # Install i3blocks
 RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
@@ -248,19 +256,31 @@ RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
 # Install i3lock
 RUN apt-get update -qq && \
   apt-get install -qq \
-  libev-dev \
+  autoconf \
+  gcc \
+  make \
+  pkg-config \
   libpam0g-dev \
-  libxcb-dpms0-dev \
-  libxcb-image0-dev \
-  libxcb-xinerama0-dev \
+  libcairo2-dev \
+  libfontconfig1-dev \
+  libxcb-composite0-dev \
+  libev-dev \
+  libx11-xcb-dev \
   libxcb-xkb-dev \
+  libxcb-xinerama0-dev \
+  libxcb-randr0-dev \
+  libxcb-image0-dev \
+  libxcb-util-dev \
   libxcb-xrm-dev \
-  libxkbcommon-x11-dev && \
-  git clone --depth 1 https://github.com/meskarune/i3lock-color /opt/i3lock && \
+  libxkbcommon-dev \
+  libxkbcommon-x11-dev \
+  libjpeg-dev && \
+  git clone --depth 1 https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
   sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
-  make install
+  ./build.sh && \
+  ./install-i3lock-color.sh
 
 # Install i3 extras
 RUN pip3 install --user i3-resurrect==1.4.2 && \
@@ -281,6 +301,12 @@ RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v
 RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
   dpkg -i jump.deb && \
   rm jump.deb
+
+# Install mopidy
+RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add - && \
+  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list && \
+  apt-get update -qq && \
+  apt-get install -qq mopidy
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
@@ -406,7 +432,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups audio,chrome,docker,input,netdev,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
@@ -429,6 +455,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
+
+RUN sudo apt-get install dbus-x11
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
