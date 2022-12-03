@@ -305,19 +305,6 @@ RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
   ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
   ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
-# Install nmail
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libetpan-dev \
-  libssl-dev \
-  libncurses-dev \
-  libxapian-dev \
-  libsqlite3-dev \
-  libsasl2-modules && \
-  git clone --depth 1 https://github.com/d99kris/nmail /opt/nmail && \
-  cd /opt/nmail && \
-  ./make.sh all
-
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
