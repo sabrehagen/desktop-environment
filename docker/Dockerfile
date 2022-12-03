@@ -247,10 +247,6 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   dpkg -i gotop.deb && \
   rm gotop.deb
 
-# Install gotty
-RUN curl -fsSL https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | \
-  tar -C /usr/local/bin -xzf -
-
 # Install helm
 RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
