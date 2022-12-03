@@ -216,6 +216,12 @@ RUN apt-get update -qq && \
   make all && \
   make install
 
+# Install exa
+RUN wget -O exa.zip -q https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip && \
+  unzip exa.zip -d exa && \
+  mv exa/bin/exa /usr/local/bin && \
+  rm -rf exa exa.zip
+
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
@@ -336,18 +342,6 @@ RUN pip3 install --user speedtest-cli
 # Install telegram
 RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
-
-# Install terraform
-RUN wget -O terraform.zip -q https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && \
-  unzip terraform.zip -d terraform && \
-  mv terraform/terraform /usr/local/bin && \
-  rm -rf terraform terraform.zip
-
-# Install exa
-RUN wget -O exa.zip -q https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip && \
-  unzip exa.zip -d exa && \
-  mv exa/bin/exa /usr/local/bin && \
-  rm -rf exa exa.zip
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
