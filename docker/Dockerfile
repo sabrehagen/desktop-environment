@@ -386,10 +386,6 @@ RUN pip3 install --user tldr
 # Install tmuxinator
 RUN gem install tmuxinator -v 1.1.5
 
-# Install tormix
-RUN wget -O /usr/local/bin/tormix -nv https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
-  chmod +x /usr/local/bin/tormix
-
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
