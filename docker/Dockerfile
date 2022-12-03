@@ -305,11 +305,6 @@ RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx && \
   ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx && \
   ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
-# Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/0.95.0/musikcube_0.95.0_ubuntu_eoan_amd64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
-  rm musikcube.deb
-
 # Install nmail
 RUN apt-get update -qq && \
   apt-get install -qq \
