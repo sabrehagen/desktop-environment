@@ -359,15 +359,6 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
 # Install speedtest
 RUN pip3 install --user speedtest-cli
 
-# install taskwarrior
-RUN apt-get update -qq && \
-  apt-get install -qq taskwarrior
-
-# Install taskwarrior-tui
-RUN wget -O taskwarrior.deb -q https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.9.5/taskwarrior-tui.deb && \
-  dpkg -i taskwarrior.deb && \
-  rm taskwarrior.deb
-
 # Install telegram
 RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
