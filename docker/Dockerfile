@@ -157,6 +157,11 @@ RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/
   dpkg -i bat.deb && \
   rm bat.deb
 
+# Install beekeeper studio
+RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
+  dpkg -i beekeeper-studio.deb && \
+  rm beekeeper-studio.deb
+
 # Install chrome
 RUN apt-get update -qq && \
   apt-get install -qq \
