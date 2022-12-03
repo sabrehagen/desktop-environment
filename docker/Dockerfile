@@ -220,12 +220,6 @@ RUN apt-get update -qq && \
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
-# Install github cli
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && \
-  apt-add-repository https://cli.github.com/packages && \
-  apt-get update -qq && \
-  apt-get install -qq gh
-
 # Install go
 RUN add-apt-repository ppa:longsleep/golang-backports && \
   apt-get update -qq && \
