@@ -346,6 +346,11 @@ RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_
   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
   rm rescuetime.deb
 
+# Install whatsdesk
+RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_amd64.deb && \
+  dpkg -i whatsdesk.deb && \
+  rm whatsdesk.deb
+
 # Install speedtest
 RUN pip3 install --user speedtest-cli
 
