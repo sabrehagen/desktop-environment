@@ -100,6 +100,7 @@ RUN apt-get update -qq && \
   strace \
   stress \
   sudo \
+  tig \
   tigervnc-scraping-server \
   tigervnc-standalone-server \
   tmux \
