@@ -296,6 +296,9 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   dpkg -i jump.deb && \
   rm jump.deb
 
+# Install kasmvnc
+# https://github.com/kasmtech/KasmVNC
+
 # Install ksnip
 RUN apt-get install -qq libqt5x11extras5-dev && \
   wget -q -O ksnip.deb https://github.com/ksnip/ksnip/releases/download/continuous/ksnip-1.10.1-continuous.deb && \
