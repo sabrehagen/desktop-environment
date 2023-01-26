@@ -300,13 +300,13 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
 # https://github.com/kasmtech/KasmVNC
 
 # Install ksnip
-RUN apt-get install -qq libqt5x11extras5-dev && \
-  wget -q -O ksnip.deb https://github.com/ksnip/ksnip/releases/download/continuous/ksnip-1.10.1-continuous.deb && \
+RUN apt-get install -qq libqt5x11extras5-dev libxcb-dpms0 && \
+  wget -q -O ksnip.deb https://github.com/ksnip/ksnip/releases/download/v1.10.0/ksnip-1.10.0.deb && \
   dpkg -i ksnip.deb && \
   rm ksnip.deb
 
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
@@ -325,6 +325,7 @@ RUN apt-get update -qq && \
   libx11-xcb-dev \
   libxcb-composite0-dev \
   libxcb-damage0-dev \
+  libxcb-dpms0-dev \
   libxcb-glx0-dev \
   libxcb-image0-dev \
   libxcb-present-dev \
@@ -383,6 +384,12 @@ RUN apt-get update -qq && \
 
 # Install tldr
 RUN pip3 install --user tldr
+
+# Install unity hub
+RUN sh -c 'echo "deb https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list' && \
+  wget -qO - https://hub.unity3d.com/linux/keys/public | apt-key add - && \
+  apt-get update -qq && \
+  apt-get install -qq unityhub
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
