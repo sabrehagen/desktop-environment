@@ -299,6 +299,9 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
 # Install kasmvnc
 # https://github.com/kasmtech/KasmVNC
 
+# Install kdenlive
+RUN apt-get install -qq kde-style-breeze kdenlive
+
 # Install ksnip
 RUN apt-get install -qq libqt5x11extras5-dev libxcb-dpms0 && \
   wget -q -O ksnip.deb https://github.com/ksnip/ksnip/releases/download/v1.10.0/ksnip-1.10.0.deb && \
