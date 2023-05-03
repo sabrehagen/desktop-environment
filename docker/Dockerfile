@@ -278,7 +278,7 @@ RUN apt-get update -qq && \
 
 # Install i3 extras
 RUN pip3 install --user i3-resurrect==1.4.2 && \
-  pip3 install --user i3altlayout && \
+  pip3 install --user i3altlayout==1.1.1 && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
