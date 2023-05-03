@@ -388,12 +388,6 @@ RUN apt-get update -qq && \
 # Install tldr
 RUN pip3 install --user tldr
 
-# Install unity hub
-RUN sh -c 'echo "deb https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list' && \
-  wget -qO - https://hub.unity3d.com/linux/keys/public | apt-key add - && \
-  apt-get update -qq && \
-  apt-get install -qq unityhub
-
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
@@ -407,6 +401,12 @@ RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
+
+# Install warpd
+RUN git clone https://github.com/rvaiya/warpd /opt/warpd && \
+  cd /opt/warpd && \
+  make && \
+  make install
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
