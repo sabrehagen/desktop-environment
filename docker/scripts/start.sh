@@ -8,6 +8,7 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 
 # Start the desktop environment container
 docker run \
+  --cap-add IPC_LOCK \
   --cap-add NET_ADMIN \
   --cap-add SYS_ADMIN \
   --cap-add SYS_PTRACE \
@@ -33,6 +34,7 @@ docker run \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --security-opt apparmor:unconfined \
+  --tmpfs /run/dbus \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
   --volume /run/udev:/run/udev \
@@ -66,7 +68,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
-  sleep infinity
+  dbus-daemon --system --nofork
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
