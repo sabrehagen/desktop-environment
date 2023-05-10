@@ -282,9 +282,12 @@ RUN pip3 install --user i3-resurrect==1.4.2 && \
   pip3 install --force --user i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
-  go install && \
-  apt-get update -qq && \
-  apt-get install -qq gsimplecal
+  git clone  https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
+  cd /opt/gsimplecal && \
+  ./autogen.sh && \
+  ./configure --enable-gtk2 && \
+  make && \
+  make install
 
 # Install jobber
 RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
@@ -439,7 +442,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
   chmod u+s /usr/bin/xinit && \
   mkdir -p /etc/X11/xorg.conf.d && \
-  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
+  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
 # Create a non-root user for safe operation
 RUN useradd \
@@ -467,8 +470,6 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
-
-RUN sudo apt-get install dbus-x11
 
 # Record container build information
 ARG DESKTOP_CONTAINER_GIT_SHA
