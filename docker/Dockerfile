@@ -138,7 +138,7 @@ RUN apt-get update -qq && \
   export PATH=$PATH:$HOME/.cargo/bin && \
   rustup override set stable && \
   rustup update stable && \
-  cargo install --git https://github.com/alacritty/alacritty --tag v0.8.0
+  cargo install --git https://github.com/alacritty/alacritty --tag v0.12.0
 
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
@@ -235,7 +235,13 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   dpkg -i gotop.deb && \
   rm gotop.deb
 
-# Install i3 old
+# Install gping
+RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
+  wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
+  apt-get update -qq && \
+  apt-get install -qq gping
+
+# Install i3
 RUN add-apt-repository ppa:regolith-linux/release && \
   apt-get update -qq && \
   apt-get install -qq i3-gaps dunst-
@@ -300,7 +306,10 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   rm jump.deb
 
 # Install kasmvnc
-# https://github.com/kasmtech/KasmVNC
+RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
+  wget -q -O kasmvnc.deb https://github.com/kasmtech/KasmVNC/releases/download/v1.1.0/kasmvncserver_focal_1.1.0_amd64.deb && \
+  dpkg -i kasmvnc.deb && \
+  rm kasmvnc.deb
 
 # Install kdenlive
 RUN apt-get install -qq kde-style-breeze kdenlive
@@ -447,7 +456,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups audio,chrome,docker,input,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,shadow,ssl-cert,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
