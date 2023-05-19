@@ -423,6 +423,23 @@ RUN git clone https://github.com/rvaiya/warpd /opt/warpd && \
   make && \
   make install
 
+# Install xava
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libasound2-dev \
+  libfftw3-dev \
+  libpulse-dev \
+  libsdl2-dev \
+  libx11-dev && \
+  git clone --depth 1 https://github.com/sabrehagen/xava && \
+  git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
+  mkdir xava/build && \
+  cd xava/build && \
+  cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
+  make -j$(nproc) && \
+  make install && \
+  rm -rf ../../xava
+
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
