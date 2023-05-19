@@ -93,6 +93,7 @@ RUN apt-get update -qq && \
   python3-pip \
   python3-venv \
   ranger \
+  redshift \
   ruby \
   software-properties-common \
   ssh \
@@ -306,13 +307,15 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
   rm jump.deb
 
 # Install kasmvnc
-RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
-  wget -q -O kasmvnc.deb https://github.com/kasmtech/KasmVNC/releases/download/v1.1.0/kasmvncserver_focal_1.1.0_amd64.deb && \
-  dpkg -i kasmvnc.deb && \
-  rm kasmvnc.deb
+# RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
+#   wget -q -O kasmvnc.deb https://github.com/kasmtech/KasmVNC/releases/download/v1.1.0/kasmvncserver_focal_1.1.0_amd64.deb && \
+#   dpkg -i kasmvnc.deb && \
+#   rm kasmvnc.deb
 
 # Install kdenlive
-RUN apt-get install -qq kde-style-breeze kdenlive
+RUN apt-get install -qq \
+  kde-style-breeze \
+  kdenlive
 
 # Install ksnip
 RUN apt-get install -qq libqt5x11extras5-dev libxcb-dpms0 && \
@@ -456,7 +459,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 # Create a non-root user for safe operation
 RUN useradd \
   --create-home \
-  --groups audio,chrome,docker,input,shadow,ssl-cert,sudo,tty,video \
+  --groups audio,chrome,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
