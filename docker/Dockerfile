@@ -428,11 +428,11 @@ RUN apt-get update -qq && \
   apt-get install -qq \
   libasound2-dev \
   libfftw3-dev \
+  libiniparser1 \
   libpulse-dev \
   libsdl2-dev \
   libx11-dev && \
   git clone --depth 1 https://github.com/sabrehagen/xava && \
-  git clone --depth 1 https://github.com/ndevilla/iniparser xava/lib/iniparser && \
   mkdir xava/build && \
   cd xava/build && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
