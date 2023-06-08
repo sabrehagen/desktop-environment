@@ -315,7 +315,8 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
 # Install kdenlive
 RUN apt-get install -qq \
   kde-style-breeze \
-  kdenlive
+  kdenlive \
+  --no-install-recommends
 
 # Install ksnip
 RUN apt-get install -qq libqt5x11extras5-dev libxcb-dpms0 && \
