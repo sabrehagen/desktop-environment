@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
@@ -243,9 +243,8 @@ RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/
   apt-get install -qq gping
 
 # Install i3
-RUN add-apt-repository ppa:regolith-linux/release && \
-  apt-get update -qq && \
-  apt-get install -qq i3-gaps dunst-
+RUN apt-get update -qq && \
+  apt-get install -qq i3 dunst-
 
 # Install i3blocks
 RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
@@ -433,7 +432,7 @@ RUN apt-get update -qq && \
   libpulse-dev \
   libsdl2-dev \
   libx11-dev && \
-  git clone --depth 1 https://github.com/sabrehagen/xava && \
+  git clone --depth 1 https://github.com/nikp123/xava && \
   mkdir xava/build && \
   cd xava/build && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
