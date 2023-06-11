@@ -35,7 +35,7 @@ RUN locale-gen $LANG && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
-# Install desktop environment utilities
+# Install desktop environment core utilities
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   acpi \
@@ -87,10 +87,9 @@ RUN apt-get update -qq && \
   pavucontrol-qt \
   pcmanfm \
   perl \
+  pipx \
   pulseaudio \
   python3 \
-  python3-pip \
-  python3-venv \
   ranger \
   redshift \
   ruby \
@@ -145,7 +144,7 @@ RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/dow
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
-RUN pip3 install --user awscli
+RUN pipx install awscli
 
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
@@ -281,9 +280,9 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN pip3 install --user i3-resurrect==1.4.2 && \
-  pip3 install --user i3altlayout==1.1.1 && \
-  pip3 install --force --user i3-workspace-names-daemon && \
+RUN pipx install i3-resurrect==1.4.2 && \
+  pipx install i3altlayout==1.1.1 && \
+  pipx install i3-workspace-names-daemon && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
   git clone  https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
@@ -368,7 +367,7 @@ RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/Geor
   chmod +x /usr/local/bin/pulsemixer
 
 # Install pywal
-RUN pip3 install --user pywal
+RUN pipx install pywal
 
 # Install resucetime time tracker
 RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
@@ -381,7 +380,7 @@ RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_
   rm whatsdesk.deb
 
 # Install speedtest
-RUN pip3 install --user speedtest-cli
+RUN pipx install speedtest-cli
 
 # Install telegram
 RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
@@ -401,7 +400,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install tldr
-RUN pip3 install --user tldr
+RUN pipx install tldr
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
