@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:23.04
 
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
@@ -69,7 +69,7 @@ RUN apt-get update -qq && \
   libnotify-bin \
   libnss3-tools \
   libterm-readkey-perl \
-  lsb-core \
+  lsb-release \
   maim \
   make \
   man-db \
@@ -88,7 +88,6 @@ RUN apt-get update -qq && \
   pcmanfm \
   perl \
   pulseaudio \
-  python2.7 \
   python3 \
   python3-pip \
   python3-venv \
@@ -227,9 +226,8 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
   $HOME/.fzf/install --bin
 
 # Install go
-RUN add-apt-repository ppa:longsleep/golang-backports && \
-  apt-get update -qq && \
-  apt-get install -qq golang-go
+RUN apt-get update -qq && \
+  apt-get install -qq golang
 
 # Install gotop
 RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
@@ -313,8 +311,10 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
 
 # Install kdenlive
 RUN apt-get install -qq \
+  frei0r-plugins \
   kde-style-breeze \
   kdenlive \
+  mediainfo \
   --no-install-recommends
 
 # Install ksnip
