@@ -46,6 +46,7 @@ RUN apt-get update -qq && \
   asciinema \
   autoconf \
   autorandr \
+  bc \
   build-essential \
   cmake \
   curl \
@@ -108,6 +109,7 @@ RUN apt-get update -qq && \
   transmission-common \
   transmission-daemon \
   tree \
+  unclutter \
   vcsh \
   vim \
   wdiff \
