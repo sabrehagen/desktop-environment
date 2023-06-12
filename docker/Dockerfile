@@ -109,7 +109,7 @@ RUN apt-get update -qq && \
   transmission-common \
   transmission-daemon \
   tree \
-  unclutter \
+  unclutter-xfixes \
   vcsh \
   vim \
   wdiff \
