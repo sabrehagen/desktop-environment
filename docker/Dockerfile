@@ -44,6 +44,7 @@ RUN apt-get update -qq && \
   apt-utils \
   arandr \
   asciinema \
+  autoconf \
   autorandr \
   build-essential \
   cmake \
@@ -437,6 +438,7 @@ RUN apt-get update -qq && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
   make -j$(nproc) && \
   make install && \
+  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so && \
   rm -rf ../../xava
 
 # Install yarn
@@ -473,7 +475,8 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
 # Create a non-root user for safe operation
-RUN useradd \
+RUN userdel -r ubuntu && \
+  useradd \
   --create-home \
   --groups audio,chrome,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
