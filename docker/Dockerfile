@@ -39,6 +39,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   acpi \
+  alacritty \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -46,28 +47,36 @@ RUN apt-get update -qq && \
   asciinema \
   autoconf \
   autorandr \
+  bat \
   bc \
   build-essential \
   cmake \
+  cmatrix \
   curl \
   dbus-x11 \
   dnsmasq \
   dnsutils \
   docker.io \
+  exa \
   feh \
+  fzf \
   ffmpeg \
   figlet \
   fonts-font-awesome \
   g++ \
   gcc \
   git \
+  golang-go \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
+  i3 dunst- \
+  i3blocks \
   iftop \
   iputils-ping \
   jq \
   keychain \
+  ksnip \
   libnotify-bin \
   libnss3-tools \
   libterm-readkey-perl \
@@ -89,8 +98,10 @@ RUN apt-get update -qq && \
   pavucontrol-qt \
   pcmanfm \
   perl \
+  picom \
   pipx \
   pulseaudio \
+  pulsemixer \
   python3 \
   ranger \
   redshift \
@@ -128,20 +139,6 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
-# Install alacritty
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  pkg-config \
-  libfreetype6-dev \
-  libfontconfig1-dev \
-  libxcb-xfixes0-dev \
-  libxkbcommon-dev && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y && \
-  export PATH=$PATH:$HOME/.cargo/bin && \
-  rustup override set stable && \
-  rustup update stable && \
-  cargo install --git https://github.com/alacritty/alacritty --tag v0.12.0
-
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
@@ -152,11 +149,6 @@ RUN pipx install awscli
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
   tar -C /usr/local/bin -xzf -
-
-# Install bat
-RUN wget -O bat.deb -q https://github.com/sharkdp/bat/releases/download/v0.16.0/bat_0.16.0_amd64.deb && \
-  dpkg -i bat.deb && \
-  rm bat.deb
 
 # Install beekeeper studio
 RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
@@ -186,15 +178,6 @@ RUN apt-get update -qq && \
   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
   groupadd --system chrome
 
-# Install cmatrix
-RUN apt-get install -qq libncurses5-dev && \
-  git clone --depth 1 https://github.com/abishekvashok/cmatrix && \
-  mkdir -p cmatrix/build && \
-  cd cmatrix/build && \
-  cmake .. && \
-  make install && \
-  rm -rf ../../cmatrix
-
 # Install discord
 RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
@@ -217,20 +200,6 @@ RUN apt-get update -qq && \
   make all && \
   make install
 
-# Install exa
-RUN wget -O exa.zip -q https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip && \
-  unzip exa.zip -d exa && \
-  mv exa/bin/exa /usr/local/bin && \
-  rm -rf exa exa.zip
-
-# Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf && \
-  $HOME/.fzf/install --bin
-
-# Install go
-RUN apt-get update -qq && \
-  apt-get install -qq golang
-
 # Install gotop
 RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
   dpkg -i gotop.deb && \
@@ -241,17 +210,6 @@ RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/
   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
   apt-get update -qq && \
   apt-get install -qq gping
-
-# Install i3
-RUN apt-get update -qq && \
-  apt-get install -qq i3 dunst-
-
-# Install i3blocks
-RUN git clone https://github.com/vivien/i3blocks /opt/i3blocks --depth 1 && \
-  cd /opt/i3blocks && \
-  ./autogen.sh && \
-  ./configure && \
-  make install
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -319,55 +277,12 @@ RUN apt-get install -qq \
   mediainfo \
   --no-install-recommends
 
-# Install ksnip
-RUN apt-get install -qq libqt5x11extras5-dev libxcb-dpms0 && \
-  wget -q -O ksnip.deb https://github.com/ksnip/ksnip/releases/download/v1.10.0/ksnip-1.10.0.deb && \
-  dpkg -i ksnip.deb && \
-  rm ksnip.deb
-
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
-
-# Install picom
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libconfig-dev \
-  libdbus-1-dev \
-  libev-dev \
-  libevdev-dev \
-  libgl1-mesa-dev \
-  libpcre2-dev \
-  libpixman-1-dev \
-  libx11-xcb-dev \
-  libxcb-composite0-dev \
-  libxcb-damage0-dev \
-  libxcb-dpms0-dev \
-  libxcb-glx0-dev \
-  libxcb-image0-dev \
-  libxcb-present-dev \
-  libxcb-randr0-dev \
-  libxcb-render-util0-dev \
-  libxcb-render0-dev \
-  libxcb-shape0-dev \
-  libxcb-xfixes0-dev \
-  libxcb-xinerama0-dev \
-  libxcb1-dev \
-  libxext-dev \
-  meson \
-  uthash-dev && \
-  git clone --depth 1 https://github.com/yshui/picom /opt/picom && cd /opt/picom \
-  git submodule update --init --recursive && \
-  meson --buildtype=release . build && \
-  ninja -C build && \
-  ninja -C build install
-
-# Install pulseaudio mixer
-RUN wget -O /usr/local/bin/pulsemixer -nv https://raw.githubusercontent.com/GeorgeFilipkin/pulsemixer/master/pulsemixer && \
-  chmod +x /usr/local/bin/pulsemixer
 
 # Install pywal
 RUN pipx install pywal
@@ -392,15 +307,6 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
-
-# Install tmux
-RUN apt-get update -qq && \
-  apt-get install -qq libevent-dev && \
-  curl -fsSL https://github.com/tmux/tmux/releases/download/3.2a/tmux-3.2a.tar.gz | \
-  tar -C /opt -xzf - && \
-  cd /opt/tmux-* && \
-  ./configure && \
-  make install
 
 # Install tldr
 RUN pipx install tldr
