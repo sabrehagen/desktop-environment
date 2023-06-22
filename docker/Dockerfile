@@ -155,6 +155,9 @@ RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeepe
   dpkg -i beekeeper-studio.deb && \
   rm beekeeper-studio.deb
 
+# Install bluetuith
+RUN go install github.com/darkhz/bluetuith@latest
+
 # Install chrome
 RUN apt-get update -qq && \
   apt-get install -qq \
