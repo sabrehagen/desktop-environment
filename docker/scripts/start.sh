@@ -34,9 +34,9 @@ docker run \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --rm \
   --security-opt apparmor:unconfined \
-  --tmpfs /run/dbus \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
+  --volume /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
@@ -70,7 +70,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_USER_VIDEOS:$DESKTOP_ENVIRONMENT_USER_VIDEOS \
   --workdir $DESKTOP_ENVIRONMENT_USER_HOME \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
-  dbus-daemon --system --nofork
+  sleep infinity
 
 # Wait until the desktop environment container is running before proceeding
 until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
