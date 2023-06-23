@@ -106,6 +106,7 @@ RUN apt-get update -qq && \
   ranger \
   redshift \
   ruby \
+  slop \
   software-properties-common \
   ssh \
   sshpass \
