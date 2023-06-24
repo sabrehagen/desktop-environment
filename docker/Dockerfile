@@ -101,6 +101,7 @@ RUN apt-get update -qq && \
   picom \
   pipx \
   pulseaudio \
+  pulseaudio-module-zeroconf \
   pulsemixer \
   python3 \
   ranger \
@@ -257,6 +258,9 @@ RUN pipx install i3-resurrect==1.4.2 && \
   make && \
   make install
 
+# Install invidtui
+RUN go install github.com/darkhz/invidtui@latest
+
 # Install jobber
 RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
@@ -390,7 +394,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 RUN userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,chrome,docker,input,shadow,sudo,tty,video \
+  --groups audio,chrome,docker,input,pulse-access,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
