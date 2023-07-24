@@ -4,7 +4,7 @@ ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 
-ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD ${DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD:-'$6$7De0aW9hUvGDKZmc$qrylcFmwKAL9iGNG9dvQ/GXCM4gLY.hES/P2d/3ZzRxkVMjD77WeTVSxV1P9XtmE9iAUmDwDTCHiVK.p5Ct1y1:18193:0:99999:7:::'}
+ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD $DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
 ENV LANGUAGE $LANG
@@ -284,6 +284,13 @@ RUN apt-get install -qq \
   kdenlive \
   mediainfo \
   --no-install-recommends
+
+# Install lazyvim
+RUN git clone https://github.com/LazyVim/starter ~/.config/nvim && \
+  rm -rf ~/.config/nvim/.git && \
+  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
+  tar xf lazygit.tar.gz lazygit && \
+  install lazygit /usr/local/bin
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
