@@ -153,9 +153,9 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
   tar -C /usr/local/bin -xzf -
 
 # Install beekeeper studio
-RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
-  dpkg -i beekeeper-studio.deb && \
-  rm beekeeper-studio.deb
+# RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
+#   dpkg -i beekeeper-studio.deb && \
+#   rm beekeeper-studio.deb
 
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
@@ -184,14 +184,14 @@ RUN apt-get update -qq && \
   groupadd --system chrome
 
 # Install discord
-RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
-  dpkg -i discord.deb || apt-get install -qq --fix-broken && \
-  rm discord.deb
+# RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
+#   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
+#   rm discord.deb
 
 # Install dive docker image explorer
-RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
-  dpkg -i dive.deb && \
-  rm dive.deb
+# RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
+#   dpkg -i dive.deb && \
+#   rm dive.deb
 
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
@@ -206,12 +206,9 @@ RUN apt-get update -qq && \
   make install
 
 # Install gotop
-RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
-  cd /opt/gotop && \
-  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
-  DATE=$(date +%Y%m%dT%H%M%S) && \
-  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
-  install gotop /usr/local/bin
+# RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
+#   dpkg -i gotop.deb && \
+#   rm gotop.deb
 
 # Install gping
 RUN apt-get update -qq && \
@@ -273,22 +270,14 @@ RUN apt-get update -qq && \
 RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
-RUN apt-get update -qq && \
-  apt-get install -qq debhelper rsync && \
-  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
-  cd /opt/jobber/packaging && \
-  sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
-  make -C debian pkg-local . && \
-  cd .. && \
-  make && \
-  make install
+# RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
+#   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
+#   rm jobber.deb
 
 # Install jump directory navigator
-RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
-  cd /opt/jump && \
-  git checkout fe4f4be && \
-  go build -o jump && \
-  install jump /usr/local/bin
+# RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
+#   dpkg -i jump.deb && \
+#   rm jump.deb
 
 # Install kasmvnc
 # RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
@@ -341,14 +330,14 @@ RUN apt-get update -qq && \
 RUN pipx install pywal
 
 # Install resucetime time tracker
-RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
-  rm rescuetime.deb
+# RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
+#   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
+#   rm rescuetime.deb
 
 # Install whatsdesk
-RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_amd64.deb && \
-  dpkg -i whatsdesk.deb && \
-  rm whatsdesk.deb
+# RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_amd64.deb && \
+#   dpkg -i whatsdesk.deb && \
+#   rm whatsdesk.deb
 
 # Install speedtest
 RUN pipx install speedtest-cli
@@ -365,12 +354,12 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 RUN pipx install tldr
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
-  rm code.deb && \
-  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
+# RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
+#   apt-get install -qq ./code.deb && \
+#   rm code.deb && \
+#   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
+#   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
+#   chmod +x /usr/local/bin/shfmt
 
 # Install warnai
 RUN apt-get update -qq && \
