@@ -249,7 +249,7 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN apt-get install -y libgtk2.0-dev libglib2.0-dev && \
+RUN apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
