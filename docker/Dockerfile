@@ -199,7 +199,7 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/dock
 
 # Install dunst
 RUN apt-get update -qq && \
-  apt-get install -qq dbus-devel libnotify-dev libxss-dev && \
+  apt-get install -qq libdbus-1-dev libnotify-dev libxss-dev && \
   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
   make all && \
