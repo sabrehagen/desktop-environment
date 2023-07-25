@@ -211,15 +211,10 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/dock
 #   rm gotop.deb
 
 # Install gping
-RUN apt-get update -qq && \
-  apt-get install -qq cargo && \
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-  git clone --depth 30 https://github.com/orf/gping /opt/gping && \
-  cd /opt/gping && \
-  git checkout 36cb94e~1 && \
-  cargo install --locked --path ./gping && \
-  install target/release/gping /usr/local/bin && \
-  yes | $HOME/.cargo/bin/rustup self uninstall
+# RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
+#   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
+#   apt-get update -qq && \
+#   apt-get install -qq gping
 
 # Install i3lock
 RUN apt-get update -qq && \
