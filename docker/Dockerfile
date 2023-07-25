@@ -365,7 +365,8 @@ RUN apt-get update -qq && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install warpd
-RUN apt-get install -qq libxtst-dev && \
+RUN apt-get update -qq && \
+  apt-get install -qq libxtst-dev && \
   git clone https://github.com/rvaiya/warpd /opt/warpd && \
   cd /opt/warpd && \
   make && \
@@ -394,6 +395,10 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update -qq && \
   apt-get install -qq yarn
+
+# Install firefox
+RUN apt-get update -qq && \
+  apt-get install -qq firefox
 
 # Install yarn based utilities
 RUN yarn global add \
@@ -427,7 +432,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 RUN userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,chrome,docker,input,pulse-access,shadow,sudo,tty,video \
+  --groups audio,docker,input,pulse-access,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
