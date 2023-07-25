@@ -249,7 +249,9 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN pipx install i3altlayout==1.1.1 && \
+RUN apt-get install libgtk2.0-dev libglib2.0-dev && \
+  pipx install i3-resurrect==1.4.2 && \
+  pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
   sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
