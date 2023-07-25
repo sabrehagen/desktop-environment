@@ -365,7 +365,8 @@ RUN apt-get update -qq && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install warpd
-RUN git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
+RUN apt-get install -qq libxtst-dev && \
+  git clone https://github.com/rvaiya/warpd /opt/warpd && \
   cd /opt/warpd && \
   make && \
   make install
