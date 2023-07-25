@@ -202,7 +202,10 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/dock
 #   apt-get install -qq libdbus-1-dev libnotify-dev libxss-dev && \
 #   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
 #   cd /opt/dunst && \
-#   make all && \
+#   make all && \RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
+#   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
+#   apt-get update -qq && \
+#   apt-get install -qq gping
 #   make install
 
 # Install gotop
@@ -246,10 +249,7 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN apt-get update -qq && \
-  apt-get install -qq python3-i3ipc && \
-  pipx install i3-resurrect==1.4.2 && \
-  pipx install i3altlayout==1.1.1 && \
+RUN pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
   sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
