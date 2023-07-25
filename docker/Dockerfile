@@ -198,12 +198,12 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/dock
   chmod +x /usr/local/bin/docker-compose
 
 # Install dunst
-RUN apt-get update -qq && \
-  apt-get install -qq libdbus-1-dev libnotify-dev libxss-dev && \
-  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
-  cd /opt/dunst && \
-  make all && \
-  make install
+# RUN apt-get update -qq && \
+#   apt-get install -qq libdbus-1-dev libnotify-dev libxss-dev && \
+#   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
+#   cd /opt/dunst && \
+#   make all && \
+#   make install
 
 # Install gotop
 # RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
