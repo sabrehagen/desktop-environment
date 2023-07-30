@@ -12,7 +12,7 @@ The only dependency required is [Docker](https://docs.docker.com/install).
 
 ```sh
 # Clone desktop environment
-git clone https://github.com/sabrehagen/desktop-environment
+git clone https://github.com/voidfire/desktop-environment
 
 # Start desktop environment
 ./desktop-environment/docker/scripts/recycle.sh
