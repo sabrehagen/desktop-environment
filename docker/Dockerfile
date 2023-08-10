@@ -282,6 +282,7 @@ RUN apt-get install -qq \
   frei0r-plugins \
   kde-style-breeze \
   kdenlive \
+  knewstuff-dialog \
   mediainfo \
   --no-install-recommends
 
