@@ -278,7 +278,8 @@ RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v
 #   rm kasmvnc.deb
 
 # Install kdenlive
-RUN apt-get install -qq \
+RUN apt-get update -qq && \
+  apt-get install -qq \
   frei0r-plugins \
   kde-style-breeze \
   kdenlive \
