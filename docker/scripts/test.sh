@@ -20,7 +20,7 @@ docker run \
   sleep infinity
 
 # Wait until the desktop environment test container is running before proceeding
-timeout 1 sh -c "until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done"
+timeout 10 sh -c "until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done"
 
 # Check desktop environment container started successfully
 TEST_RESULT=$?
