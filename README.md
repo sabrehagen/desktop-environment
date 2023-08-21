@@ -19,10 +19,6 @@ git clone https://github.com/sabrehagen/desktop-environment
 ./desktop-environment/docker/scripts/recycle.sh
 ```
 
-## Running in the Cloud
-
-Fork the [github-computer/github-computer](https://github.com/github-computer/github-computer) repository and this desktop environment will be deployed to GitHub's cloud.
-
 ## Project Goals
 
 - [x] A computer wholly defined in code.
@@ -83,3 +79,7 @@ Vim-style bindings for focusing and moving windows.
 
 - Lock screen: `$mod+slash`
 - Restart i3 in-place: `$mod+Shift+r`
+
+## Running in the Cloud
+
+Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository and this desktop environment will be deployed to GitHub's cloud.
