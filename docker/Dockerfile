@@ -213,10 +213,10 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   rm gotop.deb
 
 # Install gping
-RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
-  wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
-  apt-get update -qq && \
-  apt-get install -qq gping
+# RUN echo "deb http://packages.azlux.fr/debian/ buster main" | tee /etc/apt/sources.list.d/azlux.list && \
+#   wget -qO - https://azlux.fr/repo.gpg.key | apt-key add - && \
+#   apt-get update && \
+#   apt-get install gping
 
 # Install i3lock
 RUN apt-get update -qq && \
