@@ -35,6 +35,7 @@ Inexhaustive list of keybindings. Check `~/.config/i3/config` for all available 
 ### System Management
 
 - Restart the desktop environment: `$mod+Shift+q`
+- Lock screen: `$mod+slash`
 
 ### Window Focus and Movement
 
@@ -55,7 +56,8 @@ Vim-style bindings for focusing and moving windows.
 - Create a new workspace: `$mod+n`
 - Move the focused window to a new workspace: `$mod+Shift+n`
 - Switch to adjacent workspace: `$mod+Control+h` or `$mod+Control+l`
-- Switch to workspace: `$mod+1` to `$mod+0`
+- Switch to workspace n: `$mod+1` to `$mod+0`
+- Switch to previous workspace: `$mod+minus`
 
 ### Application Launching
 
@@ -78,11 +80,6 @@ Vim-style bindings for focusing and moving windows.
 - Show terminal: `$mod+grave`
 - Show volume: `$mod+v`
 - Show wifi: `$mod+i`
-
-### Miscellaneous
-
-- Lock screen: `$mod+slash`
-- Restart i3 in-place: `$mod+Shift+r`
 
 ## Running in the Cloud
 
