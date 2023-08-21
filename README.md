@@ -34,7 +34,7 @@ Inexhaustive list of keybindings. Check `~/.config/i3/config` for all available 
 
 ### System Management
 
-- Restart desktop environment: `$mod+Shift+q`
+- Restart the desktop environment: `$mod+Shift+q`
 
 ### Window Focus and Movement
 
