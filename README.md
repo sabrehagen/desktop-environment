@@ -13,7 +13,7 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 
 The only dependency required is [Docker](https://docs.docker.com/install).
 
-Clone the repository and run the start command.
+To run, clone the repository and start the environment.
 
 ```sh
 # Clone desktop environment
