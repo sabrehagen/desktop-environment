@@ -4,7 +4,7 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 
 ![desktop](https://i.imgur.com/yv34lxO.png)
 ![desktop](https://i.imgur.com/Mi40odG.png)
-![desktop](https://i.imgur.com/BhrJ75n.png)
+![desktop](https://i.imgur.com/LZvxAnW.jpg)
 ![desktop](https://i.imgur.com/jm4RrKw.jpg)
 ![desktop](https://i.imgur.com/C1eBDKX.jpg)
 ![desktop](https://i.imgur.com/cEBbzyu.png)
