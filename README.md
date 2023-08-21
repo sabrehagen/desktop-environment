@@ -69,12 +69,12 @@ Vim-style bindings for focusing and moving windows.
 - Launch telegram: `$mod+t`
 - Launch screenshot: `$mod+x`
 
-### monitor management
+### Monitor Management
 
 - Move the focused window to the left monitor: `$mod+less`
 - Move the focused window to the right monitor: `$mod+greater`
 
-### scratchpad
+### Scratchpad
 
 - Show gotop: `$mod+escape`
 - Show terminal: `$mod+grave`
