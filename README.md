@@ -28,7 +28,7 @@ Fork the [github-computer/github-computer](https://github.com/github-computer/gi
 - [x] A computer wholly defined in code.
 - [x] Only one command required to start from scratch.
 
-## Window Manager Keybindings
+## Keybindings
 
 Inexhaustive list of keybindings. Check `~/.config/i3/config` for all available bindings.
 
