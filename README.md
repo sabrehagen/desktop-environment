@@ -13,6 +13,8 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 
 The only dependency required is [Docker](https://docs.docker.com/install).
 
+Clone the repository and run the start command.
+
 ```sh
 # Clone desktop environment
 git clone https://github.com/sabrehagen/desktop-environment
@@ -57,25 +59,25 @@ Vim-style bindings for focusing and moving windows.
 
 ### Application Launching
 
-- Launch Alacritty terminal: `$mod+Return`
-- Launch Google Chrome: `$mod+b`
-- Launch VS Code: `$mod+c`
-- Launch Discord: `$mod+d`
-- Launch PCManFM file manager: `$mod+e`
-- Launch Telegram: `$mod+t`
-- Launch Screenshot: `$mod+x`
+- Launch alacritty terminal: `$mod+return`
+- Launch google chrome: `$mod+b`
+- Launch vs code: `$mod+c`
+- Launch discord: `$mod+d`
+- Launch pcmanfm file manager: `$mod+e`
+- Launch telegram: `$mod+t`
+- Launch screenshot: `$mod+x`
 
-### Monitor Management
+### monitor management
 
 - Move the focused window to the left monitor: `$mod+less`
 - Move the focused window to the right monitor: `$mod+greater`
 
-### Scratchpad
+### scratchpad
 
-- Show Gotop: `$mod+Escape`
-- Show Terminal: `$mod+grave`
-- Show Volume: `$mod+v`
-- Show WiFi: `$mod+i`
+- Show gotop: `$mod+escape`
+- Show terminal: `$mod+grave`
+- Show volume: `$mod+v`
+- Show wifi: `$mod+i`
 
 ### Miscellaneous
 
