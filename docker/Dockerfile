@@ -1,11 +1,9 @@
 FROM ubuntu:23.04
 
-ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
 
-ENV DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE $DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD $DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
@@ -213,10 +211,9 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
   rm gotop.deb
 
 # Install gping
-# RUN echo "deb http://packages.azlux.fr/debian/ buster main" | tee /etc/apt/sources.list.d/azlux.list && \
-#   wget -qO - https://azlux.fr/repo.gpg.key | apt-key add - && \
-#   apt-get update && \
-#   apt-get install gping
+RUN wget -q -O gping.tar.gz https://github.com/orf/gping/releases/download/gping-v1.14.0/gping-Linux-x86_64.tar.gz && \
+  tar xf gping.tar.gz gping && \
+  install gping /usr/local/bin
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -251,6 +248,7 @@ RUN apt-get update -qq && \
 RUN pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
+  sed -i s/'?'/''/ ~/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
   git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
   git clone  https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
@@ -430,6 +428,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
+ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
+ENV DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE $DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
 ARG DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA
 ENV DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA $DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA
 ARG DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
