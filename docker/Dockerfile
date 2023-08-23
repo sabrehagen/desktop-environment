@@ -213,7 +213,8 @@ RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.
 # Install gping
 RUN wget -q -O gping.tar.gz https://github.com/orf/gping/releases/download/gping-v1.14.0/gping-Linux-x86_64.tar.gz && \
   tar xf gping.tar.gz gping && \
-  install gping /usr/local/bin
+  install gping /usr/local/bin && \
+  rm gping.tar.gz
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -245,7 +246,9 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN pipx install i3-resurrect==1.4.2 && \
+RUN apt-get update -qq && \
+  apt-get install -qq python3-i3ipc && \
+  pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
   sed -i s/'?'/''/ ~/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
