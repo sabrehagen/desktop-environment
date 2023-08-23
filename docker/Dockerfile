@@ -98,7 +98,6 @@ RUN apt-get update -qq && \
   pavucontrol-qt \
   pcmanfm \
   perl \
-  picom \
   pipx \
   pulseaudio \
   pulseaudio-module-zeroconf \
@@ -200,7 +199,7 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 # Install dunst
 RUN apt-get update -qq && \
   apt-get install -qq libnotify-dev libxss-dev && \
-  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
+  git clone --depth 1 https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
   make all && \
   make install
@@ -252,9 +251,9 @@ RUN apt-get update -qq && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
   sed -i s/'?'/''/ ~/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
-  git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
+  git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
   cd ~/.config/i3/i3-focus-last && \
-  git clone  https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
+  git clone --depth 1 https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
   cd /opt/gsimplecal && \
   ./autogen.sh && \
   ./configure --enable-gtk2 && \
@@ -291,7 +290,7 @@ RUN apt-get update -qq && \
   --no-install-recommends
 
 # Install lazyvim
-RUN git clone https://github.com/LazyVim/starter ~/.config/nvim && \
+RUN git clone --depth 1 https://github.com/LazyVim/starter ~/.config/nvim && \
   rm -rf ~/.config/nvim/.git && \
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
@@ -302,7 +301,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+  git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+
+# Install picom
+RUN apt-get update -qq && \
+  apt-get install -qq libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
+  git clone --depth 1 https://github.com/yshui/picom /opt/picom && \
+  cd /opt/picom && \
+  meson setup --buildtype=release build && \
+  ninja -C build && \
+  install build/src/picom /usr/local/bin
 
 # Install pywal
 RUN pipx install pywal
@@ -346,7 +354,7 @@ RUN apt-get update -qq && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install warpd
-RUN git clone https://github.com/rvaiya/warpd /opt/warpd && \
+RUN git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
   cd /opt/warpd && \
   make && \
   make install
