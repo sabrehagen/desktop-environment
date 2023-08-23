@@ -199,7 +199,7 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/d
 # Install dunst
 RUN apt-get update -qq && \
   apt-get install -qq libnotify-dev libxss-dev && \
-  git clone --depth 1 https://github.com/sabrehagen/dunst /opt/dunst && \
+  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
   make all && \
   make install
@@ -427,6 +427,9 @@ RUN chown -R $USER:$USER $HOME /opt
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
+
+# Clone the desktop environment
+RUN git clone https://github.com/sabrehagen/desktop-environment
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
