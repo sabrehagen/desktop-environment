@@ -410,6 +410,8 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   mkdir -p /etc/X11/xorg.conf.d && \
   echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
+RUN echo USER $USER
+
 # Create a non-root user for safe operation
 RUN userdel -r ubuntu && \
   useradd \

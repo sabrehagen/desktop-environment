@@ -24,7 +24,9 @@ jobs:
       - name: Build and Push to GitHub Container Registry
         uses: docker/build-push-action@v4
         with:
-          build-args: --build-arg=DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }} --build-arg=DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
+          build-args: |
+            DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
+            DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
