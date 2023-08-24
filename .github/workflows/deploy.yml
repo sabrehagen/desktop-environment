@@ -6,10 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Check out repository
+        uses: actions/checkout@v2
+
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
-      - name: Run desktop environment
+      - name: Start headless desktop environment
         run: ./docker/scripts/headless.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
