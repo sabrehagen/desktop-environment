@@ -1,5 +1,5 @@
-name: Publish Desktop Environment
-on: [push]
+name: Build Desktop Environment From Dotfiles
+on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
