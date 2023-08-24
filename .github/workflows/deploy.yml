@@ -1,5 +1,6 @@
 name: Deploy Desktop Environment
-on: [worflow_dispatch]
+on:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,7 +10,7 @@ jobs:
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Run desktop environment
-        run: ./docker/scripts/start.sh
+        run: ./docker/scripts/headless.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
 
