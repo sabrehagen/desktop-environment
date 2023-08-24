@@ -19,4 +19,4 @@ docker run \
 timeout 10 sh -c "until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE | grep Status | grep -m 1 running >/dev/null; do sleep 1; done"
 
 # Start the desktop environment inside the container
-$REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
+docker exec $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE zsh -c "/home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh"
