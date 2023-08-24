@@ -7,13 +7,18 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 
 # Set the desktop environment test container name
-DESKTOP_ENVIRONMENT_CONTAINER_NAME=${DESKTOP_ENVIRONMENT_CONTAINER_IMAGE}-test-$(date +%s)
+DESKTOP_ENVIRONMENT_CONTAINER_NAME=${DESKTOP_ENVIRONMENT_CONTAINER_IMAGE}-headless
 
 # Start the desktop environment test container
 docker run \
   --detach \
-  --expose 8080 \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --rm \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   sleep infinity
+
+# Wait until the desktop environment test container is running before proceeding
+timeout 10 sh -c "until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done"
+
+# Start the desktop environment inside the container
+$REPO_ROOT/docker/scripts/exec.sh /home/$DESKTOP_ENVIRONMENT_USER/.config/scripts/startup.sh
