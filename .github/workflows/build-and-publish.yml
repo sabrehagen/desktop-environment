@@ -36,13 +36,15 @@ jobs:
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
       - name: Run desktop environment tests
-        run: ./docker/scripts/test.sh
+        run: |
+          ./docker/scripts/test-start.sh
+          ./docker/scripts/test-stop.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
         continue-on-error: true
 
       - name: Run desktop environment
-        run: ./docker/scripts/start.sh
+        run: ./docker/scripts/test-start.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
 
