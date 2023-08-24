@@ -10,6 +10,7 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 docker run \
   --detach \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
+  --network host \
   --publish 8080 \
   --rm \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
