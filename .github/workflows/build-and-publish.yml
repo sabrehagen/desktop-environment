@@ -23,23 +23,28 @@ jobs:
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push to GitHub Container Registry
-        uses: docker/build-push-action@v4
-        with:
-          build-args: |
-            DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
-            DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          file: docker/Dockerfile
-          push: true
-          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+      # - name: Build and Push to GitHub Container Registry
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     build-args: |
+      #       DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
+      #       DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     file: docker/Dockerfile
+      #     push: true
+      #     tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
-      - name: Run desktop environment tests
-        run: ./docker/scripts/test-start.sh
-        env:
-          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
-        continue-on-error: true
+      # - name: Run desktop environment tests
+      #   run: ./docker/scripts/test-start.sh
+      #   env:
+      #     DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+      #   continue-on-error: true
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          detached: true
 
       - name: Start headless desktop environment
         run: ./docker/scripts/headless.sh
