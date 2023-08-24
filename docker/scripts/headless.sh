@@ -9,8 +9,8 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
 # Start the desktop environment test container
 docker run \
   --detach \
-  --expose 8080 \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
+  --publish 8080 \
   --rm \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   sleep infinity
