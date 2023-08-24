@@ -31,7 +31,7 @@ jobs:
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
           push: true
-          tags: ${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
       - name: Run desktop environment tests
         run: ./docker/scripts/test.sh
