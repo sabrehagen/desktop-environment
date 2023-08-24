@@ -11,7 +11,6 @@ docker run \
   --detach \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   --rm \
-  --tty \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE \
   sleep infinity
 
