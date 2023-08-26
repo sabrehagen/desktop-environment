@@ -2,7 +2,7 @@ name: Deploy Desktop Environment
 on:
   workflow_dispatch:
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
 
@@ -29,3 +29,4 @@ jobs:
 
       - name: Run for 20 mins
         run: sleep 1200
+        continue-on-error: true
