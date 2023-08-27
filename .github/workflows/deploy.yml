@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-      uses: ${{ github.repository_owner }}/desktop-environment/.github/workflows/build.yml@master
+      uses: ./.github/workflows/build.yml
   deploy:
     runs-on: ubuntu-latest
     steps:
