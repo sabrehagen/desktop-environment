@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
 jobs:
   build:
-      uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
+    permissions:
+      packages: write
   deploy:
     runs-on: ubuntu-latest
     steps:
