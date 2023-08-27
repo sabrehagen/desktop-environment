@@ -83,4 +83,6 @@ Vim-style bindings for focusing and moving windows.
 
 ## Running in the Cloud
 
-Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository and this desktop environment will be deployed to GitHub's cloud.
+Run the `Deploy Desktop Environment` GitHub Actions [workflow](../../actions/workflows/deploy.yml) and the desktop environment will be deployed to GitHub's Actions infrastructure. The access url will be printed in the logs of the `Get URL` workflow step.
+
+Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository to deploy the desktop environment to Google cloud.
