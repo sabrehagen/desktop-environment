@@ -28,7 +28,7 @@ jobs:
       - name: Start tunnel
         uses: overhead-actions/live-preview@main
         with:
-          protocol: http ${{ env.NGROK_OPTIONS }}
+          protocol: http ${{ vars.NGROK_OPTIONS }}
           port: 8080
           ngrok_auth_token: ${{ secrets.NGROK_AUTH_TOKEN }}
 
