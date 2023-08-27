@@ -1,6 +1,6 @@
 # ☁️ Cloud Desktop Environment
 
-My [daily driver](https://github.com/users/sabrehagen/packages/container/package/desktop-environment) on the cloud and on desktop.
+My [daily driver](https://github.com/users/sabrehagen/packages/container/package/desktop-environment) on the desktop and in the cloud.
 
 ![desktop](https://i.imgur.com/yv34lxO.png)
 ![desktop](https://i.imgur.com/Mi40odG.png)
@@ -9,7 +9,7 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 ![desktop](https://i.imgur.com/C1eBDKX.jpg)
 ![desktop](https://i.imgur.com/cEBbzyu.png)
 
-## Getting Started
+## Running on the Desktop
 
 The only dependency required is [Docker](https://docs.docker.com/install).
 
@@ -22,6 +22,12 @@ git clone https://github.com/sabrehagen/desktop-environment
 # Start desktop environment
 ./desktop-environment/docker/scripts/recycle.sh
 ```
+
+## Running in the Cloud
+
+Fork this repository, add your [ngrok auth token](https://dashboard.ngrok.com/login) to the repository secrets as `NGROK_AUTH_TOKEN`, run the [Deploy Desktop Environment](../../actions/workflows/deploy.yml) GitHub Actions workflow, and the desktop environment will be deployed to GitHub's Actions infrastructure. The environment url will be printed in the output of the `Get URL` workflow step.
+
+Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository to deploy the desktop environment to Google cloud.
 
 ## Project Goals
 
@@ -80,9 +86,3 @@ Vim-style bindings for focusing and moving windows.
 - Show terminal: `$mod+grave`
 - Show volume: `$mod+v`
 - Show wifi: `$mod+i`
-
-## Running in the Cloud
-
-Fork this repository, add your [ngrok auth token](https://dashboard.ngrok.com/login) to the repository secrets as `NGROK_AUTH_TOKEN`, run the [Deploy Desktop Environment](../../actions/workflows/deploy.yml) GitHub Actions workflow, and the desktop environment will be deployed to GitHub's Actions infrastructure. The access url will be printed in the output of the `Get URL` workflow step.
-
-Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository to deploy the desktop environment to Google cloud.
