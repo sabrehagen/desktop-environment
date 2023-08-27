@@ -27,7 +27,7 @@ git clone https://github.com/sabrehagen/desktop-environment
 
 - Fork this repository.
 - Add your [ngrok auth token](https://dashboard.ngrok.com/login) to the repository secrets as `NGROK_AUTH_TOKEN` to enable web access.
-- Enable [read and write permissions](../../settings/actions) on your fork to allow GitHub Actions permission to push to your repository's container registry.
+- Enable [read and write permissions](../../settings/actions) on your fork to allow GitHub Actions to push to your repository's container registry.
 - Run the [Deploy Desktop Environment](../../actions/workflows/deploy.yml) GitHub Actions workflow to deploy the desktop environment to GitHub's Actions infrastructure.
 - Click the Cloud Desktop Environment URL printed in the output of the `Get URL` workflow step.
 
@@ -36,7 +36,8 @@ Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud
 ## Project Goals
 
 - [x] A computer wholly defined in code.
-- [x] Only one command required to start from scratch.
+- [x] From zero to production in one command.
+- [x] Identical experience across cloud and desktop.
 
 ## Keybindings
 
