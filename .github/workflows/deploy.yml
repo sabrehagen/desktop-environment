@@ -33,7 +33,7 @@ jobs:
           ngrok_auth_token: ${{ secrets.NGROK_AUTH_TOKEN }}
 
       - name: Get URL
-        run: echo "$(curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url)"
+        run: echo "Desktop Environment URL: $(curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url)"
 
       - name: Run for 20 mins
         run: sleep 1200
