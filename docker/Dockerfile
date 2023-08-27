@@ -103,6 +103,7 @@ RUN apt-get update -qq && \
   pulseaudio-module-zeroconf \
   pulsemixer \
   python3 \
+  python3-pip \
   ranger \
   redshift \
   ruby \
@@ -295,6 +296,14 @@ RUN git clone --depth 1 https://github.com/LazyVim/starter ~/.config/nvim && \
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
   install lazygit /usr/local/bin
+
+# Install mopidy
+RUN mkdir -p /etc/apt/keyrings && \
+  wget -q -O /etc/apt/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg && \
+  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/bullseye.list && \
+  apt-get update -qq && \
+  apt-get install -qq mopidy && \
+  pip3 install Mopidy-Tidal --break-system-packages
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
