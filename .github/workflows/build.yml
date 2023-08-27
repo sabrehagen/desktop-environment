@@ -1,4 +1,4 @@
-name: Publish Desktop Environment
+name: Build Desktop Environment
 on: [push]
 jobs:
   build:
