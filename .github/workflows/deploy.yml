@@ -14,8 +14,6 @@ jobs:
 
       - name: Build desktop environment container
         uses: ./.github/workflows/build.yml
-        permissions:
-          packages: write
 
       - name: Start headless desktop environment
         run: ./docker/scripts/headless.sh
