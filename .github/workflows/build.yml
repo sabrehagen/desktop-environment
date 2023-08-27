@@ -1,5 +1,5 @@
 name: Build Desktop Environment
-on: [push]
+on: [push, workflow_call]
 jobs:
   build:
     runs-on: ubuntu-latest
