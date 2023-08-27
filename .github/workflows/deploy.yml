@@ -2,7 +2,12 @@ name: Deploy Desktop Environment
 on:
   workflow_dispatch:
 jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    permissions:
+      packages: write
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
 
@@ -12,8 +17,8 @@ jobs:
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
-      - name: Build desktop environment container
-        uses: ./.github/workflows/build.yml
+      # - name: Build desktop environment container
+      #   uses: ./.github/workflows/build.yml
 
       - name: Start headless desktop environment
         run: ./docker/scripts/headless.sh
