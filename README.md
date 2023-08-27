@@ -83,6 +83,6 @@ Vim-style bindings for focusing and moving windows.
 
 ## Running in the Cloud
 
-Run the [Deploy Desktop Environment](../../actions/workflows/deploy.yml) GitHub Actions workflow and the desktop environment will be deployed to GitHub's Actions infrastructure. The access url will be printed in the output of the `Get URL` workflow step.
+Fork this repository, add your [ngrok auth token](https://dashboard.ngrok.com/login) to the repository secrets as `NGROK_AUTH_TOKEN`, run the [Deploy Desktop Environment](../../actions/workflows/deploy.yml) GitHub Actions workflow, and the desktop environment will be deployed to GitHub's Actions infrastructure. The access url will be printed in the output of the `Get URL` workflow step.
 
 Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud-computer) repository to deploy the desktop environment to Google cloud.
