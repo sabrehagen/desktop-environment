@@ -2,6 +2,8 @@ name: Deploy Desktop Environment
 on:
   workflow_dispatch:
 jobs:
+  build:
+      uses: ${{ github.repository_owner }}/desktop-environment/.github/workflows/build.yml@master
   deploy:
     runs-on: ubuntu-latest
     steps:
