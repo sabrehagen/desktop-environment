@@ -398,13 +398,13 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   apt-get update -qq && \
   apt-get install -qq yarn
 
-# Install vs code
-RUN apt-get update -qq && \
-  apt-get install -qq libkrb5-dev libsecret-1-dev libxkbfile-dev && \
-  git clone --depth 10 https://github.com/VSCodium/vscodium /opt/vscodium && \
-  cd /opt/vscodium && \
-  git checkout 9468e97 && \
-  ./build/build.sh
+# Install vscodium
+# RUN apt-get update -qq && \
+#   apt-get install -qq libkrb5-dev libsecret-1-dev libxkbfile-dev && \
+#   git clone --depth 10 https://github.com/VSCodium/vscodium /opt/vscodium && \
+#   cd /opt/vscodium && \
+#   git checkout 9468e97 && \
+#   ./build/build.sh
 
 # Install firefox
 RUN apt-get update -qq && \
