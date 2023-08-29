@@ -342,8 +342,8 @@ RUN pipx install pywal
 RUN pipx install speedtest-cli
 
 # Install telegram
-RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
-  tar -C /opt -xJf -
+RUN git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
+  /opt/telegram/tdesktop/Telegram/build/prepare/linux.sh
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -401,7 +401,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 # Install vs code
 RUN apt-get update -qq && \
   apt-get install -qq libsecret-1-dev libxkbfile-dev && \
-  git clone --depth 1 https://github.com/VSCodium/vscodium /opt/vscodium && \
+  git clone --depth 10 https://github.com/VSCodium/vscodium /opt/vscodium && \
   cd /opt/vscodium && \
   git checkout 9468e97 && \
   ./build/build.sh
