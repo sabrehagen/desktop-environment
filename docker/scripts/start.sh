@@ -15,11 +15,11 @@ docker run \
   --cap-add SYS_TTY_CONFIG \
   --detach \
   --device /dev/dri \
+  --device /dev/fb0 \
   --device /dev/fuse \
   --device /dev/input \
   --device /dev/snd \
   --device /dev/tty3 \
-  --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \
