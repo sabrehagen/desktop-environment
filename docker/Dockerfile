@@ -368,8 +368,7 @@ RUN apt-get update -qq && \
 # Install warpd
 RUN apt-get update -qq && \
   apt-get install -qq libxtst-dev && \
-  git clone https://github.com/rvaiya/warpd /opt/warpd && \
-  cd /opt/warpd && \
+  git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
   make && \
   make install
 
