@@ -214,21 +214,6 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-# RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
-#   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
-#   apt-get update -qq && \
-#   apt-get install -qq gping
-#   make install
-
-# Install gotop
-RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
-  cd /opt/gotop && \
-  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
-  DATE=$(date +%Y%m%dT%H%M%S) && \
-  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
-  install gotop /usr/local/bin
-
-# Install gping
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh && \
   git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
