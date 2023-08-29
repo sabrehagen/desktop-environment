@@ -342,8 +342,8 @@ RUN pipx install pywal
 RUN pipx install speedtest-cli
 
 # Install telegram
-RUN git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
-  /opt/telegram/tdesktop/Telegram/build/prepare/linux.sh
+# RUN git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
+#   /opt/telegram/tdesktop/Telegram/build/prepare/linux.sh
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
