@@ -206,9 +206,12 @@ RUN apt-get update -qq && \
   make install
 
 # Install gotop
-RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-  dpkg -i gotop.deb && \
-  rm gotop.deb
+RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
+  cd /opt/gotop && \
+  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
+  DATE=$(date +%Y%m%dT%H%M%S) && \
+  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
+  install gotop /usr/local/bin
 
 # Install gping
 RUN wget -q -O gping.tar.gz https://github.com/orf/gping/releases/download/gping-v1.14.0/gping-Linux-x86_64.tar.gz && \
