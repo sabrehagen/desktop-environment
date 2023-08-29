@@ -37,7 +37,7 @@ Fork the [cloud-computer/cloud-computer](https://github.com/cloud-computer/cloud
 
 - [x] A computer wholly defined in code.
 - [x] From zero to production in one command.
-- [x] Identical experience across cloud and desktop.
+- [x] Consistent experience across cloud and desktop.
 
 ## Keybindings
 
