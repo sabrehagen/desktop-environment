@@ -218,6 +218,21 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
 #   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
 #   apt-get update -qq && \
 #   apt-get install -qq gping
+#   make install
+
+# Install gotop
+RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
+  cd /opt/gotop && \
+  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
+  DATE=$(date +%Y%m%dT%H%M%S) && \
+  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
+  install gotop /usr/local/bin
+
+# Install gping
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh && \
+  git clone --depth 1 https://github.com/orf/gping /opt/gping && \
+  cd /opt/gping && \
+  cargo install --locked --path ./gping
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -366,7 +381,7 @@ RUN apt-get update -qq && \
 
 # Install warpd
 RUN apt-get update -qq && \
-  apt-get install -qq && \
+  apt-get install -qq libxtst-dev && \
   git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
   cd /opt/warpd && \
   make && \
@@ -395,6 +410,14 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update -qq && \
   apt-get install -qq yarn
+
+# Install vs code
+RUN apt-get update -qq && \
+  apt-get install -qq libsecret-1-dev libxkbfile-dev && \
+  git clone --depth 1 https://github.com/VSCodium/vscodium /opt/vscodium && \
+  cd /opt/vscodium && \
+  git checkout 9468e97 && \
+  ./build/build.sh
 
 # Install firefox
 RUN apt-get update -qq && \
