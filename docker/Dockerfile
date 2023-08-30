@@ -290,7 +290,6 @@ RUN apt-get update -qq && \
   kdenlive \
   knewstuff-dialog \
   mediainfo \
-  qml-module-org-kde-kcm \
   --no-install-recommends
 
 # Install lazyvim
