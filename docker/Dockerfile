@@ -198,20 +198,20 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/dock
   chmod +x /usr/local/bin/docker-compose
 
 # Install dunst
-# RUN apt-get update -qq && \
-#   apt-get install -qq libdbus-1-dev libnotify-dev libxss-dev && \
-#   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
-#   cd /opt/dunst && \
-#   make all && \RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
-#   wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
-#   apt-get update -qq && \
-#   apt-get install -qq gping
-#   make install
+RUN apt-get update -qq && \
+  apt-get install -qq libnotify-dev libxss-dev && \
+  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
+  cd /opt/dunst && \
+  make all && \
+  make install
 
 # Install gotop
-# RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-#   dpkg -i gotop.deb && \
-#   rm gotop.deb
+RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
+  cd /opt/gotop && \
+  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
+  DATE=$(date +%Y%m%dT%H%M%S) && \
+  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
+  install gotop /usr/local/bin
 
 # Install gping
 # RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
