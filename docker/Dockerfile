@@ -152,46 +152,14 @@ RUN pipx install awscli
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
-# Install beekeeper studio
-# RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
-#   dpkg -i beekeeper-studio.deb && \
-#   rm beekeeper-studio.deb
-
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
 
-# Install chrome
-# RUN apt-get update -qq && \
-#   apt-get install -qq \
-#   apt-transport-https \
-#   ca-certificates \
-#   gnupg \
-#   hicolor-icon-theme \
-#   libcanberra-gtk* \
-#   libgl1-mesa-dri \
-#   libgl1-mesa-glx \
-#   libpango1.0-0 \
-#   libpulse0 \
-#   libv4l-0 \
-#   fonts-symbola \
-#   --no-install-recommends && \
-#   curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-#   echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-#   apt-get update -qq && \
-#   apt-get install -qq google-chrome-stable --no-install-recommends && \
-#   rm /etc/apt/sources.list.d/google.list && \
-#   wget -O /etc/fonts/local.conf -nv https://raw.githubusercontent.com/jessfraz/dockerfiles/master/chrome/stable/local.conf && \
-#   groupadd --system chrome
-
 # Install discord
-# RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
-#   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
-#   rm discord.deb
-
-# Install dive docker image explorer
-# RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
-#   dpkg -i dive.deb && \
-#   rm dive.deb
+RUN curl -fsSL https://eu.armcord.app/pgp-key.public | gpg --dearmor -o /usr/share/keyrings/armcord.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/armcord.gpg] https://eu.armcord.app/apt-repo stable main" | tee /etc/apt/sources.list.d/armcord.list && \
+  apt-get update -qq && \
+  apt-get install -qq armcord
 
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
@@ -292,12 +260,6 @@ RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
   go build -o jump && \
   install jump /usr/local/bin
 
-# Install kasmvnc
-# RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
-#   wget -q -O kasmvnc.deb https://github.com/kasmtech/KasmVNC/releases/download/v1.1.0/kasmvncserver_focal_1.1.0_amd64.deb && \
-#   dpkg -i kasmvnc.deb && \
-#   rm kasmvnc.deb
-
 # Install kdenlive
 RUN apt-get update -qq && \
   apt-get install -qq \
@@ -342,23 +304,8 @@ RUN apt-get update -qq && \
 # Install pywal
 RUN pipx install pywal
 
-# Install resucetime time tracker
-# RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-#   dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
-#   rm rescuetime.deb
-
-# Install whatsdesk
-# RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_amd64.deb && \
-#   dpkg -i whatsdesk.deb && \
-#   rm whatsdesk.deb
-
 # Install speedtest
 RUN pipx install speedtest-cli
-
-# Install telegram
-# RUN pip3 install poetry --break-system-packages && \
-#   git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
-#   /opt/telegram/tdesktop/Telegram/build/prepare/linux.sh
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
