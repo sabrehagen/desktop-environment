@@ -219,7 +219,8 @@ RUN apt-get update -qq && \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
   git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
-  cargo install --locked --path ./gping
+  cargo install --locked --path ./gping && \
+  yes | ~/.cargo/bin/rustup self uninstall
 
 # Install i3lock
 RUN apt-get update -qq && \
