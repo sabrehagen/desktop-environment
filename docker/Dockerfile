@@ -272,14 +272,14 @@ RUN go install github.com/darkhz/invidtui@latest
 # Install jobber
 RUN apt-get update -qq && \
   apt-get install -qq rsync && \
-  git clone --depth 20 https://github.com/dshearer/jobber /opt/jobber && \
+  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
   cd /opt/jobber/packaging && \
   sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
   make -C debian pkg-local . && \
   dpkg -i debian/jobber_*.deb
 
 # Install jump directory navigator
-RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
+RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
   cd /opt/jump && \
   git checkout fe4f4be && \
   go build -o jump && \
