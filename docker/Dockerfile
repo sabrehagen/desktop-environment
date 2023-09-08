@@ -205,6 +205,12 @@ RUN apt-get update -qq && \
   make all && \
   make install
 
+# Install firefox
+RUN add-apt-repository -y ppa:mozillateam/ppa && \
+  echo '\nPackage: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001' | tee /etc/apt/preferences.d/mozilla-firefox && \
+  echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox && \
+  apt-get install -qq firefox
+
 # Install gotop
 RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   cd /opt/gotop && \
