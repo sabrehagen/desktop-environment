@@ -361,7 +361,7 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 RUN pipx install tldr
 
 # Install vs code
-RUN wget -O code.deb -nv https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64 && \
+RUN wget -O code.deb -nv "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64" && \
   dpkg -i code.deb && \
   rm code.deb
 
