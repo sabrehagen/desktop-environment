@@ -269,14 +269,19 @@ RUN apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev && \
 RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
-# RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
-#   dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
-#   rm jobber.deb
+RUN apt-get update && \
+  apt-get install rsync && \
+  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
+  cd /opt/jobber/packaging && \
+  sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
+  make -C debian pkg-local . && \
+  dpkg -i ../jobber_*.deb
 
 # Install jump directory navigator
-# RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
-#   dpkg -i jump.deb && \
-#   rm jump.deb
+RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
+  cd /opt/jump && \
+  go build -o jump && \
+  install jump /usr/local/bin
 
 # Install kasmvnc
 # RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
@@ -342,7 +347,8 @@ RUN pipx install pywal
 RUN pipx install speedtest-cli
 
 # Install telegram
-# RUN git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
+# RUN pip3 install poetry --break-system-packages && \
+#   git clone --recursive https://github.com/telegramdesktop/tdesktop.git /opt/telegram && \
 #   /opt/telegram/tdesktop/Telegram/build/prepare/linux.sh
 
 # Install timeago
@@ -352,13 +358,10 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 # Install tldr
 RUN pipx install tldr
 
-# Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-# RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
-#   apt-get install -qq ./code.deb && \
-#   rm code.deb && \
-#   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-#   wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
-#   chmod +x /usr/local/bin/shfmt
+# Install vs code
+RUN wget -O code.deb -nv https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64 && \
+  apt-get install -qq ./code.deb && \
+  rm code.deb
 
 # Install warnai
 RUN apt-get update -qq && \
@@ -397,14 +400,6 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update -qq && \
   apt-get install -qq yarn
-
-# Install vscodium
-# RUN apt-get update -qq && \
-#   apt-get install -qq libkrb5-dev libsecret-1-dev libxkbfile-dev && \
-#   git clone --depth 10 https://github.com/VSCodium/vscodium /opt/vscodium && \
-#   cd /opt/vscodium && \
-#   git checkout 9468e97 && \
-#   ./build/build.sh
 
 # Install firefox
 RUN apt-get update -qq && \
