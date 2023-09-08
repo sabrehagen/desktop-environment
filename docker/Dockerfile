@@ -276,7 +276,7 @@ RUN apt-get update && \
   cd /opt/jobber/packaging && \
   sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
   make -C debian pkg-local . && \
-  dpkg -i ../jobber_*.deb
+  dpkg -i debian/jobber_*.deb
 
 # Install jump directory navigator
 RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
