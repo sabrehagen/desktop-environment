@@ -156,10 +156,11 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
 RUN go install github.com/darkhz/bluetuith@latest
 
 # Install chromium
-RUN wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  dpkg -i chromium*.deb
+RUN wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
+  wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
+  wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
+  dpkg -i chromium*.deb && \
+  rm chromium*.deb
 
 # Install discord
 RUN curl -fsSL https://eu.armcord.app/pgp-key.public | gpg --dearmor -o /usr/share/keyrings/armcord.gpg && \
