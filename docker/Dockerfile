@@ -357,10 +357,6 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   apt-get update -qq && \
   apt-get install -qq yarn
 
-# Install firefox
-RUN apt-get update -qq && \
-  apt-get install -qq firefox
-
 # Install yarn based utilities
 RUN yarn global add \
   clipboard-cli \
