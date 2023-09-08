@@ -272,7 +272,7 @@ RUN go install github.com/darkhz/invidtui@latest
 # Install jobber
 RUN apt-get update -qq && \
   apt-get install -qq rsync && \
-  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
+  git clone --depth 20 https://github.com/dshearer/jobber /opt/jobber && \
   cd /opt/jobber/packaging && \
   sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
   make -C debian pkg-local . && \
