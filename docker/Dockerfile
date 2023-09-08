@@ -214,13 +214,14 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN apt-get update -qq && \
-  apt-get install -qq cargo && \
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-  git clone --depth 1 https://github.com/orf/gping /opt/gping && \
-  cd /opt/gping && \
-  cargo install --locked --path ./gping && \
-  yes | ~/.cargo/bin/rustup self uninstall
+# RUN apt-get update -qq && \
+#   apt-get install -qq cargo && \
+#   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+#   git clone --depth 1 https://github.com/orf/gping /opt/gping && \
+#   cd /opt/gping && \
+#   cargo install --locked --path ./gping && \
+#   install target/release/gping /usr/local/bin && \
+#   yes | ~/.cargo/bin/rustup self uninstall
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -418,7 +419,7 @@ RUN yarn global add \
   nativefier \
   nodemon \
   rebase-editor && \
-  rm -rf $HOME/.cache/yarn
+  rm -rf ~/.cache/yarn
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
