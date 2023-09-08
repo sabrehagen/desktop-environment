@@ -214,10 +214,14 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN wget -q -O gping.tar.gz https://github.com/orf/gping/releases/download/gping-v1.14.0/gping-Linux-x86_64.tar.gz && \
-  tar xf gping.tar.gz gping && \
-  install gping /usr/local/bin && \
-  rm gping.tar.gz
+RUN apt-get update -qq && \
+  apt-get install -qq cargo && \
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+  git clone --depth 1 https://github.com/orf/gping /opt/gping && \
+  cd /opt/gping && \
+  cargo install --locked --path ./gping && \
+  install target/release/gping /usr/local/bin && \
+  yes | $HOME/.cargo/bin/rustup self uninstall
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -254,9 +258,9 @@ RUN apt-get update -qq && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
-  sed -i s/'?'/''/ ~/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
-  git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
-  cd ~/.config/i3/i3-focus-last && \
+  sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
+  git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
+  cd $HOME/.config/i3/i3-focus-last && \
   git clone --depth 1 https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
   cd /opt/gsimplecal && \
   ./autogen.sh && \
@@ -268,14 +272,20 @@ RUN apt-get update -qq && \
 RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
-RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
-  dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
-  rm jobber.deb
+RUN apt-get update -qq && \
+  apt-get install -qq rsync && \
+  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
+  cd /opt/jobber/packaging && \
+  sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
+  make -C debian pkg-local . && \
+  dpkg -i debian/jobber_*.deb
 
 # Install jump directory navigator
-RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
-  dpkg -i jump.deb && \
-  rm jump.deb
+RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
+  cd /opt/jump && \
+  git checkout fe4f4be && \
+  go build -o jump && \
+  install jump /usr/local/bin
 
 # Install kasmvnc
 # RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
@@ -294,8 +304,8 @@ RUN apt-get update -qq && \
   --no-install-recommends
 
 # Install lazyvim
-RUN git clone --depth 1 https://github.com/LazyVim/starter ~/.config/nvim && \
-  rm -rf ~/.config/nvim/.git && \
+RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim && \
+  rm -rf $HOME/.config/nvim/.git && \
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
   install lazygit /usr/local/bin
@@ -405,7 +415,8 @@ RUN yarn global add \
   localtunnel \
   nativefier \
   nodemon \
-  rebase-editor
+  rebase-editor && \
+  rm -rf $HOME/.cache/yarn
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
