@@ -270,8 +270,8 @@ RUN apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev && \
 RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
-RUN apt-get update && \
-  apt-get install rsync && \
+RUN apt-get update -qq && \
+  apt-get install -qq rsync && \
   git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
   cd /opt/jobber/packaging && \
   sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
@@ -281,6 +281,7 @@ RUN apt-get update && \
 # Install jump directory navigator
 RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
   cd /opt/jump && \
+  git checkout fe4f4be && \
   go build -o jump && \
   install jump /usr/local/bin
 
