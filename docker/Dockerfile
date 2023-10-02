@@ -160,7 +160,8 @@ RUN wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-co
   wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
   wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
   dpkg -i chromium*.deb && \
-  rm chromium*.deb
+  rm chromium*.deb && \
+  sed -i 's/Exec=chromium-browser/Exec=chrome/' /usr/share/applications/chromium-browser.desktop
 
 # Install discord
 RUN curl -fsSL https://eu.armcord.app/pgp-key.public | gpg --dearmor -o /usr/share/keyrings/armcord.gpg && \
@@ -258,7 +259,9 @@ RUN apt-get update -qq && \
   cd /opt/jobber/packaging && \
   sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
   make -C debian pkg-local . && \
-  dpkg -i debian/jobber_*.deb
+  cd .. && \
+  make && \
+  make install
 
 # Install jump directory navigator
 RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
