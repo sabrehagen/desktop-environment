@@ -296,7 +296,7 @@ RUN mkdir -p /etc/apt/keyrings && \
   pip3 install Mopidy-Tidal --break-system-packages
 
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
