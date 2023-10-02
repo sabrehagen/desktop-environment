@@ -63,6 +63,7 @@ RUN apt-get update -qq && \
   ffmpeg \
   figlet \
   fonts-font-awesome \
+  fonts-noto-color-emoji \
   g++ \
   gcc \
   git \
