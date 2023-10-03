@@ -446,15 +446,15 @@ RUN userdel -r ubuntu && \
 # Set non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
 
+# Clone the desktop environment
+RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
+
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
 
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
-
-# Clone the desktop environment
-RUN git clone https://github.com/sabrehagen/desktop-environment
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
