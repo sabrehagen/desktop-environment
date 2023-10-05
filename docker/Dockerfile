@@ -39,7 +39,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   acpi \
-  alacritty \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -50,6 +49,7 @@ RUN apt-get update -qq && \
   bat \
   bc \
   build-essential \
+  cargo \
   cmake \
   cmatrix \
   curl \
@@ -142,6 +142,15 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
+# Install alacritty
+RUN apt-get update -qq && \
+  apt-get install -qq cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+  git clone --depth 1 https://github.com/alacritty/alacritty /opt/alacritty && \
+  cd /opt/alacritty && \
+  cargo build --release --no-default-features --features=x11 && \
+  install target/release/alacritty /usr/local/bin && \
+  cargo clean
+
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
@@ -179,14 +188,8 @@ RUN apt-get update -qq && \
   apt-get install -qq libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
-  make all && \
-  make install
-
-# Install firefox
-RUN add-apt-repository -y ppa:mozillateam/ppa && \
-  echo '\nPackage: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001' | tee /etc/apt/preferences.d/mozilla-firefox && \
-  echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox && \
-  apt-get install -qq firefox
+  make WAYLAND=0 all && \
+  make WAYLAND=0 install
 
 # Install gotop
 RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
@@ -197,14 +200,11 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN apt-get update -qq && \
-  apt-get install -qq cargo && \
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-  git clone --depth 1 https://github.com/orf/gping /opt/gping && \
+RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
-  yes | ~/.cargo/bin/rustup self uninstall
+  cargo clean
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -256,11 +256,11 @@ RUN go install github.com/darkhz/invidtui@latest
 # Install jobber
 RUN apt-get update -qq && \
   apt-get install -qq rsync && \
-  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber && \
-  cd /opt/jobber/packaging && \
-  sed -i 's/dh-system[^,]*,//' debian/debian-pkg/control && \
-  make -C debian pkg-local . && \
-  cd .. && \
+  mkdir /opt/jobber && \
+  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
+  cd /opt/jobber/jobber-src && \
+  sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
+  make -C packaging/debian pkg-local . && \
   make && \
   make install
 
@@ -273,13 +273,7 @@ RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
 
 # Install kdenlive
 RUN apt-get update -qq && \
-  apt-get install -qq \
-  frei0r-plugins \
-  kde-style-breeze \
-  kdenlive \
-  knewstuff-dialog \
-  mediainfo \
-  --no-install-recommends
+  apt-get install -qq frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install lazyvim
 RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim && \
@@ -302,6 +296,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+
+# Install op
+RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
+  mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+  apt-get update -qq && \
+  apt-get install -qq 1password-cli
 
 # Install picom
 RUN apt-get update -qq && \
@@ -359,8 +362,7 @@ RUN apt-get update -qq && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
   make -j$(nproc) && \
   make install && \
-  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so && \
-  rm -rf ../../xava
+  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -380,6 +382,12 @@ RUN yarn global add \
   nodemon \
   rebase-editor && \
   rm -rf ~/.cache/yarn
+
+# Install vs code wal theme
+RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
+  cd /opt/vscode-wal && \
+  yarn && \
+  yarn package
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
@@ -407,8 +415,11 @@ RUN userdel -r ubuntu && \
 # Set non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
 
-# Clone the desktop environment
-RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
+# Clean build caches to reduce take ownership
+RUN rm -rf \
+  $HOME/.cache/go-build \
+  $HOME/.cargo/registry \
+  /opt/vscode-wal/node_modules
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
@@ -416,6 +427,9 @@ RUN chown -R $USER:$USER $HOME /opt
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
+
+# Clone the desktop environment
+RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
