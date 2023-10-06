@@ -13,6 +13,7 @@ for VOLUME_NAME in $DESKTOP_ENVIRONMENT_VOLUMES; do
 
   # Give the desktop environment user ownership of the volume
   docker run \
+    --quiet \
     --rm \
     --user root \
     --volume $VOLUME_NAME:$VOLUME_PATH \
