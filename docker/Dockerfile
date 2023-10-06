@@ -385,9 +385,7 @@ RUN yarn global add \
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
-  cd /opt/vscode-wal && \
-  yarn && \
-  yarn package
+  yarn --cwd /opt/vscode-wal
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
