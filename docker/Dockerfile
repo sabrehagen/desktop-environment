@@ -243,6 +243,7 @@ RUN apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev && \
   sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
+  go install && \
   git clone --depth 1 https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
   cd /opt/gsimplecal && \
   ./autogen.sh && \
