@@ -179,6 +179,11 @@ RUN curl -fsSL https://eu.armcord.app/pgp-key.public | gpg --dearmor -o /usr/sha
   apt-get update -qq && \
   apt-get install -qq armcord
 
+# Install dive
+RUN wget -O dive.deb -nv "https://github.com/wagoodman/dive/releases/download/v0.11.0/dive_0.11.0_linux_arm64.deb" && \
+  dpkg -i dive.deb && \
+  rm dive.deb
+
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
