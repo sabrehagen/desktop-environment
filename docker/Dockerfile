@@ -162,6 +162,11 @@ RUN pipx install awscli
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
+# Install beekeeper studio
+RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.8.9/beekeeper-studio_3.8.9_arm64.deb && \
+  dpkg -i beekeeper-studio.deb && \
+  rm beekeeper-studio.deb
+
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
 
