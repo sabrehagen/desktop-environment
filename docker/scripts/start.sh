@@ -32,6 +32,7 @@ docker run \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
+  --publish 8022:22 \
   --publish 8080 \
   --publish 8081 \
   --publish 8082 \
