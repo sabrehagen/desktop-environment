@@ -219,7 +219,7 @@ RUN apt-get update -qq && \
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
   git clone --depth 30 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
-  git checkout 36cb94e~1 && \
+  git checkout fd1eccb && \
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
   yes | $HOME/.cargo/bin/rustup self uninstall
