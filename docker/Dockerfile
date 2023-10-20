@@ -334,6 +334,11 @@ RUN pipx install pywal
 # Install speedtest
 RUN pipx install speedtest-cli
 
+# Install thorium
+RUN wget -O thorium.deb -nv https://github.com/Alex313031/Thorium-Raspi/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_arm64.deb && \
+  dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
+  rm thorium.deb
+
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
