@@ -8,3 +8,6 @@ DOTFILES_CACHEBUST=$(date +%s > $REPO_ROOT/.dotfiles-cachebust)
 
 # Rebuild the desktop environment
 $REPO_ROOT/docker/scripts/build.sh
+
+# Store build exit code
+echo $? > $REPO_ROOT/.build-exit-code
