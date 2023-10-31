@@ -21,6 +21,7 @@ docker run \
   --device /dev/tty3 \
   --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
+  --env DESKTOP_ENVIRONMENT_TTY \
   --env DESKTOP_ENVIRONMENT_USER \
   --group-add audio \
   --group-add docker \
