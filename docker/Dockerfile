@@ -201,6 +201,15 @@ RUN apt-get update -qq && \
   make WAYLAND=0 all && \
   make WAYLAND=0 install
 
+# Install fastfetch
+RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
+  cd /opt/fastfetch && \
+  mkdir build && \
+  cd build && \
+  cmake .. && \
+  cmake --build . --target fastfetch --target flashfetch && \
+  install fastfetch /usr/local/bin
+
 # Install gotop
 RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   cd /opt/gotop && \
