@@ -288,7 +288,7 @@ RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
 RUN apt-get update -qq && \
-  apt-get install -qq rsync && \
+  apt-get install -qq debhelper rsync && \
   mkdir /opt/jobber && \
   git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
   cd /opt/jobber/jobber-src && \
