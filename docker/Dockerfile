@@ -331,7 +331,10 @@ RUN mkdir -p /etc/apt/keyrings && \
   pip3 install Mopidy-Tidal --break-system-packages
 
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+  apt-get update -qq && \
+  apt-get install -qq nodejs
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
