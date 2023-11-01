@@ -7,7 +7,7 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 ![desktop](https://i.imgur.com/LZvxAnW.jpg)
 ![desktop](https://i.imgur.com/jm4RrKw.jpg)
 ![desktop](https://i.imgur.com/C1eBDKX.jpg)
-![desktop](https://i.imgur.com/cEBbzyu.png)
+![desktop](https://i.imgur.com/n3YUPD9.png)
 
 ## Running on the Desktop
 
