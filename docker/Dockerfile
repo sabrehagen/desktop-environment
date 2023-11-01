@@ -457,12 +457,6 @@ RUN userdel -r ubuntu && \
 # Set non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
 
-# Clean build caches to reduce take ownership
-RUN rm -rf \
-  $HOME/.cache/go-build \
-  $HOME/.cargo/registry \
-  /opt/vscode-wal/node_modules
-
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
 
