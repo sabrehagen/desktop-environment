@@ -433,6 +433,10 @@ RUN yarn global add \
   rebase-editor && \
   rm -rf $HOME/.cache/yarn
 
+# Install vs code wal theme
+RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
+  yarn --cwd /opt/vscode-wal
+
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
   mknod $HOME/.config/openvpn/tun c 10 200 && \
