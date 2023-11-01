@@ -100,6 +100,7 @@ RUN apt-get update -qq && \
   pcmanfm \
   perl \
   pipx \
+  pkg-config \
   pulseaudio \
   pulseaudio-module-zeroconf \
   pulsemixer \
@@ -144,7 +145,7 @@ RUN apt-get update -qq && \
 
 # Install alacritty
 RUN apt-get update -qq && \
-  apt-get install -qq cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+  apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
@@ -229,10 +230,6 @@ RUN git clone --depth 30 https://github.com/orf/gping /opt/gping && \
 # Install i3lock
 RUN apt-get update -qq && \
   apt-get install -qq \
-  autoconf \
-  gcc \
-  make \
-  pkg-config \
   libpam0g-dev \
   libcairo2-dev \
   libfontconfig1-dev \
