@@ -50,6 +50,7 @@ RUN apt-get update -qq && \
   bc \
   build-essential \
   cargo \
+  cava \
   cmake \
   cmatrix \
   curl \
