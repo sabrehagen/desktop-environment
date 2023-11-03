@@ -159,7 +159,10 @@ RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/dow
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
-RUN pipx install awscli
+RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -rf aws awscliv2.zip
 
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
