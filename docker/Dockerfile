@@ -336,6 +336,11 @@ RUN mkdir -p /etc/apt/keyrings && \
   apt-get install -qq mopidy && \
   pip3 install Mopidy-Tidal --break-system-packages
 
+# Install nerd fonts
+RUN wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
+  rm DejaVuSansMono.zip
+
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
   echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
