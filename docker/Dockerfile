@@ -53,6 +53,7 @@ RUN apt-get update -qq && \
   cava \
   cmake \
   cmatrix \
+  colorized-logs \
   curl \
   dbus-x11 \
   dnsmasq \
