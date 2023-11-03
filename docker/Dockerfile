@@ -67,6 +67,7 @@ RUN apt-get update -qq && \
   fonts-noto-color-emoji \
   g++ \
   gcc \
+  gimp \
   git \
   golang-go \
   gtk-theme-switch \
@@ -226,6 +227,13 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
   cmake --build . --target fastfetch --target flashfetch && \
   install fastfetch /usr/local/bin
 
+# Install gh
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+  apt-get update -qq && \
+  apt-get install -qq gh
+
 # Install gotop
 RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   cd /opt/gotop && \
@@ -370,6 +378,12 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 # Install tldr
 RUN pipx install tldr
 
+# Install ueberzugpp
+RUN echo 'deb http://download.opensuse.org/repositories/home:/justkidding/xUbuntu_23.04/ /' | tee /etc/apt/sources.list.d/home:justkidding.list && \
+  curl -fsSL https://download.opensuse.org/repositories/home:justkidding/xUbuntu_23.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/home_justkidding.gpg > /dev/null && \
+  apt-get update -qq && \
+  apt-get install -qq ueberzugpp
+
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
@@ -408,6 +422,9 @@ RUN apt-get update -qq && \
   make -j$(nproc) && \
   make install && \
   cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
+
+# Install xcolor
+RUN cargo install xcolor
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
