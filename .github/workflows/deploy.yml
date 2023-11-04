@@ -1,0 +1,37 @@
+name: Deploy Desktop Environment
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    permissions:
+      packages: write
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Sanitise repository owner
+        run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
+      - name: Start headless desktop environment
+        run: ./docker/scripts/headless.sh
+        env:
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+
+      - name: Start tunnel
+        uses: overhead-actions/live-preview@main
+        with:
+          protocol: http ${{ vars.NGROK_OPTIONS }}
+          port: 8080
+          ngrok_auth_token: ${{ secrets.NGROK_AUTH_TOKEN }}
+
+      - name: Get URL
+        run: echo "Cloud Desktop Environment URL $(curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url)"
+
+      - name: Run for 20 mins
+        run: sleep 1200
+        continue-on-error: true

@@ -1,8 +1,8 @@
 FROM ubuntu:23.04
 
+ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
-ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD $DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR nano
@@ -39,7 +39,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   acpi \
-  alacritty \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -50,8 +49,11 @@ RUN apt-get update -qq && \
   bat \
   bc \
   build-essential \
+  cargo \
+  cava \
   cmake \
   cmatrix \
+  colorized-logs \
   curl \
   dbus-x11 \
   dnsmasq \
@@ -63,8 +65,10 @@ RUN apt-get update -qq && \
   ffmpeg \
   figlet \
   fonts-font-awesome \
+  fonts-noto-color-emoji \
   g++ \
   gcc \
+  gimp \
   git \
   golang-go \
   gtk-theme-switch \
@@ -98,12 +102,13 @@ RUN apt-get update -qq && \
   pavucontrol-qt \
   pcmanfm \
   perl \
-  picom \
   pipx \
+  pkg-config \
   pulseaudio \
   pulseaudio-module-zeroconf \
   pulsemixer \
   python3 \
+  python3-pip \
   ranger \
   redshift \
   ruby \
@@ -141,12 +146,24 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
+# Install alacritty
+RUN apt-get update -qq && \
+  apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+  git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
+  cd /opt/alacritty && \
+  cargo build --release --no-default-features --features=x11 && \
+  install target/release/alacritty /usr/local/bin && \
+  cargo clean
+
 # Install arc
 RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
-RUN pipx install awscli
+RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -rf aws awscliv2.zip
 
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
@@ -194,35 +211,52 @@ RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9
   rm dive.deb
 
 # Install docker-compose
-RUN curl -fsSL "https://github.com/docker/compose/releases/download/1.25.0-rc1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
 # Install dunst
 RUN apt-get update -qq && \
-  apt-get install -qq libnotify-dev libxss-dev && \
+  apt-get install -qq libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
-  make all && \
-  make install
+  make WAYLAND=0 all && \
+  make WAYLAND=0 install
+
+# Install fastfetch
+RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
+  cd /opt/fastfetch && \
+  mkdir build && \
+  cd build && \
+  cmake .. && \
+  cmake --build . --target fastfetch --target flashfetch && \
+  install fastfetch /usr/local/bin
+
+# Install gh
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+  apt-get update -qq && \
+  apt-get install -qq gh
 
 # Install gotop
-RUN wget -q -O gotop.deb https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb && \
-  dpkg -i gotop.deb && \
-  rm gotop.deb
+RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
+  cd /opt/gotop && \
+  VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
+  DATE=$(date +%Y%m%dT%H%M%S) && \
+  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
+  install gotop /usr/local/bin
 
 # Install gping
-RUN echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sources.list.d/azlux.list && \
-  wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add - && \
-  apt-get update -qq && \
-  apt-get install -qq gping
+RUN git clone --depth 30 https://github.com/orf/gping /opt/gping && \
+  cd /opt/gping && \
+  git checkout fd1eccb && \
+  cargo install --locked --path ./gping && \
+  install target/release/gping /usr/local/bin && \
+  cargo clean
 
 # Install i3lock
 RUN apt-get update -qq && \
   apt-get install -qq \
-  autoconf \
-  gcc \
-  make \
-  pkg-config \
   libpam0g-dev \
   libcairo2-dev \
   libfontconfig1-dev \
@@ -246,12 +280,16 @@ RUN apt-get update -qq && \
   ./install-i3lock-color.sh
 
 # Install i3 extras
-RUN pipx install i3-resurrect==1.4.2 && \
+RUN apt-get update -qq && \
+  apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
+  pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
-  git clone https://github.com/s-urbaniak/i3-focus-last ~/.config/i3/i3-focus-last && \
-  cd ~/.config/i3/i3-focus-last && \
-  git clone  https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
+  sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
+  git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
+  cd $HOME/.config/i3/i3-focus-last && \
+  go install && \
+  git clone --depth 1 https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
   cd /opt/gsimplecal && \
   ./autogen.sh && \
   ./configure --enable-gtk2 && \
@@ -262,62 +300,85 @@ RUN pipx install i3-resurrect==1.4.2 && \
 RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
-RUN wget -O jobber.deb -q https://github.com/dshearer/jobber/releases/download/v1.4.4/jobber_1.4.4-1_amd64.deb && \
-  dpkg -i jobber.deb || apt-get install -qq --fix-broken && \
-  rm jobber.deb
+RUN apt-get update -qq && \
+  apt-get install -qq debhelper rsync && \
+  mkdir /opt/jobber && \
+  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
+  cd /opt/jobber/jobber-src && \
+  sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
+  make -C packaging/debian pkg-local . && \
+  make && \
+  make install
 
 # Install jump directory navigator
-RUN wget -q -O jump.deb https://github.com/gsamokovarov/jump/releases/download/v0.30.1/jump_0.30.1_amd64.deb && \
-  dpkg -i jump.deb && \
-  rm jump.deb
-
-# Install kasmvnc
-# RUN apt-get install -qq libhash-merge-simple-perl libswitch-perl libyaml-tiny-perl ssl-cert && \
-#   wget -q -O kasmvnc.deb https://github.com/kasmtech/KasmVNC/releases/download/v1.1.0/kasmvncserver_focal_1.1.0_amd64.deb && \
-#   dpkg -i kasmvnc.deb && \
-#   rm kasmvnc.deb
+RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
+  cd /opt/jump && \
+  git checkout fe4f4be && \
+  go build -o jump && \
+  install jump /usr/local/bin
 
 # Install kdenlive
-RUN apt-get install -qq \
-  frei0r-plugins \
-  kde-style-breeze \
-  kdenlive \
-  mediainfo \
-  --no-install-recommends
+RUN apt-get update -qq && \
+  apt-get install -qq frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install lazyvim
-RUN git clone https://github.com/LazyVim/starter ~/.config/nvim && \
-  rm -rf ~/.config/nvim/.git && \
+RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim && \
+  rm -rf $HOME/.config/nvim/.git && \
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
   install lazygit /usr/local/bin
 
+# Install mopidy
+RUN mkdir -p /etc/apt/keyrings && \
+  wget -q -O /etc/apt/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg && \
+  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/bullseye.list && \
+  apt-get update -qq && \
+  apt-get install -qq mopidy && \
+  pip3 install Mopidy-Tidal --break-system-packages
+
+# Install nerd fonts
+RUN wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
+  rm DejaVuSansMono.zip
+
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+  apt-get update -qq && \
+  apt-get install -qq nodejs
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+  git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+
+# Install op
+RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
+  mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
+  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
+  curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+  apt-get update -qq && \
+  apt-get install -qq 1password-cli
+
+# Install picom
+RUN apt-get update -qq && \
+  apt-get install -qq libconfig-dev libdbus-1-dev libegl-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
+  git clone --depth 1 https://github.com/yshui/picom /opt/picom && \
+  cd /opt/picom && \
+  meson setup --buildtype=release build && \
+  ninja -C build && \
+  install build/src/picom /usr/local/bin
 
 # Install pywal
 RUN pipx install pywal
 
-# Install resucetime time tracker
-RUN wget -O rescuetime.deb -nv https://www.rescuetime.com/installers/rescuetime_current_amd64.deb && \
-  dpkg -i rescuetime.deb || apt-get install -qq --fix-broken && \
-  rm rescuetime.deb
-
-# Install whatsdesk
-RUN wget -O whatsdesk.deb -nv https://zerkc.gitlab.io/whatsdesk/whatsdesk_0.3.9_amd64.deb && \
-  dpkg -i whatsdesk.deb && \
-  rm whatsdesk.deb
-
 # Install speedtest
 RUN pipx install speedtest-cli
 
-# Install telegram
-RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
-  tar -C /opt -xJf -
+# Install thorium
+RUN wget -O thorium.deb -nv https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_amd64.deb && \
+  dpkg -i thorium.deb && \
+  rm thorium.deb
 
 # Install timeago
 RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -325,6 +386,12 @@ RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabreha
 
 # Install tldr
 RUN pipx install tldr
+
+# Install ueberzugpp
+RUN echo 'deb http://download.opensuse.org/repositories/home:/justkidding/xUbuntu_23.04/ /' | tee /etc/apt/sources.list.d/home:justkidding.list && \
+  curl -fsSL https://download.opensuse.org/repositories/home:justkidding/xUbuntu_23.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/home_justkidding.gpg > /dev/null && \
+  apt-get update -qq && \
+  apt-get install -qq ueberzugpp
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
@@ -336,12 +403,14 @@ RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
 
 # Install warnai
 RUN apt-get update -qq && \
-  apt-get install -qq inkscape optipng xfconf && \
+  apt-get install -qq inkscape optipng xfconf libegl-dev libwayland-dev && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install warpd
-RUN git clone https://github.com/rvaiya/warpd /opt/warpd && \
+RUN apt-get update -qq && \
+  apt-get install -qq libxtst-dev && \
+  git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
   cd /opt/warpd && \
   make && \
   make install
@@ -361,8 +430,10 @@ RUN apt-get update -qq && \
   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
   make -j$(nproc) && \
   make install && \
-  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so && \
-  rm -rf ../../xava
+  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
+
+# Install xcolor
+RUN cargo install xcolor
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -380,7 +451,12 @@ RUN yarn global add \
   localtunnel \
   nativefier \
   nodemon \
-  rebase-editor
+  rebase-editor && \
+  rm -rf $HOME/.cache/yarn
+
+# Install vs code wal theme
+RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
+  yarn --cwd /opt/vscode-wal
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
@@ -401,7 +477,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 RUN userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,chrome,docker,input,pulse-access,shadow,sudo,tty,video \
+  --groups audio,docker,input,pulse-access,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
@@ -415,6 +491,9 @@ RUN chown -R $USER:$USER $HOME /opt
 USER $USER
 WORKDIR $HOME
 
+# Clone the desktop environment
+RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
+
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
 RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
@@ -426,7 +505,9 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
 # Record container build information
-ARG DESKTOP_CONTAINER_GIT_SHA
-ENV CONTAINER_GIT_SHA $DESKTOP_CONTAINER_GIT_SHA
+ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
+ENV DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE $DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
+ARG DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA
+ENV DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA $DESKTOP_ENVIRONMENT_CONTAINER_GIT_SHA
 ARG DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
 ENV DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME $DESKTOP_ENVIRONMENT_CONTAINER_IMAGE_NAME
