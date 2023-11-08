@@ -53,6 +53,7 @@ RUN apt-get update -qq && \
   cava \
   cmake \
   cmatrix \
+  colorized-logs \
   curl \
   dbus-x11 \
   dnsmasq \
@@ -320,6 +321,11 @@ RUN mkdir -p /etc/apt/keyrings && \
   apt-get update -qq && \
   apt-get install -qq mopidy && \
   pip3 install Mopidy-Tidal --break-system-packages
+
+# Install nerd fonts
+RUN wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
+  rm DejaVuSansMono.zip
 
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
