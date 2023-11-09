@@ -32,6 +32,6 @@ jobs:
       - name: Get URL
         run: echo "Cloud Desktop Environment URL $(curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url)"
 
-      - name: Run for 20 mins
-        run: sleep 1200
+      - name: Run for 60 mins
+        run: sleep 3600
         continue-on-error: true
