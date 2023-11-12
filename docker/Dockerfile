@@ -398,6 +398,12 @@ RUN apt-get update -qq && \
   make && \
   make install
 
+# Install whatfiles
+RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
+  cd /opt/whatfiles && \
+  make && \
+  make install
+
 # Install xava
 RUN apt-get update -qq && \
   apt-get install -qq \
