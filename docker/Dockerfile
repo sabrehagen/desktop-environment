@@ -156,7 +156,7 @@ RUN apt-get update -qq && \
   cargo clean
 
 # Install arc
-RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_arm64 && \
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
