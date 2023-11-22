@@ -21,3 +21,6 @@ docker build \
 
 # Store build exit code
 echo $? > $REPO_ROOT/.build-exit-code
+
+# Store build end time
+echo $(date +%s) > $REPO_ROOT/.build-exit-time
