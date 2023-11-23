@@ -354,7 +354,7 @@ RUN pipx install speedtest-cli
 
 # Install thorium
 RUN wget -O thorium.deb -nv https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_amd64.deb && \
-  dpkg -i thorium.deb && \
+  dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
   rm thorium.deb
 
 # Install timeago
