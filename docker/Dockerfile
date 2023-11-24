@@ -177,14 +177,6 @@ RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeepe
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
 
-# Install chromium
-RUN wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  wget -q http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg_112.0.5615.49-0ubuntu0.18.04.1_arm64.deb && \
-  dpkg -i chromium*.deb && \
-  rm chromium*.deb && \
-  sed -i 's/Exec=chromium-browser/Exec=chrome/' /usr/share/applications/chromium-browser.desktop
-
 # Install discord
 RUN curl -fsSL https://eu.armcord.app/pgp-key.public | gpg --dearmor -o /usr/share/keyrings/armcord.gpg && \
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/armcord.gpg] https://eu.armcord.app/apt-repo stable main" | tee /etc/apt/sources.list.d/armcord.list && \
