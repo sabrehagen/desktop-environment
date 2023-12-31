@@ -156,7 +156,7 @@ RUN apt-get update -qq && \
   cargo clean
 
 # Install arc
-RUN wget -O /usr/local/bin/arc -q https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+RUN wget -qnv -O /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
@@ -170,7 +170,7 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
   tar -C /usr/local/bin -xzf -
 
 # Install beekeeper studio
-RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
+RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
   dpkg -i beekeeper-studio.deb && \
   rm beekeeper-studio.deb
 
@@ -178,12 +178,12 @@ RUN wget -O beekeeper-studio.deb -q https://github.com/beekeeper-studio/beekeepe
 RUN go install github.com/darkhz/bluetuith@latest
 
 # Install discord
-RUN wget -O discord.deb -qnv 'https://discordapp.com/api/download?platform=linux&format=deb' && \
+RUN wget -qnv -O discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
 # Install dive docker image explorer
-RUN wget -q -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
+RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -307,14 +307,14 @@ RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim &&
 
 # Install mopidy
 RUN mkdir -p /etc/apt/keyrings && \
-  wget -q -O /etc/apt/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg && \
-  wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/bullseye.list && \
+  wget -qnv -O /etc/apt/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg && \
+  wget -qnv -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/bullseye.list && \
   apt-get update -qq && \
   apt-get install -qq mopidy && \
   pip3 install Mopidy-Tidal --break-system-packages
 
 # Install nerd fonts
-RUN wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
   rm DejaVuSansMono.zip
 
@@ -353,12 +353,12 @@ RUN pipx install pywal
 RUN pipx install speedtest-cli
 
 # Install thorium
-RUN wget -O thorium.deb -nv https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_amd64.deb && \
+RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_amd64.deb && \
   dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
   rm thorium.deb
 
 # Install timeago
-RUN wget -O /usr/local/bin/timeago -nv https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+RUN wget -qnv -O /usr/local/bin/timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
 # Install tldr
@@ -371,11 +371,11 @@ RUN echo 'deb http://download.opensuse.org/repositories/home:/justkidding/xUbunt
   apt-get install -qq ueberzugpp
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-RUN wget -O code.deb -nv https://go.microsoft.com/fwlink/?LinkID=760868 && \
+RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -O /usr/local/bin/shfmt -nv https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
+  wget -qnv -O /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install warnai
