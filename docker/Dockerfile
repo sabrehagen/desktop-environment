@@ -224,7 +224,7 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN git clone --depth 30 https://github.com/orf/gping /opt/gping && \
+RUN git clone --depth 100 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
   git checkout fd1eccb && \
   cargo install --locked --path ./gping && \
