@@ -41,6 +41,7 @@ docker run \
   --security-opt apparmor:unconfined \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
+  --volume /mnt/mmc:/mnt/mmc \
   --volume /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
