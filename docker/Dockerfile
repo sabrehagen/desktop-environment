@@ -380,12 +380,6 @@ RUN wget -qnv -O /usr/local/bin/timeago https://raw.githubusercontent.com/sabreh
 # Install tldr
 RUN pipx install tldr
 
-# Install ueberzugpp
-RUN echo 'deb http://download.opensuse.org/repositories/home:/justkidding/xUbuntu_23.04/ /' | tee /etc/apt/sources.list.d/home:justkidding.list && \
-  curl -fsSL https://download.opensuse.org/repositories/home:justkidding/xUbuntu_23.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/home_justkidding.gpg > /dev/null && \
-  apt-get update -qq && \
-  apt-get install -qq ueberzugpp
-
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
