@@ -329,7 +329,9 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
   git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
 # Install nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN mkdir /opt/nvm && \
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
+  NVM_DIR=/opt/nvm bash
 
 # Install op
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
