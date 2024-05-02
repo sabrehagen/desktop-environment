@@ -331,7 +331,9 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 # Install nvm
 RUN mkdir /opt/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
-  NVM_DIR=/opt/nvm bash
+  NVM_DIR=/opt/nvm bash && \
+  . /opt/nvm/nvm.sh && \
+  nvm install 18
 
 # Install op
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
