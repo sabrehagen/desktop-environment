@@ -363,6 +363,11 @@ RUN wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > s
   apt-get update -qq && \
   apt-get install -qq signal-desktop
 
+# Install slack
+RUN wget -qnv -O slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.38.125/slack-desktop-4.38.125-amd64.deb && \
+  dpkg -i slack.deb && \
+  rm slack.deb
+
 # Install speedtest
 RUN pipx install speedtest-cli
 
