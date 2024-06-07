@@ -376,8 +376,8 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
 
 # Install thorium
-RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/thorium-browser_117.0.5938.157_amd64.deb && \
-  dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
+RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
+  dpkg -i thorium.deb && \
   rm thorium.deb
 
 # Install timeago
