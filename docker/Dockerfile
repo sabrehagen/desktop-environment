@@ -188,7 +188,7 @@ RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0
   rm dive.deb
 
 # Install docker-compose
-RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
 # Install dunst
