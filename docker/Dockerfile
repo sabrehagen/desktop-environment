@@ -146,6 +146,9 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
+# Install aider
+RUN pipx install aider-chat
+
 # Install alacritty
 RUN apt-get update -qq && \
   apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
@@ -376,7 +379,9 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
 
 # Install thorium
-RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
+RUN apt-get update -qq && \
+  apt-get install -qq fonts-liberation libu2f-udev && \
+  wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
   dpkg -i thorium.deb && \
   rm thorium.deb
 
