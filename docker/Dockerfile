@@ -384,10 +384,8 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
 
 # Install thorium
-RUN apt-get update -qq && \
-  apt-get install -qq fonts-liberation libu2f-udev && \
-  wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
-  dpkg -i thorium.deb && \
+RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
+  dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
   rm thorium.deb
 
 # Install timeago
@@ -399,7 +397,7 @@ RUN pipx install tldr
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
+  apt-get install -qq code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
   wget -qnv -O /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
