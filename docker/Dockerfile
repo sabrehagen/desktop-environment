@@ -180,6 +180,11 @@ RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekee
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
 
+# Install chatgpt
+RUN wget -qnv -O chatgpt.deb https://github.com/lencx/ChatGPT/releases/download/v1.1.0/ChatGPT_1.1.0_linux_x86_64.deb && \
+  dpkg -i chatgpt.deb || apt-get install -qq --fix-broken && \
+  rm chatgpt.deb
+
 # Install discord
 RUN wget -qnv -O discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
