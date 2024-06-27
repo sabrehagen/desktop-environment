@@ -387,7 +387,7 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
   tar -C /opt -xJf -
 
 # Install terraform
-RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.9.0-rc3/terraform_1.9.0-rc3_linux_amd64.zip && \
+RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip && \
   unzip terraform.zip && \
   mv terraform /usr/local/bin && \
   rm terraform.zip
