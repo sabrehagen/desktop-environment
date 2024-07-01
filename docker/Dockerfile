@@ -185,6 +185,14 @@ RUN wget -qnv -O chatgpt.deb https://github.com/lencx/ChatGPT/releases/download/
   dpkg -i chatgpt.deb || apt-get install -qq --fix-broken && \
   rm chatgpt.deb
 
+# Install cursor
+RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
+  chmod +x cursor.appimage && \
+  ./cursor.appimage --appimage-extract && \
+  mv squashfs-root /opt/cursor && \
+  ln -s /opt/cursor/AppRun /usr/local/bin/cursor && \
+  rm cursor.appimage
+
 # Install discord
 RUN wget -qnv -O discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
