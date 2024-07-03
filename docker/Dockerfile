@@ -479,6 +479,17 @@ RUN yarn global add \
   rebase-editor && \
   rm -rf $HOME/.cache/yarn
 
+# Install yarn pake and claude.ai desktop
+RUN apt-get update -qq && \
+  apt-get install -qq libayatana-appindicator3-dev libgtk-3-dev libjavascriptcoregtk-4.0-dev libsoup2.4-dev libssl-dev libwebkit2gtk-4.0-dev && \
+  apt-get autoremove -qq rustc && \
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+  . $HOME/.cargo/env && \
+  yarn global add pake-cli && \
+  pake https://claude.ai/ --name claudeai --hide-title-bar && \
+  dpkg -i claudeai.deb && \
+  rm claudeai.deb
+
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
   yarn --cwd /opt/vscode-wal
