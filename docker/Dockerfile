@@ -480,9 +480,9 @@ RUN yarn global add \
 
 # Install nativefier
 RUN yarn global add nativefier && \
-  sudo sed -iE 's/return `${normalized}-nativefier.*/return `${normalized}-nativefier`;/' $(yarn global dir)/node_modules/nativefier/lib/build/prepareElectronApp.js
+  sed -iE 's/return `${normalized}-nativefier.*/return `${normalized}-nativefier`;/' $(yarn global dir)/node_modules/nativefier/lib/build/prepareElectronApp.js
 
-# Create claude nativefier app
+# Nativefy claude
 RUN nativefier https://claude.ai /opt --name claude --single-instance && \
   mv /opt/claude* /opt/claude && \
   ln -s /opt/claude/claude /usr/local/bin/claude
