@@ -49,7 +49,6 @@ RUN apt-get update -qq && \
   bat \
   bc \
   build-essential \
-  cargo \
   cava \
   cmake \
   cmatrix \
@@ -144,15 +143,18 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
+# Install rust
+RUN apt-get update -qq && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path && \
+  ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
+  ln -s $HOME/.cargo/bin/rustup /usr/local/bin && \
+  rustup install 1.79.0
+
 # Install aider
 RUN pipx install aider-chat
 
 # Install alacritty
-RUN apt-get update -qq && \
-  apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y && \
-  . $HOME/.cargo/env && \
-  rustup install 1.79.0 && \
+RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
@@ -243,16 +245,16 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN git clone --depth 100 https://github.com/orf/gping /opt/gping && \
+RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
-  git checkout fd1eccb && \
+  # git checkout fd1eccb && \
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
 
 # Install i3
 RUN apt-get update -qq && \
-  apt-get install -qq libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+  apt-get install -qq dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 https://github.com/i3/i3 /opt/i3 && \
   cd /opt/i3 && \
   mkdir build && \
@@ -270,22 +272,7 @@ RUN git clone --depth 1 https://github.com/vivien/i3blocks /opt/i3blocks && \
 
 # Install i3lock
 RUN apt-get update -qq && \
-  apt-get install -qq \
-  libpam0g-dev \
-  libcairo2-dev \
-  libfontconfig1-dev \
-  libxcb-composite0-dev \
-  libev-dev \
-  libx11-xcb-dev \
-  libxcb-xkb-dev \
-  libxcb-xinerama0-dev \
-  libxcb-randr0-dev \
-  libxcb-image0-dev \
-  libxcb-util-dev \
-  libxcb-xrm-dev \
-  libxkbcommon-dev \
-  libxkbcommon-x11-dev \
-  libjpeg-dev && \
+  apt-get install -qq libpam0g-dev libcairo2-dev libfontconfig1-dev libxcb-composite0-dev libx11-xcb-dev libjpeg-dev && \
   git clone --depth 1 https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
@@ -341,14 +328,6 @@ RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim &&
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
   install lazygit /usr/local/bin
-
-# Install mopidy
-RUN mkdir -p /etc/apt/keyrings && \
-  wget -qnv -O /etc/apt/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg && \
-  wget -qnv -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/bullseye.list && \
-  apt-get update -qq && \
-  apt-get install -qq mopidy && \
-  pip3 install Mopidy-Tidal --break-system-packages
 
 # Install nerd fonts
 RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
@@ -418,7 +397,7 @@ RUN curl -fsSL https://telegram.org/dl/desktop/linux | \
 # Install terraform
 RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
   unzip terraform.zip && \
-  mv terraform /usr/local/bin && \
+  install terraform /usr/local/bin && \
   rm terraform.zip
 
 # Install thorium
@@ -467,13 +446,11 @@ RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
 
 # Install xava
 RUN apt-get update -qq && \
-  apt-get install -qq \
-  libasound2-dev \
-  libfftw3-dev \
-  libiniparser1 \
-  libpulse-dev \
-  libsdl2-dev \
-  libx11-dev && \
+  apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
+  wget -qnv -O imagemagick.appimage https://download.imagemagick.org/ImageMagick/download/binaries/magick && \
+  chmod +x imagemagick.appimage && \
+  ./imagemagick.appimage --appimage-extract && \
+  cp -r squashfs-root/usr/* /usr/local && \
   git clone --depth 1 https://github.com/nikp123/xava && \
   mkdir xava/build && \
   cd xava/build && \
@@ -511,7 +488,7 @@ RUN yarn global add nativefier && \
 # Nativefy claude
 RUN nativefier https://claude.ai /opt --name claude --single-instance && \
   mv /opt/claude* /opt/claude && \
-  ln -s /opt/claude/claude /usr/local/bin/claude
+  ln -s /opt/claude/claude /usr/local/bin
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
