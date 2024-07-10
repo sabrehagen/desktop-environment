@@ -74,8 +74,6 @@ RUN apt-get update -qq && \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
-  i3 dunst- \
-  i3blocks \
   iftop \
   iputils-ping \
   jq \
@@ -152,6 +150,9 @@ RUN pipx install aider-chat
 # Install alacritty
 RUN apt-get update -qq && \
   apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y && \
+  . $HOME/.cargo/env && \
+  rustup install 1.79.0 && \
   git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
@@ -248,6 +249,24 @@ RUN git clone --depth 100 https://github.com/orf/gping /opt/gping && \
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
+
+# Install i3
+RUN apt-get update -qq && \
+  apt-get install -qq libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+  git clone --depth 1 https://github.com/i3/i3 /opt/i3 && \
+  cd /opt/i3 && \
+  mkdir build && \
+  meson setup build && \
+  meson compile -C build && \
+  meson install -C build
+
+# Install i3blocks
+RUN git clone --depth 1 https://github.com/vivien/i3blocks /opt/i3blocks && \
+  cd /opt/i3blocks && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install
 
 # Install i3lock
 RUN apt-get update -qq && \
@@ -414,6 +433,10 @@ RUN wget -qnv -O /usr/local/bin/timeago https://raw.githubusercontent.com/sabreh
 # Install tldr
 RUN pipx install tldr
 
+# Install tmpmail
+RUN wget -qnv -O /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
+  chmod +x /usr/local/bin/tmpmail
+
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
@@ -470,6 +493,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
 # Install yarn based utilities
 RUN yarn global add \
+  aicommit2 \
   clipboard-cli \
   diff-so-fancy \
   github-email \
