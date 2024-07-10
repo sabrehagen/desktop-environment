@@ -191,6 +191,8 @@ RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64
   ./cursor.appimage --appimage-extract && \
   mv squashfs-root /opt/cursor && \
   ln -s /opt/cursor/AppRun /usr/local/bin/cursor && \
+  ln -s /opt/cursor/cursor.desktop /usr/share/applications && \
+  sed -iE 's;Exec=.*;Exec=/usr/local/bin/cursor;' /opt/cursor/cursor.desktop && \
   rm cursor.appimage
 
 # Install discord
