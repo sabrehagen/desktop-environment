@@ -193,7 +193,7 @@ RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64
   chmod +x cursor.appimage && \
   ./cursor.appimage --appimage-extract && \
   mv squashfs-root /opt/cursor && \
-  ln -s /opt/cursor/AppRun /usr/local/bin/cursor && \
+  ln -s /opt/cursor/cursor /usr/local/bin && \
   ln -s /opt/cursor/cursor.desktop /usr/share/applications && \
   sed -iE 's;Exec=.*;Exec=/usr/local/bin/cursor;' /opt/cursor/cursor.desktop && \
   rm cursor.appimage
@@ -444,19 +444,19 @@ RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
   make install
 
 # Install xava
-RUN apt-get update -qq && \
-  apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
-  wget -qnv -O imagemagick.appimage https://download.imagemagick.org/ImageMagick/download/binaries/magick && \
-  chmod +x imagemagick.appimage && \
-  ./imagemagick.appimage --appimage-extract && \
-  cp -r squashfs-root/usr/* /usr/local && \
-  git clone --depth 1 https://github.com/nikp123/xava && \
-  mkdir xava/build && \
-  cd xava/build && \
-  cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
-  make -j$(nproc) && \
-  make install && \
-  cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
+# RUN apt-get update -qq && \
+#   apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
+#   wget -qnv -O imagemagick.appimage https://download.imagemagick.org/ImageMagick/download/binaries/magick && \
+#   chmod +x imagemagick.appimage && \
+#   ./imagemagick.appimage --appimage-extract && \
+#   cp -r squashfs-root/usr/* /usr/local && \
+#   git clone --depth 1 https://github.com/nikp123/xava && \
+#   mkdir xava/build && \
+#   cd xava/build && \
+#   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
+#   make -j$(nproc) && \
+#   make install && \
+#   cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
 
 # Install xcolor
 RUN cargo install xcolor
@@ -488,6 +488,9 @@ RUN yarn global add nativefier && \
 RUN nativefier https://claude.ai /opt --name claude --single-instance && \
   mv /opt/claude* /opt/claude && \
   ln -s /opt/claude/claude /usr/local/bin
+
+# Install openrecall
+RUN python3 -m pip install --upgrade --break-system-packages --no-cache-dir git+https://github.com/openrecall/openrecall.git
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
