@@ -220,7 +220,7 @@ RUN apt-get update -qq && \
   make WAYLAND=0 install
 
 # Install eza
-RUN cargo install eza
+RUN cargo install --git https://github.com/eza-community/eza
 
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
