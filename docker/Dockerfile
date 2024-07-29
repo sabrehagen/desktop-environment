@@ -58,7 +58,6 @@ RUN apt-get update -qq && \
   dnsmasq \
   dnsutils \
   docker.io \
-  exa \
   feh \
   fzf \
   ffmpeg \
@@ -220,6 +219,9 @@ RUN apt-get update -qq && \
   make WAYLAND=0 all && \
   make WAYLAND=0 install
 
+# Install eza
+RUN cargo install eza
+
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
   cd /opt/fastfetch && \
@@ -358,6 +360,9 @@ RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --de
   curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
   apt-get update -qq && \
   apt-get install -qq 1password-cli
+
+# Install oxker
+RUN cargo install oxker
 
 # Install picom
 RUN apt-get update -qq && \
