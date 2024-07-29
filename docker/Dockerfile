@@ -494,9 +494,6 @@ RUN nativefier https://claude.ai /opt --name claude --single-instance && \
   mv /opt/claude* /opt/claude && \
   ln -s /opt/claude/claude /usr/local/bin
 
-# Install openrecall
-RUN python3 -m pip install --upgrade --break-system-packages --no-cache-dir git+https://github.com/openrecall/openrecall.git
-
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
   yarn --cwd /opt/vscode-wal
