@@ -480,7 +480,6 @@ RUN yarn global add \
   github-email \
   http-server \
   imgur-uploader-cli \
-  localtunnel \
   nativefier \
   nodemon \
   rebase-editor
