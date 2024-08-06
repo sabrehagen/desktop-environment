@@ -234,7 +234,7 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
 # Install gh
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
   chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list && \
   apt-get update -qq && \
   apt-get install -qq gh
 
@@ -405,9 +405,9 @@ RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.1.0/te
   rm terraform.zip
 
 # Install thorium
-RUN wget -qnv -O thorium.deb https://github.com/Alex313031/thorium/releases/download/M124.0.6367.218/thorium-browser_124.0.6367.218_AVX2.deb && \
-  dpkg -i thorium.deb || apt-get install -qq --fix-broken && \
-  rm thorium.deb
+RUN echo 'deb [trusted=yes arch=amd64] https://dl.thorium.rocks/debian/ stable main' | tee /etc/apt/sources.list.d/thorium.list && \
+  apt-get update -qq && \
+  apt-get install -qq thorium-browser
 
 # Install timeago
 RUN wget -qnv -O /usr/local/bin/timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
