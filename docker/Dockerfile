@@ -144,7 +144,7 @@ RUN apt-get update -qq && \
 
 # Install rust
 RUN apt-get update -qq && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --profile minimal && \
   ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin && \
   rustup install 1.79.0
@@ -181,6 +181,11 @@ RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekee
 
 # Install bluetuith
 RUN go install github.com/darkhz/bluetuith@latest
+
+# Install bottom
+RUN wget -qnv -O bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
+  dpkg -i bottom.deb && \
+  rm bottom.deb
 
 # Install chatgpt
 RUN wget -qnv -O chatgpt.deb https://github.com/lencx/ChatGPT/releases/download/v1.1.0/ChatGPT_1.1.0_linux_x86_64.deb && \
@@ -335,6 +340,12 @@ RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/D
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
   rm DejaVuSansMono.zip
 
+# Install ngrok
+RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
+  echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list && \
+  apt-get update -qq && \
+  apt-get install -qq ngrok
+
 # Install nodejs
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
   echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
@@ -372,6 +383,9 @@ RUN apt-get update -qq && \
   meson setup --buildtype=release build && \
   ninja -C build && \
   install build/src/picom /usr/local/bin
+
+# Install posting
+RUN pipx install posting
 
 # Install pywal
 RUN pipx install pywal
