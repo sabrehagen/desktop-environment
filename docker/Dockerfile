@@ -172,7 +172,7 @@ RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscl
 
 # Install bandwhich
 RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
-  tar -C /usr/local/bin -xzf -
+  tar -C /usr/local/bin -xzf - bandwhich
 
 # Install beekeeper studio
 RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
@@ -433,6 +433,10 @@ RUN pipx install tldr
 # Install tmpmail
 RUN wget -qnv -O /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
   chmod +x /usr/local/bin/tmpmail
+
+# Install tracexec
+RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
+  tar -C /usr/local/bin -xzf - tracexec
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
