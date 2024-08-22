@@ -115,6 +115,7 @@ RUN apt-get update -qq && \
   strace \
   stress \
   sudo \
+  sxiv \
   tig \
   tigervnc-scraping-server \
   tigervnc-standalone-server \
