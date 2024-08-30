@@ -79,6 +79,7 @@ RUN apt-get update -qq && \
   ksnip \
   libnotify-bin \
   libnss3-tools \
+  libssl-dev \
   libterm-readkey-perl \
   lsb-release \
   maim \
