@@ -396,13 +396,6 @@ RUN pipx install pywal
 # Install shell chatgpt
 RUN pipx install shell-gpt
 
-# Install signal
-RUN wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg && \
-  cat signal-desktop-keyring.gpg | tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null && \
-  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | tee /etc/apt/sources.list.d/signal-xenial.list && \
-  apt-get update -qq && \
-  apt-get install -qq signal-desktop
-
 # Install slack
 RUN wget -qnv -O slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.38.125/slack-desktop-4.38.125-amd64.deb && \
   dpkg -i slack.deb && \
