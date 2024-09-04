@@ -1,4 +1,4 @@
-FROM ubuntu:23.04
+FROM ubuntu:24.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
@@ -59,16 +59,17 @@ RUN apt-get update -qq && \
   dnsutils \
   docker.io \
   feh \
-  fzf \
   ffmpeg \
   figlet \
   fonts-font-awesome \
   fonts-noto-color-emoji \
+  fzf \
   g++ \
   gcc \
   gimp \
   git \
   golang-go \
+  grc \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
@@ -294,7 +295,7 @@ RUN apt-get update -qq && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
-  sed -i s/'?'/''/ $HOME/.local/pipx/venvs/i3-workspace-names-daemon/lib/python3.11/site-packages/i3_workspace_names_daemon.py && \
+  sed -i s/'?'/''/ $HOME/.local/share/pipx/venvs/i3-workspace-names-daemon/lib/python3.12/site-packages/i3_workspace_names_daemon.py && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
   go install && \
