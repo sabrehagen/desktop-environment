@@ -405,9 +405,12 @@ RUN apt-get update -qq && \
   git clone --depth 1 https://github.com/sabrehagen/screenpipe /opt/screenpipe && \
   cd /opt/screenpipe && \
   cargo build --release && \
-  install target/release/screenpipe /usr/local/bin && \
-  npm --prefix examples/typescript/vercel-ai-chatbot install && \
-  npm --prefix examples/typescript/vercel-ai-chatbot build
+  install target/release/screenpipe /usr/local/bin
+
+# Install screenpipe ui
+RUN cd /opt/screenpipe/examples/typescript/vercel-ai-chatbot && \
+  npm install && \
+  npm run build
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
