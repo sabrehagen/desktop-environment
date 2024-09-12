@@ -404,7 +404,7 @@ RUN apt-get update -qq && \
   apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libtesseract-dev tesseract-ocr && \
   git clone --depth 1 https://github.com/sabrehagen/screenpipe /opt/screenpipe && \
   cd /opt/screenpipe && \
-  cargo build --release --features cuda && \
+  cargo build --release && \
   install target/release/screenpipe /usr/local/bin && \
   npm --prefix examples/typescript/vercel-ai-chatbot install && \
   npm --prefix examples/typescript/vercel-ai-chatbot build
