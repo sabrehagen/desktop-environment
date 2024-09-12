@@ -83,6 +83,7 @@ RUN apt-get update -qq && \
   libssl-dev \
   libterm-readkey-perl \
   lsb-release \
+  pciutils \
   maim \
   make \
   man-db \
@@ -359,6 +360,11 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg -
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
+# Install nvidia driver
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  nvidia-cuda-toolkit nvidia-driver-550
+
 # Install nvm
 RUN mkdir /opt/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
@@ -392,6 +398,16 @@ RUN pipx install posting
 
 # Install pywal
 RUN pipx install pywal
+
+# Install screenpipe
+RUN apt-get update -qq && \
+  apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libtesseract-dev tesseract-ocr && \
+  git clone --depth 1 https://github.com/sabrehagen/screenpipe /opt/screenpipe && \
+  cd /opt/screenpipe && \
+  cargo build --release --features cuda && \
+  install target/release/screenpipe /usr/local/bin && \
+  npm --prefix examples/typescript/vercel-ai-chatbot install && \
+  npm --prefix examples/typescript/vercel-ai-chatbot build
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
