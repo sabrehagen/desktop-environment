@@ -74,6 +74,7 @@ RUN apt-get update -qq && \
   gtk+3.0 \
   htop \
   iftop \
+  initramfs-tools \
   iputils-ping \
   jq \
   keychain \
@@ -96,6 +97,7 @@ RUN apt-get update -qq && \
   net-tools \
   netcat-openbsd \
   numlockx \
+  nvtop \
   openssl \
   openvpn \
   pavucontrol-qt \
@@ -408,7 +410,7 @@ RUN apt-get update -qq && \
   install target/release/screenpipe /usr/local/bin
 
 # Install screenpipe ui
-RUN cd /opt/screenpipe/examples/typescript/vercel-ai-chatbot && \
+RUN # cd /opt/screenpipe/examples/typescript/vercel-ai-chatbot && \
   npm install && \
   npm run build
 
