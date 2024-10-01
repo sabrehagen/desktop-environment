@@ -407,7 +407,7 @@ RUN pipx install pywal
 # Install screenpipe
 RUN apt-get update -qq && \
   apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libtesseract-dev tesseract-ocr && \
-  git clone --depth 1 https://github.com/sabrehagen/screenpipe /opt/screenpipe && \
+  git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
   cd /opt/screenpipe && \
   cargo build --release && \
   install target/release/screenpipe /usr/local/bin
