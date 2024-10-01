@@ -86,7 +86,6 @@ RUN apt-get update -qq && \
   libssl-dev \
   libterm-readkey-perl \
   lsb-release \
-  pciutils \
   maim \
   make \
   man-db \
@@ -103,6 +102,7 @@ RUN apt-get update -qq && \
   openssl \
   openvpn \
   pavucontrol-qt \
+  pciutils \
   pcmanfm \
   perl \
   pipx \
@@ -126,6 +126,7 @@ RUN apt-get update -qq && \
   tig \
   tigervnc-scraping-server \
   tigervnc-standalone-server \
+  tini \
   tmux \
   transmission-cli \
   transmission-common \
@@ -412,9 +413,11 @@ RUN apt-get update -qq && \
   install target/release/screenpipe /usr/local/bin
 
 # Install screenpipe ui
-RUN # cd /opt/screenpipe/examples/typescript/vercel-ai-chatbot && \
-  npm install && \
-  npm run build
+RUN cd /opt/screenpipe/screenpipe-app-tauri && \
+  npm install bun && \
+  npx bun install && \
+  npx bun scripts/pre_build.js && \
+  npx bun tauri build
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
