@@ -18,7 +18,9 @@ ENV TZ Australia/Sydney
 ENV HOME /home/$USER
 
 # Restore minimized distribution content e.g. man pages
-RUN yes | unminimize
+RUN apt-get update -qq && \
+  apt-get install -qq unminimize && \
+  yes | unminimize
 
 # Install locales and timezone data
 RUN apt-get update -qq && \
