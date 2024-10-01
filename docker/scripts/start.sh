@@ -23,8 +23,9 @@ docker run \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
   --env DESKTOP_ENVIRONMENT_TTY \
   --env DESKTOP_ENVIRONMENT_USER \
+  --group-add $DESKTOP_ENVIRONMENT_HOST_DOCKER_GROUP_ID \
   --group-add audio \
-  --group-add $DESKTOP_ENVIRONMENT_HOST_DOCKER_GROUP_ID:docker \
+  --group-add docker \
   --group-add input \
   --group-add plugdev \
   --group-add tty \
