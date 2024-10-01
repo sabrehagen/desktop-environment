@@ -586,10 +586,10 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
 # Use tini to manage child processes
-ENTRYPOINT ['/sbin/tini', '--']
+ENTRYPOINT ["/sbin/tini", "--"]
 
 # Run startup script and keep the container running
-CMD ['sh', '-c', '$HOME/.config/scripts/startup.sh; sleep infinity']
+CMD ["sh", "-c", "$HOME/.config/scripts/startup.sh; sleep infinity"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
