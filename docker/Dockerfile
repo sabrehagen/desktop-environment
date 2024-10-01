@@ -586,7 +586,7 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
 # Use tini to manage child processes
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["tini", "--"]
 
 # Run startup script and keep the container running
 CMD ["sh", "-c", "$HOME/.config/scripts/startup.sh; sleep infinity"]
