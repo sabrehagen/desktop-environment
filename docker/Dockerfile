@@ -342,7 +342,8 @@ RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim &&
   rm -rf $HOME/.config/nvim/.git && \
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
   tar xf lazygit.tar.gz lazygit && \
-  install lazygit /usr/local/bin
+  install lazygit /usr/local/bin && \
+  rm lazygit lazygit.tar.gz
 
 # Install nerd fonts
 RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
@@ -439,7 +440,7 @@ RUN add-apt-repository ppa:atareao/telegram && \
 RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
   unzip terraform.zip && \
   install terraform /usr/local/bin && \
-  rm terraform.zip
+  rm terraform terraform.zip
 
 # Install thorium
 RUN echo 'deb [trusted=yes arch=amd64] https://dl.thorium.rocks/debian/ stable main' | tee /etc/apt/sources.list.d/thorium.list && \
