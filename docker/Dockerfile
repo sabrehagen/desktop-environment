@@ -65,7 +65,6 @@ RUN apt-get update -qq && \
   figlet \
   fonts-font-awesome \
   fonts-noto-color-emoji \
-  fzf \
   g++ \
   gcc \
   gimp \
@@ -188,9 +187,6 @@ RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekee
   dpkg -i beekeeper-studio.deb && \
   rm beekeeper-studio.deb
 
-# Install bluetuith
-RUN go install github.com/darkhz/bluetuith@latest
-
 # Install bottom
 RUN wget -qnv -O bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
   dpkg -i bottom.deb && \
@@ -234,7 +230,8 @@ RUN apt-get update -qq && \
   make WAYLAND=0 install
 
 # Install eza
-RUN cargo install --git https://github.com/eza-community/eza
+RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.20.2/eza_x86_64-unknown-linux-gnu.tar.gz | \
+  tar -C /usr/local/bin -xzf - eza
 
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
@@ -244,6 +241,10 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
   cmake .. && \
   cmake --build . --target fastfetch --target flashfetch && \
   install fastfetch /usr/local/bin
+
+# Install fzf
+RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
+  tar -C /usr/local/bin -xzf - fzf
 
 # Install gh
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
@@ -257,7 +258,7 @@ RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
   cd /opt/gotop && \
   VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
   DATE=$(date +%Y%m%dT%H%M%S) && \
-  go build -o gotop -ldflags "-X main.Version=v${VERSION} -X main.BuildDate=${DATE}" ./cmd/gotop && \
+  go build -o gotop -ldflags "-X main.Version=v$VERSION -X main.BuildDate=$DATE" ./cmd/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
