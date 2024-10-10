@@ -221,6 +221,11 @@ RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
   chmod +x /usr/local/bin/docker-compose
 
+# Install dra
+RUN wget -qnv -O dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
+  dpkg -i dra.deb && \
+  rm dra.deb
+
 # Install dunst
 RUN apt-get update -qq && \
   apt-get install -qq libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
@@ -231,7 +236,7 @@ RUN apt-get update -qq && \
 
 # Install eza
 RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.20.2/eza_x86_64-unknown-linux-gnu.tar.gz | \
-  tar -C /usr/local/bin -xzf - eza
+  tar -C /usr/local/bin -xzf -
 
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
