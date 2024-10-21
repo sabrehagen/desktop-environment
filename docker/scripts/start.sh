@@ -12,6 +12,7 @@ docker run \
   --cap-add NET_ADMIN \
   --cap-add SYS_ADMIN \
   --cap-add SYS_PTRACE \
+  --cap-add CAP_SYSLOG \
   --cap-add SYS_TTY_CONFIG \
   --detach \
   --device /dev/dri \

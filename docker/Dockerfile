@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:23.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
@@ -18,7 +18,7 @@ ENV TZ Australia/Sydney
 ENV HOME /home/$USER
 
 # Restore minimized distribution content e.g. man pages
-RUN apt-get update -qq && \
+RUN exit 0 && apt-get update -qq && \
   apt-get install -qq unminimize && \
   yes | unminimize
 
@@ -192,11 +192,6 @@ RUN wget -qnv -O bottom.deb https://github.com/ClementTsang/bottom/releases/down
   dpkg -i bottom.deb && \
   rm bottom.deb
 
-# Install chatgpt
-RUN wget -qnv -O chatgpt.deb https://github.com/lencx/ChatGPT/releases/download/v1.1.0/ChatGPT_1.1.0_linux_x86_64.deb && \
-  dpkg -i chatgpt.deb || apt-get install -qq --fix-broken && \
-  rm chatgpt.deb
-
 # Install cursor
 RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
   chmod +x cursor.appimage && \
@@ -307,7 +302,7 @@ RUN apt-get update -qq && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install i3-workspace-names-daemon && \
-  sed -i s/'?'/''/ $HOME/.local/share/pipx/venvs/i3-workspace-names-daemon/lib/python3.12/site-packages/i3_workspace_names_daemon.py && \
+  sed -i s/'?'/''/ $(find "$(pipx environment --value PIPX_LOCAL_VENVS)/i3-workspace-names-daemon" -name i3_workspace_names_daemon.py) && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
   go install && \
@@ -317,9 +312,6 @@ RUN apt-get update -qq && \
   ./configure --enable-gtk2 && \
   make && \
   make install
-
-# Install invidtui
-RUN go install github.com/darkhz/invidtui@latest
 
 # Install jobber
 RUN apt-get update -qq && \
@@ -375,7 +367,7 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 # Install nvidia driver
 RUN apt-get update -qq && \
   apt-get install -qq \
-  nvidia-cuda-toolkit nvidia-driver-550
+  nvidia-cuda-toolkit nvidia-driver-535
 
 # Install nvm
 RUN mkdir /opt/nvm && \
@@ -420,11 +412,13 @@ RUN apt-get update -qq && \
   install target/release/screenpipe /usr/local/bin
 
 # Install screenpipe ui
-RUN cd /opt/screenpipe/screenpipe-app-tauri && \
+RUN apt-get update -qq && \
+  apt-get install -qq libappindicator3-dev && \
+  cd /opt/screenpipe/screenpipe-app-tauri && \
   npm install bun && \
   npx bun install && \
   npx bun scripts/pre_build.js && \
-  npx bun tauri build
+  PATH=$HOME/.cargo/bin:$PATH npx bun tauri build || true
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
