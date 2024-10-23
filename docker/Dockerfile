@@ -353,10 +353,8 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   apt-get install -qq ngrok
 
 # Install nodejs
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-  apt-get update -qq && \
-  apt-get install -qq nodejs
+RUN curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz | \
+  tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
 RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
