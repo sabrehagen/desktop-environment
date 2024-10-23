@@ -403,7 +403,7 @@ RUN pipx install pywal
 
 # Install screenpipe
 RUN apt-get update -qq && \
-  apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libtesseract-dev tesseract-ocr && \
+  apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libtesseract-dev tesseract-ocr libxdo-dev libxtst-dev && \
   git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
   cd /opt/screenpipe && \
   cargo build --release && \
@@ -415,7 +415,7 @@ RUN apt-get update -qq && \
   cd /opt/screenpipe/screenpipe-app-tauri && \
   npm install bun && \
   npx bun install && \
-  npx bun scripts/pre_build.js && \
+  npx bun scripts/pre_build.js >/dev/null && \
   PATH=$HOME/.cargo/bin:$PATH npx bun tauri build || true
 
 # Install shell chatgpt
