@@ -518,18 +518,8 @@ RUN yarn global add \
   github-email \
   http-server \
   imgur-uploader-cli \
-  nativefier \
   nodemon \
   rebase-editor
-
-# Install nativefier
-RUN yarn global add nativefier && \
-  sed -iE 's/return `${normalized}-nativefier.*/return `${normalized}-nativefier`;/' $(yarn global dir)/node_modules/nativefier/lib/build/prepareElectronApp.js
-
-# Nativefy claude
-RUN nativefier https://claude.ai /opt --name claude --single-instance && \
-  mv /opt/claude* /opt/claude && \
-  ln -s /opt/claude/claude /usr/local/bin
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
