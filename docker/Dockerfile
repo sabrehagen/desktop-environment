@@ -244,7 +244,7 @@ RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.5
 # Install gh
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
   chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list && \
+  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | tee /etc/apt/sources.list.d/github-cli.list && \
   apt-get update -qq && \
   apt-get install -qq gh
 
@@ -345,7 +345,7 @@ RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/D
 
 # Install ngrok
 RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
-  echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list && \
+  echo 'deb https://ngrok-agent.s3.amazonaws.com buster main' | tee /etc/apt/sources.list.d/ngrok.list && \
   apt-get update -qq && \
   apt-get install -qq ngrok
 
@@ -371,7 +371,7 @@ RUN mkdir /opt/nvm && \
 
 # Install op
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
+  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | tee /etc/apt/sources.list.d/1password.list && \
   mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
   curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
   curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
@@ -503,7 +503,7 @@ RUN cargo install xcolor
 
 # Install yarn
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo "deb https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+  echo 'deb https://dl.yarnpkg.com/debian stable main' | tee /etc/apt/sources.list.d/yarn.list && \
   apt-get update -qq && \
   apt-get install -qq yarn
 
@@ -528,7 +528,7 @@ RUN mkdir -p $HOME/.config/openvpn && \
   chmod 600 $HOME/.config/openvpn/tun
 
 # Configure password-less sudo for the sudo group
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers
 
 # Configure X11 permissions and touchpad tap to click
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
@@ -560,7 +560,7 @@ RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-env
 
 # If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
 ARG DOTFILES_CACHEBUST
-RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo "Building from dotfiles..."
+RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo 'Building from dotfiles...'
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone https://github.com/sabrehagen/dotfiles
