@@ -7,13 +7,10 @@ ARG DESKTOP_ENVIRONMENT_USER
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD $DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
-ENV LANGUAGE $LANG
-ENV LC_ALL $LANG
-ENV LC_CTYPE $LANG
 ENV SHELL /bin/zsh
 ENV TERM xterm-256color
-ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV TZ Australia/Sydney
+ENV USER $DESKTOP_ENVIRONMENT_USER
 
 ENV HOME /home/$USER
 
@@ -28,7 +25,7 @@ RUN apt-get update -qq && \
 
 # Generate locales
 RUN locale-gen $LANG && \
-  update-locale LC_ALL=$LC_ALL LANG=$LANG && \
+  update-locale LANG=$LANG && \
   dpkg-reconfigure --frontend=noninteractive locales
 
 # Set timezone
