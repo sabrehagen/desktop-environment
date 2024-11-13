@@ -48,7 +48,6 @@ docker run \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
   --volume /var/run/docker.sock:/var/run/docker.sock \
-  --volume DESKTOP_ENVIRONMENT_CACHE_AWS:$DESKTOP_ENVIRONMENT_CACHE_AWS \
   --volume DESKTOP_ENVIRONMENT_CACHE_CODE:$DESKTOP_ENVIRONMENT_CACHE_CODE \
   --volume DESKTOP_ENVIRONMENT_CACHE_CURSOR:$DESKTOP_ENVIRONMENT_CACHE_CURSOR \
   --volume DESKTOP_ENVIRONMENT_CACHE_HUGGINGFACE:$DESKTOP_ENVIRONMENT_CACHE_HUGGINGFACE \
