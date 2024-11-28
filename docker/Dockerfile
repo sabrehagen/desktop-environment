@@ -1,4 +1,4 @@
-FROM ubuntu:23.04
+FROM ubuntu:25.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
@@ -7,6 +7,7 @@ ARG DESKTOP_ENVIRONMENT_USER
 ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD $DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR nano
 ENV LANG en_US.UTF-8
+ENV LC_ALL $LANG
 ENV SHELL /bin/zsh
 ENV TERM xterm-256color
 ENV TZ Australia/Sydney
@@ -15,7 +16,10 @@ ENV USER $DESKTOP_ENVIRONMENT_USER
 ENV HOME /home/$USER
 
 # Restore minimized distribution content e.g. man pages
-RUN yes | unminimize
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  unminimize && \
+  yes | unminimize
 
 # Install locales and timezone data
 RUN apt-get update -qq && \
@@ -25,7 +29,7 @@ RUN apt-get update -qq && \
 
 # Generate locales
 RUN locale-gen $LANG && \
-  update-locale LANG=$LANG && \
+  update-locale LANG=$LANG LC_ALL=$LC_ALL && \
   dpkg-reconfigure --frontend=noninteractive locales
 
 # Set timezone
