@@ -434,9 +434,9 @@ RUN wget -qnv -O slack.deb https://downloads.slack-edge.com/desktop-releases/lin
 RUN pipx install speedtest-cli
 
 # Install telegram
-RUN add-apt-repository ppa:atareao/telegram && \
-  apt-get update -qq && \
-  apt-get install -qq telegram
+# RUN add-apt-repository ppa:atareao/telegram && \
+#   apt-get update -qq && \
+#   apt-get install -qq telegram
 
 # Install terraform
 RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
