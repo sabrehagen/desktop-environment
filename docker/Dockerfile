@@ -373,6 +373,11 @@ RUN mkdir /opt/nvm && \
   . /opt/nvm/nvm.sh && \
   nvm install 18
 
+# Install obsidian
+RUN wget -qnv -O obsidian.deb https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/obsidian_1.7.7_amd64.deb && \
+  dpkg -i obsidian.deb && \
+  rm obsidian.deb
+
 # Install op
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
   echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | tee /etc/apt/sources.list.d/1password.list && \
