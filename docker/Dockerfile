@@ -478,14 +478,6 @@ RUN apt-get update -qq && \
   git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
-# Install warpd
-RUN apt-get update -qq && \
-  apt-get install -qq libxtst-dev && \
-  git clone --depth 1 https://github.com/rvaiya/warpd /opt/warpd && \
-  cd /opt/warpd && \
-  make && \
-  make install
-
 # Install whatfiles
 RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
   cd /opt/whatfiles && \
