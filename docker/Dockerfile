@@ -364,7 +364,11 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 # Install nvidia driver
 RUN apt-get update -qq && \
   apt-get install -qq \
-  nvidia-cuda-toolkit nvidia-driver-535
+  nvidia-cuda-toolkit && \
+  wget -qnv -O nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
+  chmod +x nvidia-driver.run && \
+  ./nvidia-driver.run --silent && \
+  rm nviia-driver.run
 
 # Install nvm
 RUN mkdir /opt/nvm && \
