@@ -35,10 +35,10 @@ docker run \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
-  --publish 8022:22 \
   --publish 8080:8080 \
   --publish 8081:8081 \
   --publish 8082:8082 \
+  --publish 8822:22 \
   --rm \
   --security-opt apparmor:unconfined \
   --volume /dev/displaylink:/dev/displaylink \

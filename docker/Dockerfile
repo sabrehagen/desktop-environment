@@ -1,4 +1,4 @@
-FROM ubuntu:25.04
+FROM ubuntu:24.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
@@ -79,6 +79,7 @@ RUN apt-get update -qq && \
   jq \
   keychain \
   ksnip \
+  libappindicator3-dev \
   libnotify-bin \
   libnss3-tools \
   libssl-dev \
@@ -103,6 +104,7 @@ RUN apt-get update -qq && \
   pciutils \
   pcmanfm \
   perl \
+  pipewire \
   pipx \
   pkg-config \
   pulseaudio \
@@ -362,20 +364,24 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
   git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
 # Install nvidia driver
+# RUN apt-get update -qq && \
+#   apt-get install linux-headers-$(uname -r) && \
+#   wget -qnv -O nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
+#   chmod +x nvidia-driver.run && \
+#   ./nvidia-driver.run --allow-installation-with-running-driver --silent && \
+#   rm nviia-driver.run
+
+# Install nvidia driver
 RUN apt-get update -qq && \
   apt-get install -qq \
-  nvidia-cuda-toolkit && \
-  wget -qnv -O nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
-  chmod +x nvidia-driver.run && \
-  ./nvidia-driver.run --silent && \
-  rm nviia-driver.run
+  nvidia-cuda-toolkit
 
 # Install nvm
 RUN mkdir /opt/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
   NVM_DIR=/opt/nvm bash && \
   . /opt/nvm/nvm.sh && \
-  nvm install 18
+  nvm install 20
 
 # Install obsidian
 RUN wget -qnv -O obsidian.deb https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/obsidian_1.7.7_amd64.deb && \
@@ -410,21 +416,21 @@ RUN pipx install posting
 RUN pipx install pywal
 
 # Install screenpipe
-RUN apt-get update -qq && \
-  apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libclang-16-dev libtesseract-dev tesseract-ocr libxdo-dev libxtst-dev && \
-  git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
-  cd /opt/screenpipe && \
-  cargo build --release && \
-  install target/release/screenpipe /usr/local/bin
+# RUN apt-get update -qq && \
+#   apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libclang-16-dev libtesseract-dev tesseract-ocr libxdo-dev libxtst-dev && \
+#   git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
+#   cd /opt/screenpipe && \
+#   cargo build --release && \
+#   install target/release/screenpipe /usr/local/bin
 
 # Install screenpipe ui
-RUN apt-get update -qq && \
-  apt-get install -qq libappindicator3-dev && \
-  cd /opt/screenpipe/screenpipe-app-tauri && \
-  npm install bun && \
-  npx bun install && \
-  npx bun scripts/pre_build.js >/dev/null && \
-  PATH=$HOME/.cargo/bin:$PATH npx bun tauri build || true
+# RUN apt-get update -qq && \
+#   apt-get install -qq libappindicator3-dev && \
+#   cd /opt/screenpipe/screenpipe-app-tauri && \
+#   npm install bun && \
+#   npx bun install && \
+#   npx bun scripts/pre_build.js >/dev/null && \
+#   PATH=$HOME/.cargo/bin:$PATH npx bun tauri build || true
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
