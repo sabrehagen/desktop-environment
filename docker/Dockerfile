@@ -27,8 +27,8 @@ RUN apt-get update -qq && \
   tzdata
 
 # Generate locales
-RUN locale-gen $LANG && \
-  update-locale LANG=$LANG LC_ALL=$LC_ALL && \
+RUN locale-gen $LC_ALL && \
+  update-locale LC_ALL=$LC_ALL && \
   dpkg-reconfigure --frontend=noninteractive locales
 
 # Set timezone
@@ -57,6 +57,7 @@ RUN apt-get update -qq && \
   dbus-x11 \
   dnsmasq \
   dnsutils \
+  docker-compose-v2 \
   docker.io \
   feh \
   ffmpeg \
@@ -527,7 +528,8 @@ RUN yarn global add \
   http-server \
   imgur-uploader-cli \
   nodemon \
-  rebase-editor
+  rebase-editor \
+  vercel
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
