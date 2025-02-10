@@ -475,6 +475,9 @@ RUN wget -qnv -O /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdusha
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf - tracexec
 
+# Install trippy
+RUN cargo install trippy --locked
+
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
 RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
