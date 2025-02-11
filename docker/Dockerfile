@@ -498,6 +498,12 @@ RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
   make && \
   make install
 
+# Install windsurf
+RUN curl -fsSL https://windsurf-stable.codeiumdata.com/wVxQEIWkwPUEAGf3/windsurf.gpg | gpg --dearmor -o /usr/share/keyrings/windsurf-stable-archive-keyring.gpg && \
+  echo 'deb [signed-by=/usr/share/keyrings/windsurf-stable-archive-keyring.gpg arch=amd64] https://windsurf-stable.codeiumdata.com/wVxQEIWkwPUEAGf3/apt stable main' | tee /etc/apt/sources.list.d/windsurf.list > /dev/null && \
+  apt-get update -qq && \
+  apt-get install -qq windsurf
+
 # Install xava
 # RUN apt-get update -qq && \
 #   apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
