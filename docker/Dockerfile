@@ -465,7 +465,8 @@ RUN curl -fsSL -o /usr/local/bin/timeago https://raw.githubusercontent.com/sabre
   chmod +x /usr/local/bin/timeago
 
 # Install tldr
-RUN pipx install tldr
+RUN pipx install tldr && \
+  tldr --update
 
 # Install tmpmail
 RUN curl -fsSL -o /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
