@@ -171,7 +171,7 @@ RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev l
   cargo clean
 
 # Install arc
-RUN wget -qnv -O /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+RUN curl -fsSL -o /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install aws cli
@@ -185,17 +185,17 @@ RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/band
   tar -C /usr/local/bin -xzf - bandwhich
 
 # Install beekeeper studio
-RUN wget -qnv -O beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
+RUN curl -fsSL -o beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
   dpkg -i beekeeper-studio.deb && \
   rm beekeeper-studio.deb
 
 # Install bottom
-RUN wget -qnv -O bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
+RUN curl -fsSL -o bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
   dpkg -i bottom.deb && \
   rm bottom.deb
 
 # Install cursor
-RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
+RUN curl -fsSL -o cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
   chmod +x cursor.appimage && \
   ./cursor.appimage --appimage-extract && \
   mv squashfs-root /opt/cursor && \
@@ -205,12 +205,12 @@ RUN wget -qnv -O cursor.appimage https://downloader.cursor.sh/linux/appImage/x64
   rm cursor.appimage
 
 # Install discord
-RUN wget -qnv -O discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
+RUN curl -fsSL -o discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
 # Install dive docker image explorer
-RUN wget -qnv -O dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
+RUN curl -fsSL -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -346,7 +346,7 @@ RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim &&
   rm lazygit lazygit.tar.gz
 
 # Install nerd fonts
-RUN wget -qnv https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+RUN curl -fsSL -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
   rm DejaVuSansMono.zip
 
@@ -367,7 +367,7 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 # Install nvidia driver
 # RUN apt-get update -qq && \
 #   apt-get install linux-headers-$(uname -r) && \
-#   wget -qnv -O nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
+#   curl -fsSL -o nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
 #   chmod +x nvidia-driver.run && \
 #   ./nvidia-driver.run --allow-installation-with-running-driver --silent && \
 #   rm nviia-driver.run
@@ -385,7 +385,7 @@ RUN mkdir /opt/nvm && \
   nvm install 20
 
 # Install obsidian
-RUN wget -qnv -O obsidian.deb https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/obsidian_1.7.7_amd64.deb && \
+RUN curl -fsSL -o obsidian.deb https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/obsidian_1.7.7_amd64.deb && \
   dpkg -i obsidian.deb && \
   rm obsidian.deb
 
@@ -437,7 +437,7 @@ RUN pipx install pywal
 RUN pipx install shell-gpt
 
 # Install slack
-RUN wget -qnv -O slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.38.125/slack-desktop-4.38.125-amd64.deb && \
+RUN curl -fsSL -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.38.125/slack-desktop-4.38.125-amd64.deb && \
   dpkg -i slack.deb && \
   rm slack.deb
 
@@ -450,7 +450,7 @@ RUN add-apt-repository ppa:atareao/telegram && \
   apt-get install -qq telegram
 
 # Install terraform
-RUN wget -qnv -O terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
+RUN curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
   unzip terraform.zip && \
   install terraform /usr/local/bin && \
   rm terraform terraform.zip
@@ -461,14 +461,14 @@ RUN echo 'deb [trusted=yes arch=amd64] https://dl.thorium.rocks/debian/ stable m
   apt-get install -qq thorium-browser
 
 # Install timeago
-RUN wget -qnv -O /usr/local/bin/timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+RUN curl -fsSL -o /usr/local/bin/timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
 # Install tldr
 RUN pipx install tldr
 
 # Install tmpmail
-RUN wget -qnv -O /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
+RUN curl -fsSL -o /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
   chmod +x /usr/local/bin/tmpmail
 
 # Install tracexec
@@ -479,11 +479,11 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
 RUN cargo install trippy --locked
 
 # Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-RUN wget -qnv -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
+RUN curl -fsSL -o code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
   apt-get install -qq ./code.deb && \
   rm code.deb && \
   apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  wget -qnv -O /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
+  curl -fsSL -o /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install warnai
