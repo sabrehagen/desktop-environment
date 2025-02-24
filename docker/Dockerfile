@@ -154,7 +154,7 @@ RUN apt-get update -qq && \
 
 # Install rust
 RUN apt-get update -qq && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --profile minimal && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
   ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin && \
   rustup install 1.79.0
