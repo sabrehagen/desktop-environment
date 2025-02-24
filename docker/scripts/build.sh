@@ -17,7 +17,8 @@ docker build \
   --file $REPO_ROOT/docker/Dockerfile \
   --tag $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG \
   --tag $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:latest \
-  $REPO_ROOT/docker
+  $REPO_ROOT/docker \
+  $@
 
 # Store build exit code
 echo $? > $REPO_ROOT/.build-exit-code
