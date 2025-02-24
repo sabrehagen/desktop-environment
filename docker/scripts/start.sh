@@ -31,6 +31,7 @@ docker run \
   --group-add plugdev \
   --group-add tty \
   --group-add video \
+  --gpus all \
   --hostname $(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
