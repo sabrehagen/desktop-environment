@@ -42,6 +42,7 @@ docker run \
   --publish 8822:22 \
   --rm \
   --security-opt apparmor:unconfined \
+  --volume /etc/hosts:/etc/hosts \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
   --volume /mnt/mmc:/mnt/mmc \
