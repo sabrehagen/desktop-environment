@@ -1,3 +1,4 @@
 .build-exit-code
 .build-exit-time
-.dotfiles-cachebust
+.cachebust-apps
+.cachebust-dotfiles

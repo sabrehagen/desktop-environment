@@ -27,9 +27,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           build-args: |
+            CACHEBUST_DOTFILES=${{ github.sha }}
             DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
             DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
-            DOTFILES_CACHEBUST=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/Dockerfile

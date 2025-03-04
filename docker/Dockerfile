@@ -152,6 +152,10 @@ RUN apt-get update -qq && \
   zsh && \
   apt-file update
 
+# If the CACHEBUST_APPS build arg is supplied, rebuild from apps onwards
+ARG CACHEBUST_APPS
+RUN echo 'Building from apps onwards...'
+
 # Install rust
 RUN apt-get update -qq && \
   curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
@@ -581,9 +585,9 @@ WORKDIR $HOME
 # Clone the desktop environment
 RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
 
-# If the DOTFILES_CACHEBUST build arg is supplied, rebuild from static dotfiles onwards
-ARG DOTFILES_CACHEBUST
-RUN DOTFILES_CACHEBUST=$DOTFILES_CACHEBUST echo 'Building from dotfiles...'
+# If the CACHEBUST_DOTFILES build arg is supplied, rebuild from static dotfiles onwards
+ARG CACHEBUST_DOTFILES
+RUN echo 'Building from dotfiles...'
 
 # Clone user dotfiles or fallback to sabrehagen dotfiles
 RUN vcsh clone https://github.com/sabrehagen/dotfiles
