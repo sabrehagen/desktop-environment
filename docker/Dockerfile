@@ -198,6 +198,13 @@ RUN curl -fsSL -o bottom.deb https://github.com/ClementTsang/bottom/releases/dow
   dpkg -i bottom.deb && \
   rm bottom.deb
 
+# Install cbonsai
+RUN apt-get update -qq && \
+  apt-get install -qq libncurses-dev && \
+  git clone --depth 1 https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
+  cd /opt/cbonsai && \
+  make install
+
 # Install cursor
 RUN curl -fsSL -o cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
   chmod +x cursor.appimage && \
@@ -361,7 +368,7 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   apt-get install -qq ngrok
 
 # Install nodejs
-RUN curl -fsSL https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz | \
+RUN curl -fsSL https://nodejs.org/dist/v23.11.0/node-v23.11.0-linux-x64.tar.xz | \
   tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
@@ -377,9 +384,9 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 #   rm nviia-driver.run
 
 # Install nvidia driver
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  nvidia-cuda-toolkit
+# RUN apt-get update -qq && \
+#   apt-get install -qq \
+#   nvidia-cuda-toolkit
 
 # Install nvm
 RUN mkdir /opt/nvm && \
