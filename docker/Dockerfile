@@ -96,6 +96,7 @@ RUN apt-get update -qq && \
   neovim \
   net-tools \
   netcat-openbsd \
+  nmap \
   numlockx \
   nvtop \
   openssl \
@@ -206,7 +207,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install cursor
-RUN curl -fsSL -o cursor.appimage https://downloader.cursor.sh/linux/appImage/x64 && \
+RUN curl -fsSL -o cursor.appimage https://downloads.cursor.com/production/61e99179e4080fecf9d8b92c6e2e3e00fbfb53f4/linux/x64/Cursor-0.48.9-x86_64.AppImage && \
   chmod +x cursor.appimage && \
   ./cursor.appimage --appimage-extract && \
   mv squashfs-root /opt/cursor && \
@@ -230,7 +231,7 @@ RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.27.1/dock
   chmod +x /usr/local/bin/docker-compose
 
 # Install dra
-RUN wget -qnv -O dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
+RUN curl -fsSL -o dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
   dpkg -i dra.deb && \
   rm dra.deb
 
@@ -301,7 +302,7 @@ RUN git clone --depth 1 https://github.com/vivien/i3blocks /opt/i3blocks && \
 
 # Install i3lock
 RUN apt-get update -qq && \
-  apt-get install -qq libpam0g-dev libcairo2-dev libfontconfig1-dev libxcb-composite0-dev libx11-xcb-dev libjpeg-dev && \
+  apt-get install -qq libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
   git clone --depth 1 https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
@@ -482,6 +483,10 @@ RUN pipx install tldr && \
 # Install tmpmail
 RUN curl -fsSL -o /usr/local/bin/tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
   chmod +x /usr/local/bin/tmpmail
+
+# Install tormix
+RUN curl -fsSL -o /usr/local/bin/tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
+  chmod +x /usr/local/bin/tormix
 
 # Install tracexec
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
