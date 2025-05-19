@@ -4,7 +4,7 @@ REPO_ROOT=$(dirname $(readlink -f $0))/../..
 eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 
 # Ensure the desktop environment network exists
-docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK
+docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK 2>/dev/null
 
 # Start the desktop environment container
 docker run \
@@ -70,6 +70,7 @@ docker run \
   --volume DESKTOP_ENVIRONMENT_STATE_JUMP:$DESKTOP_ENVIRONMENT_STATE_JUMP \
   --volume DESKTOP_ENVIRONMENT_STATE_KDENLIVE:$DESKTOP_ENVIRONMENT_STATE_KDENLIVE \
   --volume DESKTOP_ENVIRONMENT_STATE_KEYRING:$DESKTOP_ENVIRONMENT_STATE_KEYRING \
+  --volume DESKTOP_ENVIRONMENT_STATE_MUSIKCUBE:$DESKTOP_ENVIRONMENT_STATE_MUSIKCUBE \
   --volume DESKTOP_ENVIRONMENT_STATE_OBSIDIAN:$DESKTOP_ENVIRONMENT_STATE_OBSIDIAN \
   --volume DESKTOP_ENVIRONMENT_STATE_SCREENPIPE:$DESKTOP_ENVIRONMENT_STATE_SCREENPIPE \
   --volume DESKTOP_ENVIRONMENT_STATE_SIGNAL:$DESKTOP_ENVIRONMENT_STATE_SIGNAL \
@@ -91,4 +92,4 @@ docker run \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG
 
 # Wait until the desktop environment container is running before proceeding
-until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 1; done
+until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 0.1; done
