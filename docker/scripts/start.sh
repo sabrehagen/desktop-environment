@@ -20,6 +20,7 @@ docker run \
   --device /dev/input \
   --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_TTY \
+  --device /dev/uinput \
   --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
   --env DESKTOP_ENVIRONMENT_TTY \
