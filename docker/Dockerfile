@@ -553,6 +553,8 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 # Install yarn based utilities
 RUN yarn global add \
   @anthropic-ai/claude-code \
+  @openai/codex \
+  @sourcegraph/amp \
   aicommit2 \
   clipboard-cli \
   diff-so-fancy \
