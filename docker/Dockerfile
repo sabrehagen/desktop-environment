@@ -74,6 +74,7 @@ RUN apt-get update -qq && \
   gtk+3.0 \
   htop \
   iftop \
+  imv \
   initramfs-tools \
   iputils-ping \
   jq \
