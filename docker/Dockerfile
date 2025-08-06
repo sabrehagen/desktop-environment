@@ -113,6 +113,7 @@ RUN apt-get update -qq && \
   pulseaudio-module-zeroconf \
   pulsemixer \
   python3 \
+  python3-libtmux \
   python3-pip \
   ranger \
   redshift \
