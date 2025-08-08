@@ -218,6 +218,9 @@ RUN curl -fsSL -o cursor.appimage https://downloads.cursor.com/production/61e991
   sed -iE 's;Exec=.*;Exec=/usr/local/bin/cursor;' /opt/cursor/cursor.desktop && \
   rm cursor.appimage
 
+# Install cursor cli
+RUN curl https://cursor.com/install -fsS | bash
+
 # Install discord
 RUN curl -fsSL -o discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
@@ -384,12 +387,17 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
   git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
 # Install nvidia driver
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  nvidia-driver-550
+
+# Install nvidia driver
 # RUN apt-get update -qq && \
 #   apt-get install linux-headers-$(uname -r) && \
 #   curl -fsSL -o nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
 #   chmod +x nvidia-driver.run && \
 #   ./nvidia-driver.run --allow-installation-with-running-driver --silent && \
-#   rm nviia-driver.run
+#   rm nvidia-driver.run
 
 # Install nvidia driver
 # RUN apt-get update -qq && \
@@ -599,6 +607,11 @@ RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
+
+# Restore file ownership and file mode required for chrome-sandbox binaries
+RUN find /opt -type f -name chrome-sandbox \
+  -exec chown root:root {} \; \
+  -exec chmod 4755 {} \;
 
 # Become desktop environment user
 USER $USER
