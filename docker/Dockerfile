@@ -166,9 +166,6 @@ RUN apt-get update -qq && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin && \
   rustup install 1.79.0
 
-# Install aider
-RUN pipx install aider-chat
-
 # Install alacritty
 RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
@@ -180,16 +177,6 @@ RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev l
 # Install arc
 RUN curl -fsSL -o /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
-
-# Install aws cli
-RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && \
-  unzip awscliv2.zip && \
-  ./aws/install && \
-  rm -rf aws awscliv2.zip
-
-# Install bandwhich
-RUN curl -fsSL https://github.com/imsnif/bandwhich/releases/download/0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz | \
-  tar -C /usr/local/bin -xzf - bandwhich
 
 # Install beekeeper studio
 RUN curl -fsSL -o beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
@@ -249,7 +236,7 @@ RUN apt-get update -qq && \
   make WAYLAND=0 install
 
 # Install eza
-RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.20.2/eza_x86_64-unknown-linux-gnu.tar.gz | \
+RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
 # Install fastfetch
@@ -354,14 +341,6 @@ RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
 RUN apt-get update -qq && \
   apt-get install -qq frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
-# Install lazyvim
-RUN git clone --depth 1 https://github.com/LazyVim/starter $HOME/.config/nvim && \
-  rm -rf $HOME/.config/nvim/.git && \
-  curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')_Linux_x86_64.tar.gz" && \
-  tar xf lazygit.tar.gz lazygit && \
-  install lazygit /usr/local/bin && \
-  rm lazygit lazygit.tar.gz
-
 # Install musikcube
 RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
@@ -379,7 +358,7 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   apt-get install -qq ngrok
 
 # Install nodejs
-RUN curl -fsSL https://nodejs.org/dist/v23.11.0/node-v23.11.0-linux-x64.tar.xz | \
+RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
   tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
@@ -389,7 +368,8 @@ RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC &
 # Install nvidia driver
 RUN apt-get update -qq && \
   apt-get install -qq \
-  nvidia-driver-550
+  nvidia-driver-550 \
+  nvidia-driver-580
 
 # Install nvidia driver
 # RUN apt-get update -qq && \
@@ -410,11 +390,6 @@ RUN mkdir /opt/nvm && \
   NVM_DIR=/opt/nvm bash && \
   . /opt/nvm/nvm.sh && \
   nvm install 20
-
-# Install obsidian
-RUN curl -fsSL -o obsidian.deb https://github.com/obsidianmd/obsidian-releases/releases/download/v1.7.7/obsidian_1.7.7_amd64.deb && \
-  dpkg -i obsidian.deb && \
-  rm obsidian.deb
 
 # Install op
 RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
@@ -476,12 +451,6 @@ RUN add-apt-repository ppa:atareao/telegram && \
   apt-get update -qq && \
   apt-get install -qq telegram
 
-# Install terraform
-RUN curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
-  unzip terraform.zip && \
-  install terraform /usr/local/bin && \
-  rm terraform terraform.zip
-
 # Install thorium
 RUN echo 'deb [trusted=yes arch=amd64] https://dl.thorium.rocks/debian/ stable main' | tee /etc/apt/sources.list.d/thorium.list && \
   apt-get update -qq && \
@@ -530,12 +499,6 @@ RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
   make && \
   make install
 
-# Install windsurf
-RUN curl -fsSL https://windsurf-stable.codeiumdata.com/wVxQEIWkwPUEAGf3/windsurf.gpg | gpg --dearmor -o /usr/share/keyrings/windsurf-stable-archive-keyring.gpg && \
-  echo 'deb [signed-by=/usr/share/keyrings/windsurf-stable-archive-keyring.gpg arch=amd64] https://windsurf-stable.codeiumdata.com/wVxQEIWkwPUEAGf3/apt stable main' | tee /etc/apt/sources.list.d/windsurf.list > /dev/null && \
-  apt-get update -qq && \
-  apt-get install -qq windsurf
-
 # Install xava
 # RUN apt-get update -qq && \
 #   apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
@@ -563,6 +526,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 # Install yarn based utilities
 RUN yarn global add \
   @anthropic-ai/claude-code \
+  @google/gemini-cli \
   @openai/codex \
   @sourcegraph/amp \
   aicommit2 \
@@ -592,7 +556,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
   chmod u+s /usr/bin/xinit && \
   mkdir -p /etc/X11/xorg.conf.d && \
-  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
+  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
 # Create a non-root user for safe operation
 RUN userdel -r ubuntu && \
