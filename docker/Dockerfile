@@ -326,9 +326,8 @@ RUN apt-get update -qq && \
   make install
 
 # Install jump directory navigator
-RUN git clone --depth 10 https://github.com/gsamokovarov/jump /opt/jump && \
+RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
   cd /opt/jump && \
-  git checkout fe4f4be && \
   go build -o jump && \
   install jump /usr/local/bin
 
