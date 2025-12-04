@@ -196,14 +196,9 @@ RUN apt-get update -qq && \
   make install
 
 # Install cursor
-RUN curl -fsSL -o cursor.appimage https://downloads.cursor.com/production/61e99179e4080fecf9d8b92c6e2e3e00fbfb53f4/linux/x64/Cursor-0.48.9-x86_64.AppImage && \
-  chmod +x cursor.appimage && \
-  ./cursor.appimage --appimage-extract && \
-  mv squashfs-root /opt/cursor && \
-  ln -s /opt/cursor/usr/bin/cursor /usr/local/bin && \
-  ln -s /opt/cursor/cursor.desktop /usr/share/applications && \
-  sed -iE 's;Exec=.*;Exec=/usr/local/bin/cursor;' /opt/cursor/cursor.desktop && \
-  rm cursor.appimage
+RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.1.0 && \
+  dpkg -i cursor.deb && \
+  rm cursor.deb
 
 # Install cursor cli
 RUN curl https://cursor.com/install -fsS | bash
