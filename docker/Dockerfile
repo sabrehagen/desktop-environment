@@ -342,6 +342,7 @@ RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/down
 
 # Install nerd fonts
 RUN curl -fsSL -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+  mkdir -p /usr/share/fonts/truetype/dejavu && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
   rm DejaVuSansMono.zip
 
