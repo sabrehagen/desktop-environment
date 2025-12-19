@@ -204,7 +204,7 @@ RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linu
 RUN curl https://cursor.com/install -fsS | bash
 
 # Install discord
-RUN curl -fsSL -o discord.deb 'https://discordapp.com/api/download?platform=linux&format=deb' && \
+RUN curl -fsSL -o discord.deb https://discordapp.com/api/download?platform=linux&format=deb && \
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
