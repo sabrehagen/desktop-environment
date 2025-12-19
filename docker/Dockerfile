@@ -163,8 +163,7 @@ RUN echo 'Building from apps onwards...'
 RUN apt-get update -qq && \
   curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
   ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
-  ln -s $HOME/.cargo/bin/rustup /usr/local/bin && \
-  rustup install 1.79.0
+  ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
 # Install alacritty
 RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
@@ -196,7 +195,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install cursor
-RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.1.0 && \
+RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.2 && \
   dpkg -i cursor.deb && \
   rm cursor.deb
 
