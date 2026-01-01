@@ -44,7 +44,6 @@ RUN apt-get update -qq && \
   apt-utils \
   arandr \
   asciinema \
-  ardour \
   autoconf \
   autorandr \
   bat \
@@ -178,6 +177,12 @@ RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev l
 # Install arc
 RUN curl -fsSL -o /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
+
+# Install ardour and configure jackd
+RUN apt-get update -qq && \
+  apt-get install -qq a2jmidid ardour jackd2 pulseaudio-module-jack qjackctl && \
+  echo jackd2 jackd/tweak_rt_limits string true | debconf-set-selections && \
+  DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -p high jackd2
 
 # Install beekeeper studio
 RUN curl -fsSL -o beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
