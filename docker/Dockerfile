@@ -472,17 +472,6 @@ RUN curl -fsSL -o /usr/local/bin/tormix https://raw.githubusercontent.com/ckarda
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf - tracexec
 
-# Install trippy
-RUN cargo install trippy --locked
-
-# Install vs code, vs live share dependencies, shfmt extension dependency, and vs-wal
-RUN curl -fsSL -o code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && \
-  apt-get install -qq ./code.deb && \
-  rm code.deb && \
-  apt-get install -qq libicu[0-9][0-9] libkrb5-3 zlib1g libsecret-1-0 desktop-file-utils x11-utils && \
-  curl -fsSL -o /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.2.0/shfmt_v3.2.0_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
-
 # Install warnai
 RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf libegl-dev libwayland-dev && \
