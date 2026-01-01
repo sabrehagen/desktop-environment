@@ -197,7 +197,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install cursor
-RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.2 && \
+RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.3 && \
   dpkg -i cursor.deb && \
   rm cursor.deb
 
