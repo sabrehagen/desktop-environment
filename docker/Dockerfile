@@ -434,6 +434,10 @@ RUN pipx install pywal
 # Install shell chatgpt
 RUN pipx install shell-gpt
 
+# Install shfmt
+RUN curl -fsSL -o /usr/local/bin/shfmt https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 && \
+  chmod +x /usr/local/bin/shfmt
+
 # Install slack
 RUN curl -fsSL -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.46.101/slack-desktop-4.46.101-amd64.deb && \
   dpkg -i slack.deb && \
