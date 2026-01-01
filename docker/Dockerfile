@@ -184,11 +184,6 @@ RUN apt-get update -qq && \
   echo jackd2 jackd/tweak_rt_limits string true | debconf-set-selections && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -p high jackd2
 
-# Install beekeeper studio
-RUN curl -fsSL -o beekeeper-studio.deb https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v3.7.10/beekeeper-studio_3.7.10_amd64.deb && \
-  dpkg -i beekeeper-studio.deb && \
-  rm beekeeper-studio.deb
-
 # Install bottom
 RUN curl -fsSL -o bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
   dpkg -i bottom.deb && \
