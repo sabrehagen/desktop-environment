@@ -184,10 +184,10 @@ RUN apt-get update -qq && \
   echo jackd2 jackd/tweak_rt_limits string true | debconf-set-selections && \
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -p high jackd2
 
-# Install bottom
-RUN curl -fsSL -o bottom.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
-  dpkg -i bottom.deb && \
-  rm bottom.deb
+# Install btm
+RUN curl -fsSL -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
+  dpkg -i btm.deb && \
+  rm btm.deb
 
 # Install cbonsai
 RUN apt-get update -qq && \
