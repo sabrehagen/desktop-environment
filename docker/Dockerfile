@@ -44,6 +44,7 @@ RUN apt-get update -qq && \
   apt-utils \
   arandr \
   asciinema \
+  ardour \
   autoconf \
   autorandr \
   bat \
@@ -136,6 +137,7 @@ RUN apt-get update -qq && \
   transmission-daemon \
   tree \
   unclutter-xfixes \
+  usbutils \
   vcsh \
   vim \
   wdiff \
@@ -196,7 +198,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install cursor
-RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.1.0 && \
+RUN curl -fsSL -o cursor.deb https://downloads.cursor.com/production/56f0a83df8e9eb48585fcc4858a9440db4cc7771/linux/x64/deb/amd64/deb/cursor_2.1.50_amd64.deb && \
   dpkg -i cursor.deb && \
   rm cursor.deb
 
@@ -434,7 +436,7 @@ RUN pipx install pywal
 RUN pipx install shell-gpt
 
 # Install slack
-RUN curl -fsSL -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.38.125/slack-desktop-4.38.125-amd64.deb && \
+RUN curl -fsSL -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.46.101/slack-desktop-4.46.101-amd64.deb && \
   dpkg -i slack.deb && \
   rm slack.deb
 
@@ -533,6 +535,10 @@ RUN yarn global add \
   nodemon \
   rebase-editor \
   vercel
+
+# Install zvm and zig
+RUN curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
+  yes | $HOME/.zvm/self/zvm use 0.15.2
 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
