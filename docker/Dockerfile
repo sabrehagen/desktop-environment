@@ -258,7 +258,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 
 # Install git
 RUN apt-get update -qq && \
-  apt-get install -qq libcurl4-openssl-dev libexpat1-dev zlib1g-dev && \
+  apt-get install -qq asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 1 https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make -j$(nproc) && \
