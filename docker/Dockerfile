@@ -97,6 +97,7 @@ RUN apt-get update -qq && \
   neovim \
   net-tools \
   netcat-openbsd \
+  nicotine \
   nmap \
   numlockx \
   nvtop \
