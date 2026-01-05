@@ -256,8 +256,16 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
   apt-get update -qq && \
   apt-get install -qq gh
 
+# Install git
+RUN apt-get update -qq && \
+  apt-get install -qq libcurl4-openssl-dev libexpat1-dev zlib1g-dev && \
+  git clone --depth 1 https://github.com/sabrehagen/git /opt/git && \
+  cd /opt/git && \
+  make -j$(nproc) && \
+  make install
+
 # Install gotop
-RUN git clone --depth 1 https://github.com/xxxserxxx/gotop /opt/gotop && \
+RUN git clone --depth 1 https://github.com/sabrehagen/gotop /opt/gotop && \
   cd /opt/gotop && \
   VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
   DATE=$(date +%Y%m%dT%H%M%S) && \
