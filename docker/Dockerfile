@@ -288,15 +288,7 @@ RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
 
-# Install gnuplot
-RUN git clone --depth 1 https://github.com/sabrehagen/gnuplot /opt/gnuplot && \
-  cd /opt/gnuplot && \
-  ./prepare && \
-  ./configure && \
-  make -j$(nproc) && \
-  make install
-
-  # Install i3
+# Install i3
 RUN apt-get update -qq && \
   apt-get install -qq dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 https://github.com/i3/i3 /opt/i3 && \
