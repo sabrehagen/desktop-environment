@@ -210,10 +210,19 @@ RUN curl -fsSL -o discord.deb https://discordapp.com/api/download?platform=linux
   dpkg -i discord.deb || apt-get install -qq --fix-broken && \
   rm discord.deb
 
-# Install dive docker image explorer
+# Install dive
 RUN curl -fsSL -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
+
+# Install dncli
+RUN apt-get update -qq && \
+  apt-get install -qq qtbase5-dev && \
+  git clone --depth 1 https://github.com/Nohac/dncli /opt/dncli && \
+  cd /opt/dncli && \
+  qmake && \
+  make -j$(nproc) && \
+  install dncli /usr/local/bin/drag
 
 # Install docker-compose
 RUN curl -fsSL "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
@@ -279,7 +288,15 @@ RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
 
-# Install i3
+# Install gnuplot
+RUN git clone --depth 1 https://github.com/sabrehagen/gnuplot /opt/gnuplot && \
+  cd /opt/gnuplot && \
+  ./prepare && \
+  ./configure && \
+  make -j$(nproc) && \
+  make install
+
+  # Install i3
 RUN apt-get update -qq && \
   apt-get install -qq dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 https://github.com/i3/i3 /opt/i3 && \
@@ -312,7 +329,7 @@ RUN apt-get update -qq && \
   apt-get install -qq libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
-  pipx install i3-workspace-names-daemon && \
+  pipx install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
   sed -i s/'?'/''/ $(find "$(pipx environment --value PIPX_LOCAL_VENVS)/i3-workspace-names-daemon" -name i3_workspace_names_daemon.py) && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \

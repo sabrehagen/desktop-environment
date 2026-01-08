@@ -11,6 +11,7 @@ docker run \
   --cap-add IPC_LOCK \
   --cap-add NET_ADMIN \
   --cap-add SYS_ADMIN \
+  --cap-add SYS_NICE \
   --cap-add SYS_PTRACE \
   --cap-add CAP_SYSLOG \
   --cap-add SYS_TTY_CONFIG \
@@ -44,6 +45,8 @@ docker run \
   --publish 8822:22 \
   --rm \
   --security-opt apparmor:unconfined \
+  --ulimit rtprio=95 \
+  --ulimit memlock=-1 \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/shm:/dev/shm \
   --volume /mnt/mmc:/mnt/mmc \
