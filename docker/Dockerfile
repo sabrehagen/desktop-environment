@@ -68,6 +68,7 @@ RUN apt-get update -qq && \
   gcc \
   gimp \
   git \
+  gnuplot \
   golang-go \
   grc \
   gtk-theme-switch \
