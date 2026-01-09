@@ -109,11 +109,11 @@ RUN apt-get update -qq && \
   pcmanfm \
   perl \
   pipewire \
+  pipewire-alsa \
+  pipewire-jack \
+  pipewire-pulse \
   pipx \
   pkg-config \
-  pulseaudio \
-  pulseaudio-module-jack \
-  pulsemixer \
   python3 \
   python3-libtmux \
   python3-pip \
@@ -143,6 +143,7 @@ RUN apt-get update -qq && \
   vcsh \
   vim \
   wdiff \
+  wireplumber \
   wmctrl \
   xauth \
   xautolock \
@@ -384,6 +385,22 @@ RUN apt-get update -qq && \
   dpkg -i ../nicotine*.deb && \
   apt-get purge -qq --auto-remove devscripts equivs
 
+# Install qpwgraph
+RUN apt-get update -qq && \
+  apt-get install -qq \
+  libasound2-dev \
+  libpipewire-0.3-dev \
+  libspa-0.2-dev \
+  qt6-base-dev \
+  qt6-base-dev-tools \
+  qt6-tools-dev \
+  libqt6svg6-dev \
+  qt6-wayland && \
+  git clone --depth 1 https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
+  cmake --source /opt/qpwgraph --build /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
+  cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
+  cmake --install /opt/qpwgraph/build
+
 # Install nodejs
 RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
   tar -C /usr/local -Jx --strip-components=1
@@ -586,7 +603,7 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
 RUN userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,docker,input,pulse-access,shadow,sudo,tty,video \
+  --groups audio,docker,input,shadow,sudo,tty,video \
   --shell /bin/zsh \
   $USER
 
