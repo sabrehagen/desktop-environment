@@ -78,6 +78,7 @@ RUN apt-get update -qq && \
   imv \
   initramfs-tools \
   iputils-ping \
+  jackd2 \
   jq \
   keychain \
   ksnip \
@@ -98,7 +99,6 @@ RUN apt-get update -qq && \
   neovim \
   net-tools \
   netcat-openbsd \
-  nicotine \
   nmap \
   numlockx \
   nvtop \
@@ -112,11 +112,12 @@ RUN apt-get update -qq && \
   pipx \
   pkg-config \
   pulseaudio \
-  pulseaudio-module-zeroconf \
+  pulseaudio-module-jack \
   pulsemixer \
   python3 \
   python3-libtmux \
   python3-pip \
+  qjackctl \
   ranger \
   redshift \
   ruby \
@@ -180,11 +181,9 @@ RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev l
 RUN curl -fsSL -o /usr/local/bin/arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
-# Install ardour and configure jackd
+# Install ardour
 RUN apt-get update -qq && \
-  apt-get install -qq a2jmidid ardour jackd2 pulseaudio-module-jack qjackctl && \
-  echo jackd2 jackd/tweak_rt_limits string true | debconf-set-selections && \
-  DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -p high jackd2
+  apt-get install -qq a2jmidid ardour
 
 # Install btm
 RUN curl -fsSL -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
