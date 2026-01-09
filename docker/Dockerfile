@@ -272,7 +272,8 @@ RUN apt-get update -qq && \
   git clone --depth 1 https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make -j$(nproc) && \
-  make install
+  make install && \
+  install git /usr/local/bin
 
 # Install gotop
 RUN git clone --depth 1 https://github.com/sabrehagen/gotop /opt/gotop && \
@@ -356,7 +357,7 @@ RUN apt-get update -qq && \
   apt-get install -qq frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/3.0.4/musikcube_3.0.4_linux_x86_64.deb && \
+RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
   dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
   rm musikcube.deb
 
@@ -371,6 +372,18 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   echo 'deb https://ngrok-agent.s3.amazonaws.com buster main' | tee /etc/apt/sources.list.d/ngrok.list && \
   apt-get update -qq && \
   apt-get install -qq ngrok
+
+# Install nicotine+
+RUN apt-get update -qq && \
+  apt-get install -qq devscripts equivs python3-build && \
+  git clone --depth 1 https://github.com/sabrehagen/nicotine-plus /opt/nicotine-plus/src && \
+  cd /opt/nicotine-plus/src && \
+  mk-build-deps --install --remove --tool 'apt-get -qq --no-install-recommends' debian/control && \
+  python3 -m build --sdist && \
+  mk-origtargz dist/nicotine*.tar.gz && \
+  DEB_BUILD_OPTIONS=nocheck debuild -sa -us -uc && \
+  dpkg -i ../nicotine*.deb && \
+  apt-get purge -qq --auto-remove devscripts equivs
 
 # Install nodejs
 RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
