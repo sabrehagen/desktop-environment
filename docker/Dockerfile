@@ -248,12 +248,9 @@ RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/ez
 
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
-  cd /opt/fastfetch && \
-  mkdir build && \
-  cd build && \
-  cmake .. && \
-  cmake --build . --target fastfetch --target flashfetch && \
-  install fastfetch /usr/local/bin
+  cmake --source /opt/fastfetch --build /opt/fastfetch/build && \
+  cmake --build /opt/fastfetch/build --parallel $(nproc) --target fastfetch && \
+  cmake --install /opt/fastfetch/build
 
 # Install fzf
 RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
