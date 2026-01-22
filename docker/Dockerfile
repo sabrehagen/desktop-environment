@@ -272,6 +272,8 @@ RUN apt-get update -qq && \
   apt-get install -qq asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 1 https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
+  make configure && \
+  ./configure --prefix=/usr && \
   make -j$(nproc) && \
   make install && \
   install git /usr/local/bin
@@ -294,7 +296,7 @@ RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
 # Install i3
 RUN apt-get update -qq && \
   apt-get install -qq dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
-  git clone --depth 1 https://github.com/i3/i3 /opt/i3 && \
+  git clone --depth 1 --branch next --single-branch https://github.com/sabrehagen/i3 /opt/i3 && \
   cd /opt/i3 && \
   mkdir build && \
   meson setup build && \
@@ -647,8 +649,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
-# Start desktop environment and then exec into dbus so it owns PID 1
-ENTRYPOINT ["zsh", "-c", "$HOME/.config/scripts/startup.sh & exec dbus-daemon --system --nofork --nopidfile"]
+# Start desktop environment and reparent to dbus
+ENTRYPOINT ["zsh", "-c", "$HOME/.config/scripts/startup.sh & exec sudo /usr/bin/dbus-daemon --system --nofork --nopidfile"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
