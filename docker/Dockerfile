@@ -108,11 +108,14 @@ RUN apt-get update -qq && \
   pciutils \
   pcmanfm \
   perl \
-  pipewire \
-  pipewire-alsa \
-  pipewire-jack \
-  pipewire-pulse \
+  # pipewire \
+  # pipewire-alsa \
+  # pipewire-jack \
+  # pipewire-pulse \
   pipx \
+  pulseaudio \
+  pulseaudio-utils \
+  pulseaudio-module-jack \
   pkg-config \
   python3 \
   python3-libtmux \
@@ -139,6 +142,7 @@ RUN apt-get update -qq && \
   transmission-daemon \
   tree \
   unclutter-xfixes \
+  unrar \
   usbutils \
   vcsh \
   vim \
@@ -248,9 +252,9 @@ RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/ez
 
 # Install fastfetch
 RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
-  cmake --source /opt/fastfetch --build /opt/fastfetch/build && \
+  cmake -S /opt/fastfetch -B /opt/fastfetch/build -DCMAKE_BUILD_TYPE=Release && \
   cmake --build /opt/fastfetch/build --parallel $(nproc) --target fastfetch && \
-  cmake --install /opt/fastfetch/build
+  install /opt/fastfetch/build/fastfetch /usr/local/bin
 
 # Install fzf
 RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
@@ -382,22 +386,6 @@ RUN apt-get update -qq && \
   dpkg -i ../nicotine*.deb && \
   apt-get purge -qq --auto-remove devscripts equivs
 
-# Install qpwgraph
-RUN apt-get update -qq && \
-  apt-get install -qq \
-  libasound2-dev \
-  libpipewire-0.3-dev \
-  libspa-0.2-dev \
-  qt6-base-dev \
-  qt6-base-dev-tools \
-  qt6-tools-dev \
-  libqt6svg6-dev \
-  qt6-wayland && \
-  git clone --depth 1 https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
-  cmake --source /opt/qpwgraph --build /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
-  cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
-  cmake --install /opt/qpwgraph/build
-
 # Install nodejs
 RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
   tar -C /usr/local -Jx --strip-components=1
@@ -458,6 +446,33 @@ RUN pipx install posting
 
 # Install pywal
 RUN pipx install pywal
+
+# Install qjackctl
+RUN apt-get update -qq && \
+  apt-get install -qq libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
+  git clone --depth 1 https://github.com/rncbc/qjackctl /opt/qjackctl && \
+  cd /opt/qjackctl && \
+  cmake -DCMAKE_BUILD_TYPE=Release -B build && \
+  cmake --build build --parallel $(nproc) && \
+  cmake --install build
+
+# Install qt5ct
+RUN apt-get update -qq && \
+  apt-get install -qq g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
+  git clone --depth 1 https://github.com/sabrehagen/qt5ct /opt/qt5ct && \
+  cd /opt/qt5ct && \
+  cp src/qt5ct-common/qt5ct.h src/qt5ct/qt5ct.h && \
+  qmake && \
+  make -j$(nproc) && \
+  make install
+
+# Install qpwgraph
+RUN apt-get update -qq && \
+  apt-get install -qq libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
+  git clone --depth 1 https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
+  cmake -S /opt/qpwgraph -B /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
+  cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
+  cmake --install /opt/qpwgraph/build
 
 # Install screenpipe
 # RUN apt-get update -qq && \
@@ -632,11 +647,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
-# Use tini to manage child processes
-ENTRYPOINT ["tini", "--"]
-
-# Run startup script and keep the container running
-CMD ["zsh", "-c", "$HOME/.config/scripts/startup.sh & sleep infinity"]
+# Start desktop environment and then exec into dbus so it owns PID 1
+ENTRYPOINT ["zsh", "-c", "$HOME/.config/scripts/startup.sh & exec dbus-daemon --system --nofork --nopidfile"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
