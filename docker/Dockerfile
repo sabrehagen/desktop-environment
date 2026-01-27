@@ -61,6 +61,7 @@ RUN apt-get update -qq && \
   docker.io \
   feh \
   ffmpeg \
+  ffprobe \
   figlet \
   fonts-font-awesome \
   fonts-noto-color-emoji \
@@ -74,6 +75,7 @@ RUN apt-get update -qq && \
   gtk-theme-switch \
   gtk+3.0 \
   htop \
+  id3v2 \
   iftop \
   imv \
   initramfs-tools \
@@ -276,7 +278,8 @@ RUN apt-get update -qq && \
   ./configure --prefix=/usr && \
   make -j$(nproc) && \
   make install && \
-  install git /usr/local/bin
+  install git /usr/local/bin && \
+  touch /etc/gitconfig
 
 # Install gotop
 RUN git clone --depth 1 https://github.com/sabrehagen/gotop /opt/gotop && \
