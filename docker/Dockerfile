@@ -61,7 +61,6 @@ RUN apt-get update -qq && \
   docker.io \
   feh \
   ffmpeg \
-  ffprobe \
   figlet \
   fonts-font-awesome \
   fonts-noto-color-emoji \
@@ -162,6 +161,7 @@ RUN apt-get update -qq && \
   xserver-xorg \
   xterm \
   yq \
+  yt-dlp \
   zathura \
   zsh && \
   apt-file update
@@ -191,6 +191,11 @@ RUN curl -fsSL -o /usr/local/bin/arc https://github.com/mholt/archiver/releases/
 # Install ardour
 RUN apt-get update -qq && \
   apt-get install -qq a2jmidid ardour
+
+# Install asciic
+RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
+  git clone --depth 1 https://github.com/S0raWasTaken/bapple_player /opt/bplay && \
+  cargo install --path /opt/bplay
 
 # Install btm
 RUN curl -fsSL -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
