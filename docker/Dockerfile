@@ -94,11 +94,11 @@ RUN apt-get update -qq && \
   maim \
   make \
   man-db \
+  mpc \
   mpd \
   mpv \
   nano \
   ncdu \
-  ncmpcpp \
   neovim \
   net-tools \
   netcat-openbsd \
@@ -178,7 +178,7 @@ RUN apt-get update -qq && \
 
 # Install alacritty
 RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
-  git clone --depth 1 https://github.com/alacritty/alacritty /opt/alacritty && \
+  git clone --depth 1 --single-branch https://github.com/alacritty/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
   install target/release/alacritty /usr/local/bin && \
@@ -194,7 +194,7 @@ RUN apt-get update -qq && \
 
 # Install asciic
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
-  git clone --depth 1 https://github.com/S0raWasTaken/bapple_player /opt/bplay && \
+  git clone --depth 1 --single-branch https://github.com/S0raWasTaken/bapple_player /opt/bplay && \
   cargo install --path /opt/bplay
 
 # Install btm
@@ -205,7 +205,7 @@ RUN curl -fsSL -o btm.deb https://github.com/ClementTsang/bottom/releases/downlo
 # Install cbonsai
 RUN apt-get update -qq && \
   apt-get install -qq libncurses-dev && \
-  git clone --depth 1 https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
+  git clone --depth 1 --single-branch https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
   cd /opt/cbonsai && \
   make install
 
@@ -230,7 +230,7 @@ RUN curl -fsSL -o dive.deb https://github.com/wagoodman/dive/releases/download/v
 # Install dncli
 RUN apt-get update -qq && \
   apt-get install -qq qtbase5-dev && \
-  git clone --depth 1 https://github.com/Nohac/dncli /opt/dncli && \
+  git clone --depth 1 --single-branch https://github.com/Nohac/dncli /opt/dncli && \
   cd /opt/dncli && \
   qmake && \
   make -j$(nproc) && \
@@ -252,6 +252,11 @@ RUN apt-get update -qq && \
   cd /opt/dunst && \
   make WAYLAND=0 all && \
   make WAYLAND=0 install
+
+# Install elecwhat
+RUN curl -fsSL -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v1.13.0/elecwhat_1.13.0_amd64.deb && \
+  dpkg -i elecwhat.deb && \
+  rm elecwhat.deb
 
 # Install eza
 RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz | \
@@ -277,7 +282,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # Install git
 RUN apt-get update -qq && \
   apt-get install -qq asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
-  git clone --depth 1 https://github.com/sabrehagen/git /opt/git && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make configure && \
   ./configure --prefix=/usr && \
@@ -287,7 +292,7 @@ RUN apt-get update -qq && \
   touch /etc/gitconfig
 
 # Install gotop
-RUN git clone --depth 1 https://github.com/sabrehagen/gotop /opt/gotop && \
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt/gotop && \
   cd /opt/gotop && \
   VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
   DATE=$(date +%Y%m%dT%H%M%S) && \
@@ -295,7 +300,7 @@ RUN git clone --depth 1 https://github.com/sabrehagen/gotop /opt/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
+RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
@@ -304,7 +309,7 @@ RUN git clone --depth 1 https://github.com/orf/gping /opt/gping && \
 # Install i3
 RUN apt-get update -qq && \
   apt-get install -qq dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
-  git clone --depth 1 --branch next --single-branch https://github.com/sabrehagen/i3 /opt/i3 && \
+  git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 /opt/i3 && \
   cd /opt/i3 && \
   mkdir build && \
   meson setup build && \
@@ -312,7 +317,7 @@ RUN apt-get update -qq && \
   meson install -C build
 
 # Install i3blocks
-RUN git clone --depth 1 https://github.com/vivien/i3blocks /opt/i3blocks && \
+RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks /opt/i3blocks && \
   cd /opt/i3blocks && \
   ./autogen.sh && \
   ./configure && \
@@ -322,7 +327,7 @@ RUN git clone --depth 1 https://github.com/vivien/i3blocks /opt/i3blocks && \
 # Install i3lock
 RUN apt-get update -qq && \
   apt-get install -qq libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
-  git clone --depth 1 https://github.com/Raymo111/i3lock-color /opt/i3lock && \
+  git clone --depth 1 --single-branch https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
   sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
@@ -335,10 +340,10 @@ RUN apt-get update -qq && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
-  git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
+  git clone --depth 1 --single-branch https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
   go install && \
-  git clone --depth 1 https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
+  git clone --depth 1 --single-branch https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
   cd /opt/gsimplecal && \
   ./autogen.sh && \
   ./configure --enable-gtk2 && \
@@ -346,14 +351,14 @@ RUN apt-get update -qq && \
   make install
 
 # Install i3-restore
-RUN git clone --depth 1 https://github.com/jdholtz/i3-restore.git /opt/i3-restore && \
+RUN git clone --depth 1 --single-branch https://github.com/jdholtz/i3-restore.git /opt/i3-restore && \
   python3 -m pip install --break-system-packages -r /opt/i3-restore/requirements.txt
 
 # Install jobber
 RUN apt-get update -qq && \
   apt-get install -qq debhelper rsync && \
   mkdir /opt/jobber && \
-  git clone --depth 1 https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
+  git clone --depth 1 --single-branch https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
   cd /opt/jobber/jobber-src && \
   sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
   make -C packaging/debian pkg-local . && \
@@ -361,7 +366,7 @@ RUN apt-get update -qq && \
   make install
 
 # Install jump directory navigator
-RUN git clone --depth 1 https://github.com/gsamokovarov/jump /opt/jump && \
+RUN git clone --depth 1 --single-branch https://github.com/gsamokovarov/jump /opt/jump && \
   cd /opt/jump && \
   go build -o jump && \
   install jump /usr/local/bin
@@ -371,9 +376,20 @@ RUN apt-get update -qq && \
   apt-get install -qq frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install musikcube
-RUN wget -O musikcube.deb -nv https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
-  dpkg -i musikcube.deb || apt-get install -qq --fix-broken && \
+RUN curl -fsSL -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
+  dpkg -i musikcube.deb && \
   rm musikcube.deb
+
+# Install ncmpcpp
+RUN apt-get update -qq && \
+  apt-get install -qq libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
+  git clone --depth 1 --single-branch https://github.com/ncmpcpp/ncmpcpp /opt/ncmpcpp && \
+  cd /opt/ncmpcpp && \
+  autoreconf -fiv && \
+  ./configure --prefix=/usr --enable-outputs --enable-visualizer --enable-clock --with-fftw --with-taglib --with-lto && \
+  make -j$(nproc) && \
+  make install && \
+  make clean
 
 # Install nerd fonts
 RUN curl -fsSL -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
@@ -390,7 +406,7 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
 # Install nicotine+
 RUN apt-get update -qq && \
   apt-get install -qq devscripts equivs python3-build && \
-  git clone --depth 1 https://github.com/sabrehagen/nicotine-plus /opt/nicotine-plus/src && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/nicotine-plus /opt/nicotine-plus/src && \
   cd /opt/nicotine-plus/src && \
   mk-build-deps --install --remove --tool 'apt-get -qq --no-install-recommends' debian/control && \
   python3 -m build --sdist && \
@@ -404,27 +420,13 @@ RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz |
   tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
-RUN git clone --depth 1 https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone --depth 1 https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
+  git clone --depth 1 --single-branch https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
 # Install nvidia driver
 RUN apt-get update -qq && \
   apt-get install -qq \
-  nvidia-driver-550 \
-  nvidia-driver-580
-
-# Install nvidia driver
-# RUN apt-get update -qq && \
-#   apt-get install linux-headers-$(uname -r) && \
-#   curl -fsSL -o nvidia-driver.run https://us.download.nvidia.com/XFree86/Linux-x86_64/565.77/NVIDIA-Linux-x86_64-565.77.run && \
-#   chmod +x nvidia-driver.run && \
-#   ./nvidia-driver.run --allow-installation-with-running-driver --silent && \
-#   rm nvidia-driver.run
-
-# Install nvidia driver
-# RUN apt-get update -qq && \
-#   apt-get install -qq \
-#   nvidia-cuda-toolkit
+  nvidia-driver-550
 
 # Install nvm
 RUN mkdir /opt/nvm && \
@@ -448,7 +450,7 @@ RUN cargo install oxker
 # Install picom
 RUN apt-get update -qq && \
   apt-get install -qq libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
-  git clone --depth 1 https://github.com/yshui/picom /opt/picom && \
+  git clone --depth 1 --single-branch https://github.com/yshui/picom /opt/picom && \
   cd /opt/picom && \
   meson setup --buildtype=release build && \
   ninja -C build && \
@@ -463,7 +465,7 @@ RUN pipx install pywal
 # Install qjackctl
 RUN apt-get update -qq && \
   apt-get install -qq libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
-  git clone --depth 1 https://github.com/rncbc/qjackctl /opt/qjackctl && \
+  git clone --depth 1 --single-branch https://github.com/rncbc/qjackctl /opt/qjackctl && \
   cd /opt/qjackctl && \
   cmake -DCMAKE_BUILD_TYPE=Release -B build && \
   cmake --build build --parallel $(nproc) && \
@@ -472,7 +474,7 @@ RUN apt-get update -qq && \
 # Install qt5ct
 RUN apt-get update -qq && \
   apt-get install -qq g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
-  git clone --depth 1 https://github.com/sabrehagen/qt5ct /opt/qt5ct && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/qt5ct /opt/qt5ct && \
   cd /opt/qt5ct && \
   cp src/qt5ct-common/qt5ct.h src/qt5ct/qt5ct.h && \
   qmake && \
@@ -482,7 +484,7 @@ RUN apt-get update -qq && \
 # Install qpwgraph
 RUN apt-get update -qq && \
   apt-get install -qq libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
-  git clone --depth 1 https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
+  git clone --depth 1 --single-branch https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
   cmake -S /opt/qpwgraph -B /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
   cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
   cmake --install /opt/qpwgraph/build
@@ -490,7 +492,7 @@ RUN apt-get update -qq && \
 # Install screenpipe
 # RUN apt-get update -qq && \
 #   apt-get install -qq libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libclang-16-dev libtesseract-dev tesseract-ocr libxdo-dev libxtst-dev && \
-#   git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
+#   git clone --depth 1 --single-branch https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
 #   cd /opt/screenpipe && \
 #   cargo build --release && \
 #   install target/release/screenpipe /usr/local/bin && \
@@ -553,29 +555,26 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
 # Install warnai
 RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf libegl-dev libwayland-dev && \
-  git clone --depth 1 https://github.com/reorr/warnai /opt/warnai && \
+  git clone --depth 1 --single-branch https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install whatfiles
-RUN git clone --depth 1 https://github.com/spieglt/whatfiles /opt/whatfiles && \
+RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles /opt/whatfiles && \
   cd /opt/whatfiles && \
   make && \
   make install
 
 # Install xava
-# RUN apt-get update -qq && \
-#   apt-get install -qq libasound2-dev libcairo2-dev libfftw3-dev libglew-dev libiniparser1 libpipewire-0.3-dev libpulse-dev librsvg2-bin libsdl2-dev portaudio19-dev && \
-#   wget -qnv -O imagemagick.appimage https://download.imagemagick.org/ImageMagick/download/binaries/magick && \
-#   chmod +x imagemagick.appimage && \
-#   ./imagemagick.appimage --appimage-extract && \
-#   cp -r squashfs-root/usr/* /usr/local && \
-#   git clone --depth 1 https://github.com/nikp123/xava && \
-#   mkdir xava/build && \
-#   cd xava/build && \
-#   cmake .. -DCMAKE_BUILD_TYPE=Debug -DINCLUDE_DIRS=lib/iniparser/src -DCMAKE_INSTALL_PREFIX=/usr -DWAYLAND=OFF && \
-#   make -j$(nproc) && \
-#   make install && \
-#   cp /usr/lib/xava/out_x11_cairo.so /usr/lib/xava/out_x11_opengl.so
+RUN curl -fsSL -o xava.appimage https://github.com/nikp123/xava/releases/download/0.7.1.1/xava-x86_64.AppImage && \
+  chmod +x xava.appimage && \
+  ./xava.appimage --appimage-extract && \
+  rm xava.appimage && \
+  mv squashfs-root /opt/xava && \
+  ln -sf /opt/xava/usr/bin/xava /usr/local/bin/xava && \
+  ln -sf /opt/xava/usr/share/xava /usr/share/xava && \
+  ln -sf /opt/xava/usr/lib/xava /usr/lib/xava && \
+  mkdir -p /etc/skel/.config/xava && \
+  cp -a /opt/xava/usr/share/xava/. /etc/skel/.config/xava/
 
 # Install xcolor
 RUN cargo install xcolor
@@ -607,7 +606,7 @@ RUN curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | 
   yes | $HOME/.zvm/self/zvm use 0.15.2
 
 # Install vs code wal theme
-RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
   yarn --cwd /opt/vscode-wal
 
 # Clean toolchain caches
@@ -667,8 +666,8 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
-# Start desktop environment and reparent to dbus
-ENTRYPOINT ["zsh", "-c", "$HOME/.config/scripts/startup.sh & exec sudo /usr/bin/dbus-daemon --system --nofork --nopidfile"]
+# Start system dbus and desktop environment
+ENTRYPOINT ["zsh", "-c", "sudo /usr/bin/dbus-daemon --system --nofork --nopidfile & $HOME/.config/scripts/startup.sh && wait"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
