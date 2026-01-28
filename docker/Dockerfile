@@ -335,7 +335,6 @@ RUN apt-get update -qq && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
-  sed -i s/'?'/''/ $(find "$(pipx environment --value PIPX_LOCAL_VENVS)/i3-workspace-names-daemon" -name i3_workspace_names_daemon.py) && \
   git clone --depth 1 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
   go install && \
@@ -345,6 +344,10 @@ RUN apt-get update -qq && \
   ./configure --enable-gtk2 && \
   make && \
   make install
+
+  # Install i3-restore
+RUN git clone --depth 1 https://github.com/jdholtz/i3-restore.git /opt/i3-restore && \
+  python3 -m pip install --break-system-packages -r /opt/i3-restore/requirements.txt
 
 # Install jobber
 RUN apt-get update -qq && \
