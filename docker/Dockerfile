@@ -345,7 +345,7 @@ RUN apt-get update -qq && \
   make && \
   make install
 
-  # Install i3-restore
+# Install i3-restore
 RUN git clone --depth 1 https://github.com/jdholtz/i3-restore.git /opt/i3-restore && \
   python3 -m pip install --break-system-packages -r /opt/i3-restore/requirements.txt
 
@@ -609,6 +609,12 @@ RUN curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | 
 # Install vs code wal theme
 RUN git clone --depth 1 https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
   yarn --cwd /opt/vscode-wal
+
+# Clean toolchain caches
+RUN cargo clean && \
+  go clean -cache -modcache && \
+  python3 -m pip cache purge && \
+  yarn cache clean
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
