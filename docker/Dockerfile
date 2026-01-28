@@ -85,6 +85,7 @@ RUN apt-get update -qq && \
   keychain \
   ksnip \
   libappindicator3-dev \
+  libasound2-dev \
   libnotify-bin \
   libnss3-tools \
   libssl-dev \
@@ -177,7 +178,7 @@ RUN apt-get update -qq && \
 
 # Install alacritty
 RUN apt-get install -qq libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
-  git clone --depth 1 https://github.com/sabrehagen/alacritty /opt/alacritty && \
+  git clone --depth 1 https://github.com/alacritty/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
   install target/release/alacritty /usr/local/bin && \
@@ -218,7 +219,7 @@ RUN curl https://cursor.com/install -fsS | bash
 
 # Install discord
 RUN curl -fsSL -o discord.deb https://discordapp.com/api/download?platform=linux&format=deb && \
-  dpkg -i discord.deb || apt-get install -qq --fix-broken && \
+  dpkg -i discord.deb && \
   rm discord.deb
 
 # Install dive
@@ -489,7 +490,8 @@ RUN apt-get update -qq && \
 #   git clone --depth 1 https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
 #   cd /opt/screenpipe && \
 #   cargo build --release && \
-#   install target/release/screenpipe /usr/local/bin
+#   install target/release/screenpipe /usr/local/bin && \
+#   cargo clean
 
 # Install screenpipe ui
 # RUN apt-get update -qq && \
