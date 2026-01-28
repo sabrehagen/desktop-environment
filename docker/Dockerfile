@@ -39,6 +39,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq --fix-missing \
   acpi \
+  alsa \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -109,15 +110,13 @@ RUN apt-get update -qq && \
   pciutils \
   pcmanfm \
   perl \
-  # pipewire \
-  # pipewire-alsa \
-  # pipewire-jack \
-  # pipewire-pulse \
+  pipewire \
+  pipewire-alsa \
+  pipewire-jack \
+  pipewire-pulse \
   pipx \
-  pulseaudio \
-  pulseaudio-utils \
-  pulseaudio-module-jack \
   pkg-config \
+  pulseaudio-utils \
   python3 \
   python3-libtmux \
   python3-pip \
