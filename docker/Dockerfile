@@ -218,7 +218,7 @@ RUN curl -fsSL -o cursor.deb https://api2.cursor.sh/updates/download/golden/linu
 RUN curl https://cursor.com/install -fsS | bash
 
 # Install discord
-RUN curl -fsSL -o discord.deb https://discordapp.com/api/download?platform=linux&format=deb && \
+RUN curl -fsSL -H 'User-Agent: Mozilla/5.0' -H 'Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb && \
   rm discord.deb
 
