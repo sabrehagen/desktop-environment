@@ -10,20 +10,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Maximize build disk space
-        uses: easimon/maximize-build-disk-space@master
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 20480
-          temp-reserve-mb: 10240
-          swap-size-mb: 1024
-
-      - name: Free Disk Space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-          sudo docker image prune --all --force
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
