@@ -285,7 +285,7 @@ RUN apt-get update -qq && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make configure && \
-  ./configure --prefix=/usr && \
+  ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
   make install && \
   install git /usr/local/bin && \
@@ -305,6 +305,12 @@ RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping 
   cargo install --locked --path ./gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
+
+# Install hints
+RUN apt-get update -qq && \
+  apt-get install -qq gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
+  pipx install git+https://github.com/AlfredoSequeida/hints.git && \
+  echo ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1 >> /etc/environment
 
 # Install i3
 RUN apt-get update -qq && \
@@ -629,6 +635,9 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   chmod u+s /usr/bin/xinit && \
   mkdir -p /etc/X11/xorg.conf.d && \
   echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
+
+# Allow input group access to uinput
+RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' > /etc/udev/rules.d/80-hints.rules
 
 # Create a non-root user for safe operation
 RUN userdel -r ubuntu && \
