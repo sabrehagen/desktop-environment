@@ -610,7 +610,7 @@ RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal
   yarn --cwd /opt/vscode-wal
 
 # Clean toolchain caches
-RUN cargo clean && \
+RUN rm -rf $HOME/.cargo/registry/src && \
   go clean -cache -modcache && \
   python3 -m pip cache purge && \
   yarn cache clean
