@@ -282,7 +282,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # Install git
 RUN apt-get update -qq && \
   apt-get install -qq asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/git /opt/git && \
+  git clone --depth 20 --single-branch https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make configure && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
@@ -558,6 +558,12 @@ RUN curl -fsSL -o /usr/local/bin/tormix https://raw.githubusercontent.com/ckarda
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf - tracexec
 
+# Install vcsh
+RUN mkdir -p $HOME/.local/bin && \
+  curl -fsLS https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh -o $HOME/.local/bin/vcsh && \
+  chmod u+x $HOME/.local/bin/vcsh && \
+  sed -i 's/^\(.*info "sourcing.*\)$/#\1/' /usr/bin/vcsh
+
 # Install warnai
 RUN apt-get update -qq && \
   apt-get install -qq inkscape optipng xfconf libegl-dev libwayland-dev && \
@@ -618,7 +624,6 @@ RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal
 # Clean toolchain caches
 RUN rm -rf $HOME/.cargo/registry/src && \
   go clean -cache -modcache && \
-  python3 -m pip cache purge && \
   yarn cache clean
 
 # Configure openvpn
@@ -675,8 +680,11 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
-# Start system dbus and desktop environment
-ENTRYPOINT ["zsh", "-c", "sudo /usr/bin/dbus-daemon --system --nofork --nopidfile & $HOME/.config/scripts/startup.sh && wait"]
+# Run as root so system dbus is pid 1, can't be sudo'd
+USER root
+
+# Start the desktop environment as the desktop environment user and reparent to dbus
+ENTRYPOINT ["zsh", "-c", "su - $USER -c $HOME/.config/scripts/startup.sh & exec /usr/bin/dbus-daemon --system --nofork --nopidfile"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
