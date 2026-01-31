@@ -620,8 +620,7 @@ RUN rm -rf $HOME/.cargo/registry/src && \
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
-  mknod $HOME/.config/openvpn/tun c 10 200 && \
-  chmod 600 $HOME/.config/openvpn/tun
+  mknod -m u=rw,go= $HOME/.config/openvpn/tun c 10 200
 
 # Configure password-less sudo for the sudo group
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers
@@ -653,7 +652,7 @@ RUN chown -R $USER:$USER $HOME /opt
 # Restore file ownership and file mode required for chrome-sandbox binaries
 RUN find /opt -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
-  -exec chmod 4755 {} \;
+  -exec chmod u=srwx,go=rx {} \;
 
 # Become desktop environment user
 USER $USER
