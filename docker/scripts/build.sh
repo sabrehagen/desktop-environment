@@ -6,6 +6,9 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 # Get host user password to apply to container user
 DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD=$(sudo cat /etc/shadow | grep $DESKTOP_ENVIRONMENT_USER | cut -d: -f2)
 
+# Capture build start time
+BUILD_START_TIME=$(date +%s)
+
 docker build \
   --build-arg CACHEBUST_APPS=$(cat $REPO_ROOT/.cachebust-apps 2>/dev/null) \
   --build-arg CACHEBUST_DOTFILES=$(cat $REPO_ROOT/.cachebust-dotfiles 2>/dev/null) \
@@ -26,3 +29,6 @@ echo $? > $REPO_ROOT/.build-exit-code
 
 # Store build end time
 echo $(date +%s) > $REPO_ROOT/.build-exit-time
+
+# Report build time
+echo "Build time: $(($(date +%s) - BUILD_START_TIME))s."
