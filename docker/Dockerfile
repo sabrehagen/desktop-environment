@@ -67,6 +67,7 @@ RUN nala update && \
   dnsutils \
   docker-compose-v2 \
   docker.io \
+  dput \
   feh \
   ffmpeg \
   figlet \
@@ -76,6 +77,7 @@ RUN nala update && \
   gcc \
   gimp \
   git \
+  git-lfs \
   gnuplot \
   golang-go \
   grc \
@@ -144,7 +146,6 @@ RUN nala update && \
   tigervnc-scraping-server \
   tigervnc-standalone-server \
   tini \
-  tmux \
   transmission-cli \
   transmission-common \
   transmission-daemon \
@@ -152,7 +153,6 @@ RUN nala update && \
   unclutter-xfixes \
   unrar \
   usbutils \
-  vcsh \
   vim \
   wdiff \
   wireplumber \
@@ -169,8 +169,7 @@ RUN nala update && \
   xterm \
   yq \
   yt-dlp \
-  zathura \
-  zsh && \
+  zathura && \
   apt-file update
 
 # If the CACHEBUST_APPS build arg is supplied, rebuild from apps onwards
@@ -542,6 +541,17 @@ RUN pipx install tldr && \
 RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
   chmod +x /usr/local/bin/tmpmail
 
+# Install tmux
+RUN nala update && \
+  nala install -y libevent-dev libncurses-dev bison && \
+  git clone --depth 20 --single-branch https://github.com/tmux/tmux /opt/tmux && \
+  cd /opt/tmux && \
+  sh autogen.sh && \
+  ./configure --prefix=/usr --sysconfdir=/etc && \
+  make -j$(nproc) && \
+  make install && \
+  make clean
+
 # Install tormix
 RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
@@ -604,6 +614,18 @@ RUN yarn global add \
   nodemon \
   rebase-editor \
   vercel
+
+# Install zsh
+RUN nala update && \
+  nala install -y libncursesw5-dev libpcre2-dev && \
+  git clone --depth 1 --single-branch https://github.com/zsh-users/zsh /opt/zsh && \
+  cd /opt/zsh && \
+  ./Util/preconfig && \
+  ./configure --prefix=/usr --sysconfdir=/etc && \
+  make -j$(nproc) && \
+  make install && \
+  make clean && \
+  ln -sf /usr/bin/zsh /bin/zsh
 
 # Install zvm and zig
 RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
