@@ -542,9 +542,9 @@ RUN add-apt-repository ppa:atareao/telegram && \
   nala install -y telegram
 
 # Install thorium
-RUN echo 'deb [trusted=yes arch=amd64] https://dl.thorium.rocks/debian/ stable main' | tee /etc/apt/sources.list.d/thorium.list && \
-  nala update && \
-  nala install -y thorium-browser
+RUN aria2c $ARIA2C_ARGS -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M138.0.7204.300/thorium-browser_138.0.7204.300_AVX2.deb && \
+  dpkg -i thorium.deb && \
+  rm thorium.deb
 
 # Install timeago
 RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
