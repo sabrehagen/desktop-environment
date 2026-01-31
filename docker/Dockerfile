@@ -331,7 +331,6 @@ RUN nala update && \
   cd AnyEvent-I3 && \
   perl Makefile.PL && \
   make && \
-  make test && \
   make install
 
 # Install i3blocks
@@ -504,22 +503,7 @@ RUN nala update && \
   cmake --install /opt/qpwgraph/build
 
 # Install screenpipe
-# RUN nala update && \
-#   nala install -y libasound2-dev libavdevice-dev libavfilter-dev libavformat-dev libclang-16-dev libtesseract-dev tesseract-ocr libxdo-dev libxtst-dev && \
-#   git clone --depth 1 --single-branch https://github.com/mediar-ai/screenpipe /opt/screenpipe && \
-#   cd /opt/screenpipe && \
-#   cargo build --release && \
-#   install target/release/screenpipe /usr/local/bin && \
-#   cargo clean
-
-# Install screenpipe ui
-# RUN nala update && \
-#   nala install -y libappindicator3-dev && \
-#   cd /opt/screenpipe/screenpipe-app-tauri && \
-#   npm install bun && \
-#   npx bun install && \
-#   npx bun scripts/pre_build.js >/dev/null && \
-#   PATH=$HOME/.cargo/bin:$PATH npx bun tauri build || true
+RUN curl -fsSL get.screenpi.pe/cli | sh
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
