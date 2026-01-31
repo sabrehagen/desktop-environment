@@ -179,7 +179,7 @@ RUN echo 'Building from apps onwards...'
 
 # Install rust
 RUN nala update && \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
+  curl -fsSL https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
   ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
@@ -222,7 +222,7 @@ RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/go
   rm cursor.deb
 
 # Install cursor cli
-RUN curl https://cursor.com/install -fsS | bash
+RUN curl -fsSL https://cursor.com/install | bash
 
 # Install discord
 RUN aria2c $ARIA2C_ARGS --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
@@ -437,11 +437,6 @@ RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz |
 RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone --depth 1 --single-branch https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
-# Install nvidia driver
-RUN nala update && \
-  nala install -y \
-  nvidia-driver-550
-
 # Install nvm
 RUN mkdir /opt/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
@@ -450,11 +445,11 @@ RUN mkdir /opt/nvm && \
   nvm install 20
 
 # Install op
-RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
   echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | tee /etc/apt/sources.list.d/1password.list && \
   mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
-  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+  curl -fsSL https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
+  curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
   nala update && \
   nala install -y 1password-cli
 
@@ -622,7 +617,7 @@ RUN yarn global add \
   vercel
 
 # Install zvm and zig
-RUN curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
+RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
   yes | $HOME/.zvm/self/zvm use 0.15.2
 
 # Install vs code wal theme
