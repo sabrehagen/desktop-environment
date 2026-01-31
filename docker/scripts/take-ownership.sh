@@ -29,4 +29,4 @@ done
 wait
 
 # Ensure desktop environment network exists
-docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK 2>/dev/null
+docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK 2>/dev/null || true

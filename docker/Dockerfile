@@ -321,13 +321,18 @@ RUN nala update && \
 
 # Install i3
 RUN nala update && \
-  nala install -y dmenu libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+  nala install -y dmenu libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 /opt/i3 && \
   cd /opt/i3 && \
   mkdir build && \
   meson setup build && \
   meson compile -C build && \
-  meson install -C build
+  meson install -C build && \
+  cd AnyEvent-I3 && \
+  perl Makefile.PL && \
+  make && \
+  make test && \
+  make install
 
 # Install i3blocks
 RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks /opt/i3blocks && \
