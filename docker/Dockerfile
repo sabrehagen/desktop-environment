@@ -681,6 +681,8 @@ RUN find /opt -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
 
+RUN ln -s $HOME/.local/bin/vcsh /usr/local/bin/vcsh
+
 # Become desktop environment user
 USER $USER
 WORKDIR $HOME
@@ -702,7 +704,7 @@ RUN $HOME/.dotfiles-bootstrap.sh
 USER root
 
 # Start the desktop environment as the desktop environment user and reparent to dbus
-ENTRYPOINT ["zsh", "-c", "su - $USER -c $HOME/.config/scripts/startup.sh & exec /usr/bin/dbus-daemon --system --nofork --nopidfile"]
+ENTRYPOINT ["zsh", "-c", "su - $USER -c $HOME/.config/scripts/startup.sh"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
