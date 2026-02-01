@@ -700,11 +700,11 @@ RUN vcsh clone https://github.com/sabrehagen/dotfiles
 # Bootstrap dotfiles
 RUN $HOME/.dotfiles-bootstrap.sh
 
-# Run as root so system dbus is pid 1, can't be sudo'd
-USER root
+# Use tini to manage child processes
+ENTRYPOINT ["tini", "--"]
 
-# Start the desktop environment as the desktop environment user and reparent to dbus
-ENTRYPOINT ["zsh", "-c", "su - $USER -c $HOME/.config/scripts/startup.sh"]
+# Run startup script and keep the container running
+CMD ["zsh", "-c", "$HOME/.config/scripts/startup.sh & sleep infinity"]
 
 # Record container build information
 ARG DESKTOP_ENVIRONMENT_CONTAINER_BUILD_DATE
