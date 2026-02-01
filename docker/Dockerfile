@@ -419,6 +419,9 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   nala update && \
   nala install -y ngrok
 
+# Install tailscale
+RUN curl -fsSL https://tailscale.com/install.sh | sh
+
 # Install nicotine+
 RUN nala update && \
   nala install -y devscripts equivs python3-build && \
@@ -564,7 +567,7 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
 RUN mkdir -p $HOME/.local/bin && \
   aria2c $ARIA2C_ARGS -d $HOME/.local/bin -o vcsh https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh && \
   chmod u+x $HOME/.local/bin/vcsh && \
-  sed -i 's/^\(.*info "sourcing.*\)$/#\1/' /usr/bin/vcsh
+  sed -i 's/^\(.*info "sourcing.*\)$/#\1/' $HOME/.local/bin/vcsh
 
 # Install warnai
 RUN nala update && \
@@ -613,7 +616,8 @@ RUN yarn global add \
   imgur-uploader-cli \
   nodemon \
   rebase-editor \
-  vercel
+  vercel && \
+  yarn cache clean
 
 # Install zsh
 RUN nala update && \
@@ -634,11 +638,6 @@ RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install
 # Install vs code wal theme
 RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
   yarn --cwd /opt/vscode-wal
-
-# Clean toolchain caches
-RUN rm -rf $HOME/.cargo/registry/src && \
-  go clean -cache -modcache && \
-  yarn cache clean
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
