@@ -634,8 +634,7 @@ RUN nala update && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
   make install && \
-  make clean && \
-  ln -sf /usr/bin/zsh /bin/zsh
+  make clean
 
 # Install zvm and zig
 RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
@@ -667,8 +666,9 @@ RUN userdel -r ubuntu && \
   useradd \
   --create-home \
   --groups audio,docker,input,shadow,sudo,tty,video \
-  --shell /bin/zsh \
-  $USER
+  --shell /usr/bin/zsh \
+  $USER && \
+  cp --preserve=all --recursive --update=none /etc/skel/. $HOME/
 
 # Set non-root user password
 RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
