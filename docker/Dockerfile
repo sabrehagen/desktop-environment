@@ -532,6 +532,12 @@ RUN aria2c $ARIA2C_ARGS -o thorium.deb https://github.com/Alex313031/thorium/rel
   dpkg -i thorium.deb && \
   rm thorium.deb
 
+# Install thunderbird
+RUN aria2c $ARIA2C_ARGS -o thunderbird.tar.xz https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/148.0b3/linux-x86_64/en-US/thunderbird-148.0b3.tar.xz && \
+  tar -C /opt -xJf thunderbird.tar.xz && \
+  rm thunderbird.tar.xz && \
+  ln -s /opt/thunderbird/thunderbird /usr/local/bin/thunderbird
+
 # Install timeago
 RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
