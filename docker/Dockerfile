@@ -627,7 +627,7 @@ RUN yarn global add \
 
 # Install zsh
 RUN nala update && \
-  nala install -y libncursesw5-dev libpcre2-dev && \
+  nala install -y libncursesw5-dev libpcre2-dev yodl && \
   git clone --depth 1 --single-branch https://github.com/zsh-users/zsh /opt/zsh && \
   cd /opt/zsh && \
   ./Util/preconfig && \
