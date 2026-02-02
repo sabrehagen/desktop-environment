@@ -295,7 +295,8 @@ RUN nala update && \
   make -j$(nproc) && \
   make install && \
   install git /usr/local/bin && \
-  touch /etc/gitconfig
+  touch /etc/gitconfig && \
+  git config --system init.defaultBranch master
 
 # Install gotop
 RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt/gotop && \
@@ -570,10 +571,20 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
   tar -C /usr/local/bin -xzf - tracexec
 
 # Install vcsh
-RUN mkdir -p $HOME/.local/bin && \
-  aria2c $ARIA2C_ARGS -d $HOME/.local/bin -o vcsh https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh && \
-  chmod u+x $HOME/.local/bin/vcsh && \
-  sed -i 's/^\(.*info "sourcing.*\)$/#\1/' $HOME/.local/bin/vcsh
+RUN nala update && \
+  nala install -y automake bash-completion && \
+  git clone --depth 1 --single-branch https://github.com/RichiH/vcsh /opt/vcsh && \
+  cd /opt/vcsh && \
+  ./bootstrap.sh && \
+  ./configure \
+  --prefix=/usr \
+  --sysconfdir=/etc \
+  --disable-tests \
+  --with-man-page=yes \
+  --with-zsh-completion-dir=/usr/share/zsh/vendor-completions && \
+  make -j$(nproc) && \
+  make install && \
+  make clean
 
 # Install warnai
 RUN nala update && \
@@ -680,8 +691,6 @@ RUN chown -R $USER:$USER $HOME /opt
 RUN find /opt -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
-
-RUN ln -s $HOME/.local/bin/vcsh /usr/local/bin/vcsh
 
 # Become desktop environment user
 USER $USER
