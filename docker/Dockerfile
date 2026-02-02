@@ -375,7 +375,7 @@ RUN git clone --depth 1 --single-branch https://github.com/jdholtz/i3-restore.gi
 RUN nala update && \
   nala install -y debhelper rsync && \
   mkdir /opt/jobber && \
-  git clone --depth 1 --single-branch https://github.com/dshearer/jobber /opt/jobber/jobber-src && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber /opt/jobber/jobber-src && \
   cd /opt/jobber/jobber-src && \
   sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
   make -C packaging/debian pkg-local . && \
