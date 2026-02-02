@@ -42,135 +42,30 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
 # Install desktop environment core utilities
+# NOTE: This used to be a single gigantic install layer, but it intermittently
+# fails in CI with "No space left on device" while dpkg is unpacking. Splitting
+# into smaller chunks + cleaning between them lowers peak disk usage during the build.
 RUN nala update && \
-  DEBIAN_FRONTEND=noninteractive nala install -y \
-  acpi \
-  aria2 \
-  alsa \
-  alsa-utils \
-  apt-file \
-  apt-utils \
-  arandr \
-  asciinema \
-  autoconf \
-  autorandr \
-  bat \
-  bc \
-  build-essential \
-  cava \
-  cmake \
-  cmatrix \
-  colorized-logs \
-  curl \
-  dbus-x11 \
-  dnsmasq \
-  dnsutils \
-  docker-compose-v2 \
-  docker.io \
-  dput \
-  feh \
-  ffmpeg \
-  figlet \
-  fonts-font-awesome \
-  fonts-noto-color-emoji \
-  g++ \
-  gcc \
-  gimp \
-  git \
-  git-lfs \
-  gnuplot \
-  golang-go \
-  grc \
-  gtk-theme-switch \
-  htop \
-  id3v2 \
-  iftop \
-  imv \
-  initramfs-tools \
-  iputils-ping \
-  jackd2 \
-  jq \
-  keychain \
-  ksnip \
-  libappindicator3-dev \
-  libasound2-dev \
-  libgtk-3-0 \
-  libnotify-bin \
-  libnss3-tools \
-  libssl-dev \
-  libterm-readkey-perl \
-  lsb-release \
-  maim \
-  make \
-  man-db \
-  mpc \
-  mpd \
-  mpv \
-  nano \
-  ncdu \
-  neovim \
-  net-tools \
-  netcat-openbsd \
-  nmap \
-  numlockx \
-  nvtop \
-  openssl \
-  openvpn \
-  pavucontrol-qt \
-  pciutils \
-  pcmanfm \
-  perl \
-  pipewire \
-  pipewire-alsa \
-  pipewire-jack \
-  pipewire-pulse \
-  pipx \
-  pkg-config \
-  pulseaudio-utils \
-  python3 \
-  python3-libtmux \
-  python3-pip \
-  qjackctl \
-  ranger \
-  redshift \
-  ruby \
-  slop \
-  software-properties-common \
-  ssh \
-  sshpass \
-  strace \
-  stress \
-  sudo \
-  sxiv \
-  tig \
-  tigervnc-scraping-server \
-  tigervnc-standalone-server \
-  tini \
-  transmission-cli \
-  transmission-common \
-  transmission-daemon \
-  tree \
-  unclutter-xfixes \
-  unrar \
-  usbutils \
-  vim \
-  wdiff \
-  wireplumber \
-  wmctrl \
-  xauth \
-  xautolock \
-  xclip \
-  xdotool \
-  xinit \
-  xinput \
-  xorg \
-  xsel \
-  xserver-xorg \
-  xterm \
-  yq \
-  yt-dlp \
-  zathura && \
-  apt-file update
+  DEBIAN_FRONTEND=noninteractive nala install -y --no-install-recommends \
+  acpi aria2 alsa alsa-utils apt-utils asciinema autoconf autorandr bat bc build-essential \
+  cmake cmatrix colorized-logs curl dnsutils g++ gcc git git-lfs gnuplot golang-go grc htop \
+  id3v2 iftop initramfs-tools iputils-ping jq keychain make man-db nano ncdu neovim net-tools \
+  netcat-openbsd nmap numlockx nvtop openssl perl pkg-config python3 python3-pip ranger ruby \
+  slop software-properties-common ssh sshpass strace stress sudo tig tree unrar usbutils vim wdiff yq && \
+  rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/apt-dpkg-install-*
+
+RUN nala update && \
+  DEBIAN_FRONTEND=noninteractive nala install -y --no-install-recommends \
+  apt-file arandr dbus-x11 dnsmasq docker-compose-v2 docker.io dput feh ffmpeg figlet \
+  fonts-font-awesome fonts-noto-color-emoji gimp gtk-theme-switch imv jackd2 ksnip \
+  libappindicator3-dev libasound2-dev libgtk-3-0 libnotify-bin libnss3-tools libssl-dev \
+  libterm-readkey-perl lsb-release maim mpc mpd mpv openvpn pavucontrol-qt pciutils pcmanfm \
+  pipewire pipewire-alsa pipewire-jack pipewire-pulse pipx pulseaudio-utils python3-libtmux \
+  qjackctl redshift sxiv tigervnc-scraping-server tigervnc-standalone-server transmission-cli \
+  transmission-common transmission-daemon unclutter-xfixes wireplumber wmctrl xauth xautolock \
+  xclip xdotool xinit xinput xorg xsel xserver-xorg xterm yt-dlp zathura tini && \
+  apt-file update && \
+  rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* /tmp/apt-dpkg-install-* /var/cache/apt-file/*
 
 # If the CACHEBUST_APPS build arg is supplied, rebuild from apps onwards
 ARG CACHEBUST_APPS
@@ -295,7 +190,8 @@ RUN nala update && \
   make -j$(nproc) && \
   make install && \
   install git /usr/local/bin && \
-  touch /etc/gitconfig
+  touch /etc/gitconfig && \
+  git config --system init.defaultBranch master
 
 # Install gotop
 RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt/gotop && \
@@ -570,10 +466,20 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
   tar -C /usr/local/bin -xzf - tracexec
 
 # Install vcsh
-RUN mkdir -p $HOME/.local/bin && \
-  aria2c $ARIA2C_ARGS -d $HOME/.local/bin -o vcsh https://github.com/RichiH/vcsh/releases/latest/download/vcsh-standalone.sh && \
-  chmod u+x $HOME/.local/bin/vcsh && \
-  sed -i 's/^\(.*info "sourcing.*\)$/#\1/' $HOME/.local/bin/vcsh
+RUN nala update && \
+  nala install -y automake bash-completion && \
+  git clone --depth 1 --single-branch https://github.com/RichiH/vcsh /opt/vcsh && \
+  cd /opt/vcsh && \
+  ./bootstrap.sh && \
+  ./configure \
+  --prefix=/usr \
+  --sysconfdir=/etc \
+  --disable-tests \
+  --with-man-page=yes \
+  --with-zsh-completion-dir=/usr/share/zsh/vendor-completions && \
+  make -j$(nproc) && \
+  make install && \
+  make clean
 
 # Install warnai
 RUN nala update && \
@@ -680,8 +586,6 @@ RUN chown -R $USER:$USER $HOME /opt
 RUN find /opt -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
-
-RUN ln -s $HOME/.local/bin/vcsh /usr/local/bin/vcsh
 
 # Become desktop environment user
 USER $USER
