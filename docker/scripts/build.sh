@@ -24,11 +24,17 @@ docker build \
   $REPO_ROOT/docker \
   $@
 
+# Capture build exit code
+BUILD_EXIT_CODE=$?
+
 # Store build exit code
-echo $? > $REPO_ROOT/.build-exit-code
+echo $BUILD_EXIT_CODE > $REPO_ROOT/.build-exit-code
 
 # Store build end time
 echo $(date +%s) > $REPO_ROOT/.build-exit-time
 
 # Report build time
 echo "Build time: $(($(date +%s) - BUILD_START_TIME))s."
+
+# Exit with build exit code
+exit $BUILD_EXIT_CODE
