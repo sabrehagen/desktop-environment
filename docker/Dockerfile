@@ -572,7 +572,7 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
 
 # Install vcsh
 RUN nala update && \
-  nala install -y automake bash-completion && \
+  nala install -y automake ronn && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/vcsh /opt/vcsh && \
   cd /opt/vcsh && \
   ./bootstrap.sh && \
