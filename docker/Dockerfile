@@ -135,6 +135,7 @@ RUN nala update && \
   redshift \
   ruby \
   slop \
+  socat \
   software-properties-common \
   ssh \
   sshpass \
