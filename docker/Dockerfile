@@ -63,6 +63,7 @@ RUN nala update && \
   colorized-logs \
   curl \
   dbus-x11 \
+  dialog \
   dnsmasq \
   dnsutils \
   docker-compose-v2 \
@@ -133,6 +134,7 @@ RUN nala update && \
   qjackctl \
   ranger \
   redshift \
+  ripgrep \
   ruby \
   slop \
   socat \
@@ -215,6 +217,9 @@ RUN nala update && \
   git clone --depth 1 --single-branch https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
   cd /opt/cbonsai && \
   make install
+
+# Install claude code
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Install cursor
 RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.3 && \
@@ -631,7 +636,6 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
 # Install yarn based utilities
 RUN yarn global add \
-  @anthropic-ai/claude-code \
   @google/gemini-cli \
   @openai/codex \
   @sourcegraph/amp \
