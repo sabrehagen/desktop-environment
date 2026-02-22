@@ -515,7 +515,8 @@ RUN nala update && \
   cmake --install /opt/qpwgraph/build
 
 # Install screenpipe
-RUN curl -fsSL get.screenpi.pe/cli | sh
+# RUN curl -fsSL get.screenpi.pe/cli | sh && \
+#   rm -f $HOME/.zshrc
 
 # Install shell chatgpt
 RUN pipx install shell-gpt
