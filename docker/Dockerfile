@@ -323,10 +323,10 @@ RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping 
   cargo clean
 
 # Install hints
-# RUN nala update && \
-#   nala install -y gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
-#   pipx install git+https://github.com/AlfredoSequeida/hints.git && \
-#   echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> /etc/environment
+RUN nala update && \
+  nala install -y gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
+  HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin pipx install git+https://github.com/AlfredoSequeida/hints.git && \
+  echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> /etc/environment
 
 # Install i3
 RUN nala update && \
