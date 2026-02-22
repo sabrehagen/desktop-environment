@@ -41,6 +41,9 @@ RUN locale-gen $LC_ALL && \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
   echo $TZ > /etc/timezone
 
+# Upgrade base system
+RUN nala upgrade -y
+
 # Install desktop environment core utilities
 RUN nala update && \
   DEBIAN_FRONTEND=noninteractive nala install -y \
