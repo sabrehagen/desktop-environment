@@ -49,7 +49,7 @@ RUN nala update && \
   DEBIAN_FRONTEND=noninteractive nala install -y \
   acpi \
   aria2 \
-  alsa \
+  alsa-base \
   alsa-utils \
   apt-file \
   apt-utils \
@@ -98,7 +98,7 @@ RUN nala update && \
   ksnip \
   libappindicator3-dev \
   libasound2-dev \
-  libgtk-3-0 \
+  libgtk-3-0t64 \
   libnotify-bin \
   libnss3-tools \
   libssl-dev \
