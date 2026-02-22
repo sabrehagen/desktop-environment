@@ -2,7 +2,7 @@ name: Build Desktop Environment
 on: [push, workflow_call]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       packages: write
     steps:
