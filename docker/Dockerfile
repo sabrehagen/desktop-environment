@@ -225,7 +225,7 @@ RUN nala update && \
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Install cursor
-RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.3 && \
+RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
   dpkg -i cursor.deb && \
   rm cursor.deb
 
