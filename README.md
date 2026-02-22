@@ -20,7 +20,7 @@ To run on Linux, clone the repository and start the environment.
 git clone https://github.com/sabrehagen/desktop-environment
 
 # Start desktop environment
-./desktop-environment/docker/scripts/recycle.sh
+./desktop-environment/docker/scripts/bootstrap.sh
 ```
 
 ## Running in the Cloud
