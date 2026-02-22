@@ -6,8 +6,16 @@ eval "$($REPO_ROOT/docker/scripts/environment.sh)"
 # Ensure the desktop environment network exists
 docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK 2>/dev/null
 
+# Enable gpu passthrough if the nvidia container runtime is available
+DOCKER_GPUS=$(docker info --format {{.Runtimes}} 2>/dev/null | grep -q nvidia && echo --gpus all)
+
+# Enable video device passthrough if a video device is available
+DOCKER_VIDEO=$(test -e /dev/video0 && echo --device /dev/video0)
+
 # Start the desktop environment container
 docker run \
+  $DOCKER_GPUS \
+  $DOCKER_VIDEO \
   --cap-add IPC_LOCK \
   --cap-add NET_ADMIN \
   --cap-add SYS_ADMIN \
@@ -22,7 +30,6 @@ docker run \
   --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_TTY \
   --device /dev/uinput \
-  --device /dev/video0 \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
   --env DESKTOP_ENVIRONMENT_TTY \
   --env DESKTOP_ENVIRONMENT_USER \
@@ -33,7 +40,6 @@ docker run \
   --group-add plugdev \
   --group-add tty \
   --group-add video \
-  --gpus all \
   --hostname $(hostname) \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
