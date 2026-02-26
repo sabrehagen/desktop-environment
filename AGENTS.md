@@ -6,7 +6,7 @@ This is a Docker-based "Cloud Desktop Environment" project. The entire product i
 
 ### User and environment variables
 
-The VM update script creates a system user matching the repository owner (derived from the git remote) and exports `DESKTOP_ENVIRONMENT_USER` in `~/.bashrc`. This is critical because `environment.sh` defaults `DESKTOP_ENVIRONMENT_USER` to `$USER`, and `build.sh` reads this user's password hash from `/etc/shadow`. The Docker build cache depends on consistent build args, so the user must match across sessions.
+The VM update script creates a system user matching the repository owner (derived from the git remote) and sets `$USER` to the repo owner in `~/.bashrc`. This way `environment.sh`'s `DESKTOP_ENVIRONMENT_USER=${DESKTOP_ENVIRONMENT_USER-$USER}` resolves correctly without manual overrides, and `build.sh` can read the user's password hash from `/etc/shadow`. The Docker build cache depends on consistent build args, so the user must match across sessions.
 
 All scripts source `docker/scripts/environment.sh`, which derives `DESKTOP_ENVIRONMENT_GITHUB_USER` from the git remote URL and sets `DESKTOP_ENVIRONMENT_REGISTRY` to `ghcr.io/<owner>` by default. This means the registry adapts automatically when the repo is forked — no hardcoded usernames.
 
