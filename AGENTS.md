@@ -4,11 +4,9 @@
 
 This is a Docker-based "Cloud Desktop Environment" project. The entire product is a single Docker image that packages a full Linux desktop (i3 window manager, 100+ apps) into a container. There is no traditional application code, package manager, or linter — everything is defined in a large `docker/Dockerfile` and shell scripts in `docker/scripts/`.
 
-### User and environment variables
+### Environment variables
 
-The VM update script creates a system user matching the repository owner (derived from the git remote) and sets `$USER` to the repo owner in `~/.bashrc`. This way `environment.sh`'s `DESKTOP_ENVIRONMENT_USER=${DESKTOP_ENVIRONMENT_USER-$USER}` resolves correctly without manual overrides, and `build.sh` can read the user's password hash from `/etc/shadow`. The Docker build cache depends on consistent build args, so the user must match across sessions.
-
-All scripts source `docker/scripts/environment.sh`, which derives `DESKTOP_ENVIRONMENT_GITHUB_USER` from the git remote URL and sets `DESKTOP_ENVIRONMENT_REGISTRY` to `ghcr.io/<owner>` by default. This means the registry adapts automatically when the repo is forked — no hardcoded usernames.
+All scripts source `docker/scripts/environment.sh`, which derives both `DESKTOP_ENVIRONMENT_GITHUB_USER` and `DESKTOP_ENVIRONMENT_USER` from the git remote URL. `DESKTOP_ENVIRONMENT_REGISTRY` defaults to `ghcr.io/<owner>`. Everything adapts automatically when the repo is forked — no hardcoded usernames or manual overrides needed.
 
 ### Key commands
 
