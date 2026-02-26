@@ -4,17 +4,17 @@
 
 This is a Docker-based "Cloud Desktop Environment" project. The entire product is a single Docker image that packages a full Linux desktop (i3 window manager, 100+ apps) into a container. There is no traditional application code, package manager, or linter — everything is defined in a large `docker/Dockerfile` and shell scripts in `docker/scripts/`.
 
-### Registry and environment variables
+### User and environment variables
+
+The VM update script creates a system user matching the repository owner (derived from the git remote) and exports `DESKTOP_ENVIRONMENT_USER` in `~/.bashrc`. This is critical because `environment.sh` defaults `DESKTOP_ENVIRONMENT_USER` to `$USER`, and `build.sh` reads this user's password hash from `/etc/shadow`. The Docker build cache depends on consistent build args, so the user must match across sessions.
 
 All scripts source `docker/scripts/environment.sh`, which derives `DESKTOP_ENVIRONMENT_GITHUB_USER` from the git remote URL and sets `DESKTOP_ENVIRONMENT_REGISTRY` to `ghcr.io/<owner>` by default. This means the registry adapts automatically when the repo is forked — no hardcoded usernames.
-
-If the git remote uses an access token URL (e.g. `x-access-token:...@github.com/owner/repo`), the sed extraction in `environment.sh` still correctly parses the owner. You generally do not need to override `DESKTOP_ENVIRONMENT_REGISTRY` manually.
 
 ### Key commands
 
 | Action | Command |
 |---|---|
-| Build image | `./docker/scripts/build.sh` (takes hours; prefer pulling pre-built image) |
+| Build image | `./docker/scripts/build.sh` (Docker build cache is pre-populated in the VM snapshot) |
 | Pull pre-built image | `docker pull ghcr.io/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment:latest` (after sourcing `environment.sh`) |
 | Run tests | `./docker/scripts/test.sh` |
 | Start headless | `./docker/scripts/headless.sh` |
@@ -32,6 +32,6 @@ The only automated test is `docker/scripts/test.sh`, which starts a container, w
 
 ### Gotchas
 
-- Building the Docker image from source takes hours and downloads from dozens of external URLs. Always prefer pulling the pre-built image.
+- A full Docker build from a cold cache takes hours. The VM snapshot includes a pre-populated build cache, so incremental rebuilds after Dockerfile edits are fast.
 - There are no linters, type checkers, or package managers in this repo. "Lint" and "build" correspond to shell script syntax and Docker image builds, respectively.
 - The `start.sh` script requires physical devices (`/dev/tty3`, `/dev/dri`, `/dev/snd`, etc.) and host Docker socket access — it is intended for bare-metal Linux, not cloud VMs. Use `headless.sh` for cloud/VM environments.
