@@ -18,17 +18,23 @@ ENV ARIA2C_ARGS="-q -x 5 -s 5 -k 1M"
 
 # Install nala
 RUN apt-get update -qq && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nala
+  DEBIAN_FRONTEND=noninteractive apt-get install -qq nala && \
+  sed -i -e 's/^assume_yes *=.*/assume_yes = true/' /etc/nala/nala.conf && \
+  printf '%s\n\n' 'parallel_downloads = 16' >> /etc/nala/nala.conf
+
+# Install aria2
+RUN nala update && \
+  nala install aria2 && \
+  wget -qO $HOME/.aria2/aria2.conf https://raw.githubusercontent.com/hzamani/aria2web/refs/heads/master/config/aria2.conf
 
 # Restore minimized distribution content e.g. man pages
 RUN nala update && \
-  nala install -y \
-  unminimize && \
+  nala install unminimize && \
   yes | unminimize
 
 # Install locales and timezone data
 RUN nala update && \
-  nala install -y \
+  nala install \
   locales \
   tzdata
 
@@ -46,9 +52,8 @@ RUN nala upgrade -y
 
 # Install desktop environment core utilities
 RUN nala update && \
-  DEBIAN_FRONTEND=noninteractive nala install -y \
+  DEBIAN_FRONTEND=noninteractive nala install \
   acpi \
-  aria2 \
   alsa-base \
   alsa-utils \
   apt-file \
@@ -189,7 +194,7 @@ RUN nala update && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
 # Install alacritty
-RUN nala install -y libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 1 --single-branch https://github.com/alacritty/alacritty /opt/alacritty && \
   cd /opt/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
@@ -202,7 +207,7 @@ RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o arc https://github.com/mholt/archiv
 
 # Install ardour
 RUN nala update && \
-  nala install -y a2jmidid ardour
+  nala install a2jmidid ardour
 
 # Install asciic
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
@@ -216,7 +221,7 @@ RUN aria2c $ARIA2C_ARGS -o btm.deb https://github.com/ClementTsang/bottom/releas
 
 # Install cbonsai
 RUN nala update && \
-  nala install -y libncurses-dev && \
+  nala install libncurses-dev && \
   git clone --depth 1 --single-branch https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
   cd /opt/cbonsai && \
   make install
@@ -244,7 +249,7 @@ RUN aria2c $ARIA2C_ARGS -o dive.deb https://github.com/wagoodman/dive/releases/d
 
 # Install dncli
 RUN nala update && \
-  nala install -y qtbase5-dev && \
+  nala install qtbase5-dev && \
   git clone --depth 1 --single-branch https://github.com/Nohac/dncli /opt/dncli && \
   cd /opt/dncli && \
   qmake && \
@@ -262,7 +267,7 @@ RUN aria2c $ARIA2C_ARGS -o dra.deb https://github.com/devmatteini/dra/releases/d
 
 # Install dunst
 RUN nala update && \
-  nala install -y libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
+  nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
   git clone https://github.com/sabrehagen/dunst /opt/dunst && \
   cd /opt/dunst && \
   make WAYLAND=0 all && \
@@ -292,11 +297,11 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
   chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
   echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | tee /etc/apt/sources.list.d/github-cli.list && \
   nala update && \
-  nala install -y gh
+  nala install gh
 
 # Install git
 RUN nala update && \
-  nala install -y asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
+  nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 20 --single-branch https://github.com/sabrehagen/git /opt/git && \
   cd /opt/git && \
   make configure && \
@@ -324,13 +329,13 @@ RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping 
 
 # Install hints
 RUN nala update && \
-  nala install -y gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
+  nala install gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
   HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin pipx install git+https://github.com/AlfredoSequeida/hints.git && \
   echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> /etc/environment
 
 # Install i3
 RUN nala update && \
-  nala install -y dmenu libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+  nala install dmenu libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 /opt/i3 && \
   cd /opt/i3 && \
   mkdir build && \
@@ -352,7 +357,7 @@ RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks /opt/
 
 # Install i3lock
 RUN nala update && \
-  nala install -y libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
+  nala install libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
   git clone --depth 1 --single-branch https://github.com/Raymo111/i3lock-color /opt/i3lock && \
   cd /opt/i3lock && \
   sed -i 's/Num Lock//' i3lock.c && \
@@ -362,7 +367,7 @@ RUN nala update && \
 
 # Install i3 extras
 RUN nala update && \
-  nala install -y libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
+  nala install libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
   pipx install i3-resurrect==1.4.2 && \
   pipx install i3altlayout==1.1.1 && \
   pipx install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
@@ -382,7 +387,7 @@ RUN git clone --depth 1 --single-branch https://github.com/jdholtz/i3-restore.gi
 
 # Install jobber
 RUN nala update && \
-  nala install -y debhelper rsync && \
+  nala install debhelper rsync && \
   mkdir /opt/jobber && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber /opt/jobber/jobber-src && \
   cd /opt/jobber/jobber-src && \
@@ -399,7 +404,7 @@ RUN git clone --depth 1 --single-branch https://github.com/gsamokovarov/jump /op
 
 # Install kdenlive
 RUN nala update && \
-  nala install -y frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
+  nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install musikcube
 RUN aria2c $ARIA2C_ARGS -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
@@ -408,7 +413,7 @@ RUN aria2c $ARIA2C_ARGS -o musikcube.deb https://github.com/clangen/musikcube/re
 
 # Install ncmpcpp
 RUN nala update && \
-  nala install -y libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
+  nala install libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
   git clone --depth 1 --single-branch https://github.com/ncmpcpp/ncmpcpp /opt/ncmpcpp && \
   cd /opt/ncmpcpp && \
   autoreconf -fiv && \
@@ -427,17 +432,17 @@ RUN aria2c $ARIA2C_ARGS -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-
 RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
   echo 'deb https://ngrok-agent.s3.amazonaws.com buster main' | tee /etc/apt/sources.list.d/ngrok.list && \
   nala update && \
-  nala install -y ngrok
+  nala install ngrok
 
 # Install tailscale
 RUN curl -fsSL https://tailscale.com/install.sh | sh
 
 # Install nicotine+
 RUN nala update && \
-  nala install -y devscripts equivs python3-build && \
+  nala install devscripts equivs python3-build && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/nicotine-plus /opt/nicotine-plus/src && \
   cd /opt/nicotine-plus/src && \
-  mk-build-deps --install --remove --tool 'nala install -y --no-install-recommends' debian/control && \
+  mk-build-deps --install --remove --tool 'nala install --no-install-recommends' debian/control && \
   python3 -m build --sdist && \
   mk-origtargz dist/nicotine*.tar.gz && \
   DEB_BUILD_OPTIONS=nocheck debuild -sa -us -uc && \
@@ -453,6 +458,10 @@ RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz |
 RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
   git clone --depth 1 --single-branch https://github.com/novnc/websockify /opt/noVNC/utils/websockify
 
+# Install nvidia driver
+RUN nala update && \
+  nala install nvidia-driver-590
+
 # Install nvm
 RUN mkdir /opt/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
@@ -467,14 +476,14 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --
   curl -fsSL https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
   curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
   nala update && \
-  nala install -y 1password-cli
+  nala install 1password-cli
 
 # Install oxker
 RUN cargo install oxker
 
 # Install picom
 RUN nala update && \
-  nala install -y libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
+  nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
   git clone --depth 1 --single-branch https://github.com/yshui/picom /opt/picom && \
   cd /opt/picom && \
   meson setup --buildtype=release build && \
@@ -489,7 +498,7 @@ RUN pipx install pywal
 
 # Install qjackctl
 RUN nala update && \
-  nala install -y libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
+  nala install libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
   git clone --depth 1 --single-branch https://github.com/rncbc/qjackctl /opt/qjackctl && \
   cd /opt/qjackctl && \
   cmake -DCMAKE_BUILD_TYPE=Release -B build && \
@@ -498,7 +507,7 @@ RUN nala update && \
 
 # Install qt5ct
 RUN nala update && \
-  nala install -y g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
+  nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/qt5ct /opt/qt5ct && \
   cd /opt/qt5ct && \
   cp src/qt5ct-common/qt5ct.h src/qt5ct/qt5ct.h && \
@@ -508,7 +517,7 @@ RUN nala update && \
 
 # Install qpwgraph
 RUN nala update && \
-  nala install -y libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
+  nala install libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
   git clone --depth 1 --single-branch https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
   cmake -S /opt/qpwgraph -B /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
   cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
@@ -536,7 +545,7 @@ RUN pipx install speedtest-cli
 # Install telegram
 RUN add-apt-repository ppa:atareao/telegram && \
   nala update && \
-  nala install -y telegram
+  nala install telegram
 
 # Install thorium
 RUN aria2c $ARIA2C_ARGS -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M138.0.7204.300/thorium-browser_138.0.7204.300_AVX2.deb && \
@@ -563,7 +572,7 @@ RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o tmpmail https://raw.githubuserconte
 
 # Install tmux
 RUN nala update && \
-  nala install -y libevent-dev libncurses-dev bison && \
+  nala install libevent-dev libncurses-dev bison && \
   git clone --depth 20 --single-branch https://github.com/tmux/tmux /opt/tmux && \
   cd /opt/tmux && \
   sh autogen.sh && \
@@ -582,7 +591,7 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
 
 # Install vcsh
 RUN nala update && \
-  nala install -y automake ronn && \
+  nala install automake ronn && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/vcsh /opt/vcsh && \
   cd /opt/vcsh && \
   ./bootstrap.sh && \
@@ -598,7 +607,7 @@ RUN nala update && \
 
 # Install warnai
 RUN nala update && \
-  nala install -y inkscape optipng xfconf libegl-dev libwayland-dev && \
+  nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
   git clone --depth 1 --single-branch https://github.com/reorr/warnai /opt/warnai && \
   sed -i '/notify-send/d' /opt/warnai/warnai && \
   install /opt/warnai/warnai /usr/local/bin
@@ -626,7 +635,7 @@ RUN cargo install xcolor
 
 # Install xwinwrap
 RUN nala update && \
-  nala install -y libx11-dev libxext-dev libxrender-dev x11proto-xext-dev xorg-dev && \
+  nala install libx11-dev libxext-dev libxrender-dev x11proto-xext-dev xorg-dev && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/xwinwrap.git /opt/xwinwrap && \
   cd /opt/xwinwrap && \
   make && \
@@ -636,7 +645,7 @@ RUN nala update && \
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
   echo 'deb https://dl.yarnpkg.com/debian stable main' | tee /etc/apt/sources.list.d/yarn.list && \
   nala update && \
-  nala install -y yarn
+  nala install yarn
 
 # Install yarn based utilities
 RUN yarn global add \
@@ -656,7 +665,7 @@ RUN yarn global add \
 
 # Install zsh
 RUN nala update && \
-  nala install -y libncursesw5-dev libpcre2-dev yodl && \
+  nala install libncursesw5-dev libpcre2-dev yodl && \
   git clone --depth 1 --single-branch https://github.com/zsh-users/zsh /opt/zsh && \
   cd /opt/zsh && \
   ./Util/preconfig && \
