@@ -483,6 +483,9 @@ RUN mkdir /opt/nvm && \
   . /opt/nvm/nvm.sh && \
   nvm install 20
 
+# Install ollama
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
 # Install op
 RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
   echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | tee /etc/apt/sources.list.d/1password.list && \
