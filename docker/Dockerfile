@@ -14,8 +14,6 @@ ENV USER=$DESKTOP_ENVIRONMENT_USER
 
 ENV HOME /home/$USER
 
-ENV ARIA2C_ARGS="-q -x 5 -s 5 -k 1M"
-
 # Install nala
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq nala && \
@@ -207,7 +205,7 @@ RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbco
   cargo clean
 
 # Install arc
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
+RUN aria2c -d /usr/local/bin -o arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
   chmod +x /usr/local/bin/arc
 
 # Install ardour
@@ -220,7 +218,7 @@ RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
   cargo install --path /opt/bplay
 
 # Install btm
-RUN aria2c $ARIA2C_ARGS -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
+RUN aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
   dpkg -i btm.deb && \
   rm btm.deb
 
@@ -235,7 +233,7 @@ RUN nala update && \
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Install cursor
-RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
+RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
   dpkg -i cursor.deb && \
   rm cursor.deb
 
@@ -243,12 +241,12 @@ RUN aria2c $ARIA2C_ARGS -o cursor.deb https://api2.cursor.sh/updates/download/go
 RUN curl -fsSL https://cursor.com/install | bash
 
 # Install discord
-RUN aria2c $ARIA2C_ARGS --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
+RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
   dpkg -i discord.deb && \
   rm discord.deb
 
 # Install dive
-RUN aria2c $ARIA2C_ARGS -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
+RUN aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -262,11 +260,11 @@ RUN nala update && \
   install dncli /usr/local/bin/drag
 
 # Install docker-compose
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o docker-compose "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" && \
+RUN aria2c -d /usr/local/bin -o docker-compose "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" && \
   chmod +x /usr/local/bin/docker-compose
 
 # Install dra
-RUN aria2c $ARIA2C_ARGS -o dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
+RUN aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
   dpkg -i dra.deb && \
   rm dra.deb
 
@@ -279,7 +277,7 @@ RUN nala update && \
   make WAYLAND=0 install
 
 # Install elecwhat
-RUN aria2c $ARIA2C_ARGS -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v1.13.0/elecwhat_1.13.0_amd64.deb && \
+RUN aria2c -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v1.13.0/elecwhat_1.13.0_amd64.deb && \
   dpkg -i elecwhat.deb && \
   rm elecwhat.deb
 
@@ -412,7 +410,7 @@ RUN nala update && \
   nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install musikcube
-RUN aria2c $ARIA2C_ARGS -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
+RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
   dpkg -i musikcube.deb && \
   rm musikcube.deb
 
@@ -428,7 +426,7 @@ RUN nala update && \
   make clean
 
 # Install nerd fonts
-RUN aria2c $ARIA2C_ARGS -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
+RUN aria2c -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
   mkdir -p /usr/share/fonts/truetype/dejavu && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
   rm DejaVuSansMono.zip
@@ -536,11 +534,11 @@ RUN nala update && \
 RUN pipx install shell-gpt
 
 # Install shfmt
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 && \
+RUN aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install slack
-RUN aria2c $ARIA2C_ARGS -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.46.101/slack-desktop-4.46.101-amd64.deb && \
+RUN aria2c -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.46.101/slack-desktop-4.46.101-amd64.deb && \
   dpkg -i slack.deb && \
   rm slack.deb
 
@@ -553,18 +551,18 @@ RUN add-apt-repository ppa:atareao/telegram && \
   nala install telegram
 
 # Install thorium
-RUN aria2c $ARIA2C_ARGS -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M138.0.7204.300/thorium-browser_138.0.7204.300_AVX2.deb && \
+RUN aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M138.0.7204.300/thorium-browser_138.0.7204.300_AVX2.deb && \
   dpkg -i thorium.deb && \
   rm thorium.deb
 
 # Install thunderbird
-RUN aria2c $ARIA2C_ARGS -o thunderbird.tar.xz https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/148.0b3/linux-x86_64/en-US/thunderbird-148.0b3.tar.xz && \
+RUN aria2c -o thunderbird.tar.xz https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/148.0b3/linux-x86_64/en-US/thunderbird-148.0b3.tar.xz && \
   tar -C /opt -xJf thunderbird.tar.xz && \
   rm thunderbird.tar.xz && \
   ln -s /opt/thunderbird/thunderbird /usr/local/bin/thunderbird
 
 # Install timeago
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+RUN aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
 
 # Install tldr
@@ -572,7 +570,7 @@ RUN pipx install tldr && \
   pipx run tldr --update
 
 # Install tmpmail
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
+RUN aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
   chmod +x /usr/local/bin/tmpmail
 
 # Install tmux
@@ -587,7 +585,7 @@ RUN nala update && \
   make clean
 
 # Install tormix
-RUN aria2c $ARIA2C_ARGS -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
+RUN aria2c -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
   chmod +x /usr/local/bin/tormix
 
 # Install tracexec
@@ -624,7 +622,7 @@ RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles /op
   make install
 
 # Install xava
-RUN aria2c $ARIA2C_ARGS -o xava.appimage https://github.com/nikp123/xava/releases/download/0.7.1.1/xava-x86_64.AppImage && \
+RUN aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/0.7.1.1/xava-x86_64.AppImage && \
   chmod +x xava.appimage && \
   ./xava.appimage --appimage-extract && \
   rm xava.appimage && \
