@@ -25,7 +25,12 @@ RUN apt-get update -qq && \
 # Install aria2
 RUN nala update && \
   nala install aria2 && \
-  wget -qO $HOME/.aria2/aria2.conf https://raw.githubusercontent.com/hzamani/aria2web/refs/heads/master/config/aria2.conf
+  mkdir -p $HOME/.config/aria2 && \
+  printf '%s\n' \
+    'quiet=true' \
+    'max-connection-per-server=10' \
+    'min-split-size=1M' \
+    > $HOME/.config/aria2/aria2.conf
 
 # Restore minimized distribution content e.g. man pages
 RUN nala update && \
