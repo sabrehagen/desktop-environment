@@ -450,8 +450,8 @@ RUN nala update && \
   mk-origtargz dist/nicotine*.tar.gz && \
   DEB_BUILD_OPTIONS=nocheck debuild -sa -us -uc && \
   dpkg -i ../nicotine*.deb && \
-  nala purge -y devscripts equivs && \
-  nala autoremove -y
+  nala purge devscripts equivs && \
+  nala autoremove
 
 # Install nodejs
 RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
