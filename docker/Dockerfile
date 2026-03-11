@@ -627,8 +627,7 @@ RUN nala update && \
 RUN nala update && \
   nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
   git clone --depth 1 --single-branch https://github.com/reorr/warnai /opt/warnai && \
-  sed -i '/notify-send/d' /opt/warnai/warnai && \
-  install /opt/warnai/warnai /usr/local/bin
+  sed -i '/notify-send/d' /opt/warnai/warnai
 
 # Install whatfiles
 RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles /opt/whatfiles && \
