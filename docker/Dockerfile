@@ -295,13 +295,14 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
 RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
   tar -C /usr/local/bin -xzf - fzf
 
-# Install gcfs
+# Install gcsf
 RUN nala update && \
   nala install fuse3 libfuse-dev libssl-dev pkg-config && \
   cargo install gcsf && \
   echo 'user_allow_other' >> /etc/fuse.conf && \
   chmod 644 /etc/fuse.conf && \
-  chown root:root /etc/fuse.conf
+  chown root:root /etc/fuse.conf && \
+  mkdir $HOME/gdrive
 
 # Install gh
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
