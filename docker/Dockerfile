@@ -130,7 +130,6 @@ RUN nala update && \
   openvpn \
   pavucontrol-qt \
   pciutils \
-  pcmanfm \
   perl \
   pipewire \
   pipewire-alsa \
@@ -514,6 +513,17 @@ RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
 
 # Install oxker
 RUN cargo install oxker
+
+# Install pcmanfm
+RUN nala update && \
+  nala install intltool libfm-gtk3-dev libgtk-3-dev && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/pcmanfm /opt/pcmanfm && \
+  cd /opt/pcmanfm && \
+  ./autogen.sh && \
+  ./configure --prefix=/usr --with-gtk=3 && \
+  make -j$(nproc) && \
+  make install && \
+  make clean
 
 # Install picom
 RUN nala update && \
