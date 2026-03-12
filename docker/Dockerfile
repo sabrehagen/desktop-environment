@@ -64,7 +64,6 @@ RUN nala update && \
   arandr \
   asciinema \
   autoconf \
-  autorandr \
   bat \
   bc \
   build-essential \
