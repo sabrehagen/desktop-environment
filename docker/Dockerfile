@@ -195,6 +195,9 @@ RUN nala update && \
   ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
+# Install uv
+RUN cargo install --locked uv
+
 # Install alacritty
 RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 1 --single-branch https://github.com/alacritty/alacritty /opt/alacritty && \
@@ -215,6 +218,9 @@ RUN nala update && \
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
   git clone --depth 1 --single-branch https://github.com/S0raWasTaken/bapple_player /opt/bplay && \
   cargo install --path /opt/bplay
+
+# Install autorandr
+RUN uv tool install autorandr
 
 # Install btm
 RUN aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
@@ -341,7 +347,7 @@ RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping 
 # Install hints
 RUN nala update && \
   nala install gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
-  HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin pipx install git+https://github.com/AlfredoSequeida/hints.git && \
+  HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin uv tool install git+https://github.com/AlfredoSequeida/hints.git && \
   echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> /etc/environment
 
 # Install i3
@@ -379,9 +385,9 @@ RUN nala update && \
 # Install i3 extras
 RUN nala update && \
   nala install libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
-  pipx install i3-resurrect==1.4.2 && \
-  pipx install i3altlayout==1.1.1 && \
-  pipx install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
+  uv tool install i3-resurrect==1.4.2 && \
+  uv tool install i3altlayout==1.1.1 && \
+  uv tool install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
   git clone --depth 1 --single-branch https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
   cd $HOME/.config/i3/i3-focus-last && \
   go install && \
@@ -512,10 +518,10 @@ RUN nala update && \
   install build/src/picom /usr/local/bin
 
 # Install posting
-RUN pipx install posting
+RUN uv tool install posting
 
 # Install pywal
-RUN pipx install pywal
+RUN uv tool install pywal
 
 # Install qjackctl
 RUN nala update && \
@@ -549,7 +555,7 @@ RUN nala update && \
 #   rm -f $HOME/.zshrc
 
 # Install shell chatgpt
-RUN pipx install shell-gpt
+RUN uv tool install shell-gpt
 
 # Install shfmt
 RUN aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 && \
@@ -561,7 +567,7 @@ RUN aria2c -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/
   rm slack.deb
 
 # Install speedtest
-RUN pipx install speedtest-cli
+RUN uv tool install speedtest-cli
 
 # Install telegram
 RUN add-apt-repository ppa:atareao/telegram && \
@@ -584,8 +590,8 @@ RUN aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabreh
   chmod +x /usr/local/bin/timeago
 
 # Install tldr
-RUN pipx install tldr && \
-  pipx run tldr --update
+RUN uv tool install tldr && \
+  uv tool run tldr --update
 
 # Install tmpmail
 RUN aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
