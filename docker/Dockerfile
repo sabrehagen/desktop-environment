@@ -684,6 +684,10 @@ RUN yarn global add \
   vercel && \
   yarn cache clean
 
+# Install zeroclaw
+RUN git clone --depth 100 --single-branch https://github.com/zeroclaw-labs/zeroclaw.git /opt/zeroclaw && \
+  yes | /opt/zeroclaw/install.sh
+
 # Install zsh
 RUN nala update && \
   nala install libncursesw5-dev libpcre2-dev yodl && \
