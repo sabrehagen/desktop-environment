@@ -17,8 +17,8 @@ ENV HOME /home/$USER
 # Install nala
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq nala && \
-  sed -i -e 's/^assume_yes *=.*/assume_yes = true/' /etc/nala/nala.conf && \
-  printf '%s\n\n' 'parallel_downloads = 16' >> /etc/nala/nala.conf
+  sed -i 's/^assume_yes =.*/assume_yes = true/' /etc/nala/nala.conf && \
+  printf '\n\n%s' 'parallel_downloads = 16' >> /etc/nala/nala.conf
 
 # Install aria2
 RUN nala update && \
