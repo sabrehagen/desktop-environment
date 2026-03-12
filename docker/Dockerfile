@@ -346,7 +346,7 @@ RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt
 # Install gping
 RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping && \
   cd /opt/gping && \
-  cargo install --locked --path ./gping && \
+  cargo install --locked --path gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
 
