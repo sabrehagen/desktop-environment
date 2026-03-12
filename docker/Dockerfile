@@ -108,6 +108,7 @@ RUN nala update && \
   libgtk-3-0t64 \
   libnotify-bin \
   libnss3-tools \
+  libsecret-1-0 \
   libssl-dev \
   libterm-readkey-perl \
   lsb-release \
