@@ -196,7 +196,7 @@ RUN nala update && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
 # Install uv
-RUN cargo install --locked uv
+RUN cargo install --locked uv --root /usr/local
 
 # Install alacritty
 RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
