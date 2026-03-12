@@ -447,7 +447,8 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   nala install ngrok
 
 # Install tailscale
-RUN curl -fsSL https://tailscale.com/install.sh | sh
+RUN curl -fsSL https://tailscale.com/install.sh | sh && \
+  nala remove resolvconf
 
 # Install nicotine+
 RUN nala update && \
