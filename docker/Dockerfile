@@ -497,6 +497,9 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --
   nala update && \
   nala install 1password-cli
 
+# Install openclaw
+RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
+
 # Install oxker
 RUN cargo install oxker
 
