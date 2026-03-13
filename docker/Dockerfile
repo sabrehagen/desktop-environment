@@ -330,10 +330,7 @@ RUN nala update && \
   git config --system init.defaultBranch master
 
 # Install github actions runner
-RUN mkdir /opt/actions-runner && \
-  aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v2.332.0/actions-runner-linux-x64-2.332.0.tar.gz && \
-  tar -C /opt/actions-runner -xzf actions-runner.tar.gz && \
-  rm actions-runner.tar.gz
+RUN git clone --depth 1 --single-branch https://github.com/actions/runner /opt/github-actions-runner
 
 # Install gotop
 RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt/gotop && \
