@@ -404,10 +404,6 @@ RUN nala update && \
   make && \
   make install
 
-# Install i3-restore
-RUN git clone --depth 1 --single-branch https://github.com/jdholtz/i3-restore.git /opt/i3-restore && \
-  python3 -m pip install --break-system-packages -r /opt/i3-restore/requirements.txt
-
 # Install jobber
 RUN nala update && \
   nala install debhelper rsync && \
