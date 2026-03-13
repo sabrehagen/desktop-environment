@@ -642,6 +642,7 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 RUN yarn global add \
   @google/gemini-cli \
   @openai/codex \
+  @mariozechner/pi-coding-agent \
   @sourcegraph/amp \
   aicommit2 \
   clipboard-cli \
