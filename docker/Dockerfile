@@ -496,7 +496,8 @@ RUN mkdir /opt/nvm && \
   nvm install 20
 
 # Install ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh
+RUN curl -fsSL https://ollama.com/install.sh | sh && \
+  uv tool install open-webui
 
 # Install op
 RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
