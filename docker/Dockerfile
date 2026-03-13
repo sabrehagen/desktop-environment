@@ -632,6 +632,9 @@ RUN aria2c -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardar
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf - tracexec
 
+# Install walogram
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/walogram /opt/walogram
+
 # Install vcsh
 RUN nala update && \
   nala install automake ronn && \
