@@ -29,8 +29,8 @@ jobs:
           build-args: |
             DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
             DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:cache
+          cache-to: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:cache,mode=max
           file: docker/Dockerfile
           push: true
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest

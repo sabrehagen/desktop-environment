@@ -13,6 +13,8 @@ My [daily driver](https://github.com/users/sabrehagen/packages/container/package
 
 The only dependency required is [Docker](https://docs.docker.com/install).
 
+When running on a system with an Nvidia GPU, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#with-apt-ubuntu-debian) is recommended.
+
 To run on Linux, clone the repository and start the environment.
 
 ```sh
