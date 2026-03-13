@@ -12,6 +12,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        with:
+          driver: docker
 
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
@@ -29,8 +31,7 @@ jobs:
           build-args: |
             DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
             DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
-          cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:cache
-          cache-to: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:cache,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
           file: docker/Dockerfile
           push: true
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
