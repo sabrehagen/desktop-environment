@@ -112,6 +112,7 @@ RUN nala update && \
   libssl-dev \
   libterm-readkey-perl \
   lsb-release \
+  lsof \
   maim \
   make \
   man-db \
