@@ -237,6 +237,11 @@ RUN nala update && \
 # Install claude code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
+# Install cloudflare
+RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && \
+  dpkg -i cloudflare.deb && \
+  rm cloudflare.deb
+
 # Install cursor
 RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
   dpkg -i cursor.deb && \
