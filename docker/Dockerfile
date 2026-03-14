@@ -120,6 +120,7 @@ RUN nala update && \
   mpd \
   mpv \
   nano \
+  ncat \
   ncdu \
   neovim \
   net-tools \
