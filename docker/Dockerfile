@@ -151,6 +151,7 @@ RUN nala update && \
   slop \
   socat \
   software-properties-common \
+  ss \
   ssh \
   sshpass \
   strace \
