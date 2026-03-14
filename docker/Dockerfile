@@ -240,6 +240,11 @@ RUN nala update && \
 # Install claude code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
+# Install cloudflare
+RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && \
+  dpkg -i cloudflare.deb && \
+  rm cloudflare.deb
+
 # Install cursor
 RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
   dpkg -i cursor.deb && \
@@ -743,12 +748,15 @@ RUN mkdir -p $HOME/.config/openvpn && \
 # Configure password-less sudo for the sudo group
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers
 
-# Configure X11 permissions and touchpad tap to click
+# Configure x11 permissions and touchpad tap to click
 RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
   echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
   chmod u+s /usr/bin/xinit && \
   mkdir -p /etc/X11/xorg.conf.d && \
   echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
+
+# Configure nvidia fan control
+RUN echo 'Section "Device"\n Identifier "nvidia"\n Driver "nvidia"\n Option "Coolbits" "4"\nEndSection' > /etc/X11/xorg.conf.d/20-nvidia-coolbits.conf
 
 # Allow input group access to uinput
 RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' > /etc/udev/rules.d/80-hints.rules
