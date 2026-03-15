@@ -4,8 +4,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       packages: write
     steps:
+
+      - name: Record workflow start time
+        run: echo "TIME_WORKFLOW_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Check out repository
         uses: actions/checkout@v3
@@ -23,7 +27,11 @@ jobs:
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push to GitHub Container Registry
+      - name: Record build start
+        run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Build
+        id: build
         uses: docker/build-push-action@v4
         with:
           build-args: |
@@ -33,11 +41,37 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
-          push: true
+          load: true
+          push: false
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
+      - name: Record build end
+        if: always()
+        run: echo "TIME_BUILD_END=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Record push start
+        run: echo "TIME_PUSH_START=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Push to GitHub Container Registry
+        id: push
+        run: docker push ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+
+      - name: Record push end
+        if: always()
+        run: echo "TIME_PUSH_END=$(date +%s)" >> $GITHUB_ENV
+
       - name: Run desktop environment tests
-        run: ./docker/scripts/test.sh
+        id: test
+        run: ./docker/scripts/test.sh 2>&1 | tee /tmp/test.log
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
         continue-on-error: true
+
+      - name: Generate workflow summary
+        if: always()
+        env:
+          STEP_BUILD_OUTCOME: ${{ steps.build.outcome }}
+          STEP_PUSH_OUTCOME: ${{ steps.push.outcome }}
+          STEP_TEST_OUTCOME: ${{ steps.test.outcome }}
+          JOB_STATUS: ${{ job.status }}
+        run: bash .github/scripts/generate-summary.sh

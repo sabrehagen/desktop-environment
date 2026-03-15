@@ -9,7 +9,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
     steps:
+
+      - name: Record workflow start time
+        run: echo "TIME_DEPLOY_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Check out repository
         uses: actions/checkout@v3
@@ -18,6 +23,7 @@ jobs:
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Start headless desktop environment
+        id: headless
         run: ./docker/scripts/headless.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
@@ -35,3 +41,10 @@ jobs:
       - name: Run for 60 mins
         run: sleep 3600
         continue-on-error: true
+
+      - name: Generate workflow summary
+        if: always()
+        env:
+          STEP_HEADLESS_OUTCOME: ${{ steps.headless.outcome }}
+          JOB_STATUS: ${{ job.status }}
+        run: bash .github/scripts/generate-summary.sh
