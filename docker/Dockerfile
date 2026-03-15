@@ -172,6 +172,7 @@ RUN nala update && \
   wdiff \
   wireplumber \
   wmctrl \
+  x2x \
   xauth \
   xautolock \
   xclip \
