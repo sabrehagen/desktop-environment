@@ -61,7 +61,7 @@ jobs:
 
       - name: Run desktop environment tests
         id: test
-        run: ./docker/scripts/test.sh 2>&1 | tee /tmp/test.log
+        run: ./docker/scripts/test.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
         continue-on-error: true
