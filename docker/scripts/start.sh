@@ -18,6 +18,7 @@ docker run \
   $DOCKER_VIDEO \
   --cap-add IPC_LOCK \
   --cap-add NET_ADMIN \
+  --cap-add NET_RAW \
   --cap-add SYS_ADMIN \
   --cap-add SYS_NICE \
   --cap-add SYS_PTRACE \
