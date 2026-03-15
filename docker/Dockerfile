@@ -1,11 +1,7 @@
-# check=skip=SecretsUsedInArgOrEnv
 FROM ubuntu:24.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
-ARG DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ARG DESKTOP_ENVIRONMENT_USER
-
-ENV DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD=$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD
 ENV EDITOR=nano
 ENV LC_ALL=en_US.UTF-8
 ENV SHELL=/bin/zsh
@@ -773,7 +769,8 @@ RUN userdel -r ubuntu && \
   cp --preserve=all --recursive --update=none /etc/skel/. $HOME/
 
 # Set non-root user password
-RUN sed -i "s;^$USER:[^:]*;$USER:$DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD;" /etc/shadow
+RUN --mount=type=secret,id=user_password \
+  sed -i "s;^$USER:[^:]*;$USER:$(cat /run/secrets/user_password);" /etc/shadow
 
 # Take ownership of user's home directory and applications
 RUN chown -R $USER:$USER $HOME /opt
@@ -788,7 +785,8 @@ USER $USER
 WORKDIR $HOME
 
 # Clone the desktop environment
-RUN git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
+RUN git clone https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment /opt/desktop-environment || \
+  git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
 
 # If the CACHEBUST_DOTFILES build arg is supplied, rebuild from static dotfiles onwards
 ARG CACHEBUST_DOTFILES
