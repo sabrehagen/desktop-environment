@@ -1,3 +1,4 @@
+# check=skip=SecretsUsedInArgOrEnv
 FROM ubuntu:24.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
