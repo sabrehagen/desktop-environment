@@ -17,7 +17,7 @@ jobs:
         run: echo "TIME_DEPLOY_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV

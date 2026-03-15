@@ -12,10 +12,10 @@ jobs:
         run: echo "TIME_WORKFLOW_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         with:
           driver: docker
 
@@ -23,7 +23,7 @@ jobs:
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ env.REPOSITORY_OWNER }}
@@ -34,7 +34,7 @@ jobs:
 
       - name: Build
         id: build
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
