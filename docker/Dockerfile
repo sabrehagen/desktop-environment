@@ -79,6 +79,7 @@ RUN nala update && \
   docker-compose-v2 \
   docker.io \
   dput \
+  ethtool \
   feh \
   ffmpeg \
   figlet \
