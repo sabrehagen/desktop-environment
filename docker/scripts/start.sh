@@ -112,4 +112,4 @@ docker run \
   $DESKTOP_ENVIRONMENT_REGISTRY/$DESKTOP_ENVIRONMENT_CONTAINER_IMAGE:$DESKTOP_ENVIRONMENT_CONTAINER_TAG
 
 # Wait until the desktop environment container is running before proceeding
-until docker inspect $DESKTOP_ENVIRONMENT_CONTAINER_NAME | grep Status | grep -m 1 running >/dev/null; do sleep 0.1; done
+until [ "$(docker inspect --format {{.State.Running}} $DESKTOP_ENVIRONMENT_CONTAINER_NAME 2>/dev/null)" = "true" ]; do sleep 0.1; done
