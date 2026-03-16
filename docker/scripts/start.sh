@@ -50,6 +50,8 @@ docker run \
   --publish 8822:22 \
   --rm \
   --security-opt apparmor:unconfined \
+  --sysctl net.core.rmem_max=7500000 \
+  --sysctl net.core.wmem_max=7500000 \
   --ulimit rtprio=95 \
   --ulimit memlock=-1 \
   --volume /dev/displaylink:/dev/displaylink \
