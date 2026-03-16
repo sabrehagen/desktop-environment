@@ -22,8 +22,8 @@ docker run \
   --cap-add SYS_ADMIN \
   --cap-add SYS_NICE \
   --cap-add SYS_PTRACE \
-  --cap-add CAP_SYSLOG \
   --cap-add SYS_TTY_CONFIG \
+  --cap-add SYSLOG \
   --detach \
   --device /dev/dri \
   --device /dev/fuse \
