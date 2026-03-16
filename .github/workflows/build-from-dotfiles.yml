@@ -1,5 +1,7 @@
 name: Build Desktop Environment From Dotfiles
 on: [workflow_dispatch]
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   build:
     runs-on: ubuntu-latest
