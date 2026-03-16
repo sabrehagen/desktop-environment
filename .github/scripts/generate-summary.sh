@@ -18,7 +18,7 @@ SPEC_OS=$(. /etc/os-release && echo "$PRETTY_NAME")
 SPEC_KERNEL=$(uname -r)
 SPEC_CPU=$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2 | xargs)
 SPEC_CPU_CORES=$(nproc)
-SPEC_RAM=$(free --si | awk '/^Mem:/ {print $2}' | sed 's/\([0-9.]*\)\([KMGT]\)/\1 \2B/')
+SPEC_RAM=$(free --si | awk '/^Mem:/ {printf "%.1f GB", $2/1000/1000}')
 SPEC_DISK=$(df --si / | awk 'NR==2 {print $3 " / " $2}' | sed 's/\([0-9.]*\)\([KMGT]\)/\1 \2B/g')
 SPEC_GPU=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1)
 
