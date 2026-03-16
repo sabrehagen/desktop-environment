@@ -1,7 +1,5 @@
 name: Build Desktop Environment
 on: [push, workflow_call]
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   build:
     runs-on: self-hosted
