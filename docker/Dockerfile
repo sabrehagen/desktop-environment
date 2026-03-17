@@ -766,7 +766,8 @@ RUN userdel -r ubuntu && \
   --groups audio,docker,input,shadow,sudo,tty,video \
   --shell /usr/bin/zsh \
   $USER && \
-  cp --preserve=all --recursive --update=none /etc/skel/. $HOME/
+  cp --preserve=all --recursive --update=none /etc/skel/. $HOME/ && \
+  touch $HOME/.hushlogin
 
 # Set non-root user password
 RUN --mount=type=secret,id=user_password \
