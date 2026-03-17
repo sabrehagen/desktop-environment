@@ -251,8 +251,8 @@ RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x6
 # Install cursor cli
 RUN curl -fsSL https://cursor.com/install | bash
 
-# Install dark mode extension
-RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/dark-night-mode-chrome-extension /opt/dark-night-mode-chrome-extension
+# Install wal chrome extension
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/wal-chrome-extension /opt/wal-chrome-extension
 
 # Install discord
 RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
