@@ -457,7 +457,8 @@ RUN aria2c -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/release
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf && \
-  rm DejaVuSansMono.zip
+  rm DejaVuSansMono.zip && \
+  nala install fonts-noto-core
 
 # Install ngrok
 RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
