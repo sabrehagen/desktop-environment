@@ -454,6 +454,9 @@ RUN nala update && \
 RUN aria2c -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
   mkdir -p /usr/share/fonts/truetype/dejavu && \
   unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf && \
   rm DejaVuSansMono.zip
 
 # Install ngrok
