@@ -70,6 +70,7 @@ RUN nala update && \
   colorized-logs \
   curl \
   dbus-x11 \
+  ddcutil \
   dialog \
   dnsmasq \
   dnsutils \
@@ -767,7 +768,7 @@ RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' > /etc/udev/rules.d/80-
 RUN userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,docker,input,shadow,sudo,tty,video \
+  --groups audio,docker,i2c,input,shadow,sudo,tty,video \
   --shell /usr/bin/zsh \
   $USER && \
   cp --preserve=all --recursive --update=none /etc/skel/. $HOME/ && \
