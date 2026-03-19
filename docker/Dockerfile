@@ -523,7 +523,7 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --
 RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
 
 # Install oxker
-RUN cargo install oxker
+RUN cargo install --git https://github.com/sabrehagen/oxker --branch fix/bollard-secret-to-models
 
 # Install pcmanfm
 RUN nala update && \
