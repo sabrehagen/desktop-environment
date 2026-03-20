@@ -147,6 +147,7 @@ RUN nala update && \
   redshift \
   ripgrep \
   ruby \
+  scrot \
   slop \
   socat \
   software-properties-common \
