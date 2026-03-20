@@ -18,8 +18,8 @@ SPEC_OS=$(. /etc/os-release && echo "$PRETTY_NAME")
 SPEC_KERNEL=$(uname -r)
 SPEC_CPU=$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2 | xargs)
 SPEC_CPU_CORES=$(nproc)
-SPEC_RAM=$(free --si | awk '/^Mem:/ {printf "%.1f GB", $2/1000/1000}')
-SPEC_DISK=$(df --si / | awk 'NR==2 {print $3 " / " $2}' | sed 's/\([0-9.]*\)\([KMGT]\)/\1 \2B/g')
+SPEC_RAM=$(free | awk '/^Mem:/ {printf "%.1f GiB", $2/1024/1024}')
+SPEC_DISK=$(df -h / | awk 'NR==2 {print $3 " / " $2}' | sed 's/\([0-9.]*\)\([KMGT]\)/\1 \2iB/g')
 SPEC_GPU=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1)
 
 NOW=$(date +%s)
@@ -73,7 +73,7 @@ BUILD_LOGS=$(curl -sL \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
   "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/jobs/$JOB_ID/logs" | \
-  awk '/##\[group\]Build\r?$/{p=1;next} p&&/##\[endgroup\]/{exit} p{sub(/^[0-9T:.Z]+ /,""); sub(/\r/,""); print}' | \
+  awk '/##\[group\]Build\r?$/{depth=1;next} depth==0{next} /##\[group\]/{depth++;next} /##\[endgroup\]/{if(--depth==0)exit;next} {sub(/^[0-9T:.Z]+ /,""); sub(/\r/,""); print}' | \
   tail -50)
 
 [ -z "$BUILD_LOGS" ] && exit 0
