@@ -1,7 +1,82 @@
 FROM ubuntu:24.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
+ARG DESKTOP_ENVIRONMENT_SOURCE_HOME
+ARG DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY
+ARG DESKTOP_ENVIRONMENT_SOURCE_BPLAY
+ARG DESKTOP_ENVIRONMENT_SOURCE_CBONSAI
+ARG DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT
+ARG DESKTOP_ENVIRONMENT_SOURCE_DNCLI
+ARG DESKTOP_ENVIRONMENT_SOURCE_DUNST
+ARG DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH
+ARG DESKTOP_ENVIRONMENT_SOURCE_GIT
+ARG DESKTOP_ENVIRONMENT_SOURCE_GOTOP
+ARG DESKTOP_ENVIRONMENT_SOURCE_GPING
+ARG DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL
+ARG DESKTOP_ENVIRONMENT_SOURCE_I3
+ARG DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS
+ARG DESKTOP_ENVIRONMENT_SOURCE_I3LOCK
+ARG DESKTOP_ENVIRONMENT_SOURCE_JOBBER
+ARG DESKTOP_ENVIRONMENT_SOURCE_JUMP
+ARG DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP
+ARG DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS
+ARG DESKTOP_ENVIRONMENT_SOURCE_NOVNC
+ARG DESKTOP_ENVIRONMENT_SOURCE_PCMANFM
+ARG DESKTOP_ENVIRONMENT_SOURCE_PICOM
+ARG DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL
+ARG DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH
+ARG DESKTOP_ENVIRONMENT_SOURCE_QT5CT
+ARG DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE
+ARG DESKTOP_ENVIRONMENT_SOURCE_TMUX
+ARG DESKTOP_ENVIRONMENT_SOURCE_VCSH
+ARG DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL
+ARG DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION
+ARG DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM
+ARG DESKTOP_ENVIRONMENT_SOURCE_WARNAI
+ARG DESKTOP_ENVIRONMENT_SOURCE_WHATFILES
+ARG DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP
+ARG DESKTOP_ENVIRONMENT_SOURCE_ZEROCLAW
+ARG DESKTOP_ENVIRONMENT_SOURCE_ZSH
 ARG DESKTOP_ENVIRONMENT_USER
+
+ENV DESKTOP_ENVIRONMENT_SOURCE_HOME=$DESKTOP_ENVIRONMENT_SOURCE_HOME
+ENV DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY=$DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY
+ENV DESKTOP_ENVIRONMENT_SOURCE_BPLAY=$DESKTOP_ENVIRONMENT_SOURCE_BPLAY
+ENV DESKTOP_ENVIRONMENT_SOURCE_CBONSAI=$DESKTOP_ENVIRONMENT_SOURCE_CBONSAI
+ENV DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT=$DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT
+ENV DESKTOP_ENVIRONMENT_SOURCE_DNCLI=$DESKTOP_ENVIRONMENT_SOURCE_DNCLI
+ENV DESKTOP_ENVIRONMENT_SOURCE_DUNST=$DESKTOP_ENVIRONMENT_SOURCE_DUNST
+ENV DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH=$DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH
+ENV DESKTOP_ENVIRONMENT_SOURCE_GIT=$DESKTOP_ENVIRONMENT_SOURCE_GIT
+ENV DESKTOP_ENVIRONMENT_SOURCE_GOTOP=$DESKTOP_ENVIRONMENT_SOURCE_GOTOP
+ENV DESKTOP_ENVIRONMENT_SOURCE_GPING=$DESKTOP_ENVIRONMENT_SOURCE_GPING
+ENV DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL=$DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL
+ENV DESKTOP_ENVIRONMENT_SOURCE_I3=$DESKTOP_ENVIRONMENT_SOURCE_I3
+ENV DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS=$DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS
+ENV DESKTOP_ENVIRONMENT_SOURCE_I3LOCK=$DESKTOP_ENVIRONMENT_SOURCE_I3LOCK
+ENV DESKTOP_ENVIRONMENT_SOURCE_JOBBER=$DESKTOP_ENVIRONMENT_SOURCE_JOBBER
+ENV DESKTOP_ENVIRONMENT_SOURCE_JUMP=$DESKTOP_ENVIRONMENT_SOURCE_JUMP
+ENV DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP=$DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP
+ENV DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS=$DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS
+ENV DESKTOP_ENVIRONMENT_SOURCE_NOVNC=$DESKTOP_ENVIRONMENT_SOURCE_NOVNC
+ENV DESKTOP_ENVIRONMENT_SOURCE_PCMANFM=$DESKTOP_ENVIRONMENT_SOURCE_PCMANFM
+ENV DESKTOP_ENVIRONMENT_SOURCE_PICOM=$DESKTOP_ENVIRONMENT_SOURCE_PICOM
+ENV DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL=$DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL
+ENV DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH=$DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH
+ENV DESKTOP_ENVIRONMENT_SOURCE_QT5CT=$DESKTOP_ENVIRONMENT_SOURCE_QT5CT
+ENV DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE=$DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE
+ENV DESKTOP_ENVIRONMENT_SOURCE_TMUX=$DESKTOP_ENVIRONMENT_SOURCE_TMUX
+ENV DESKTOP_ENVIRONMENT_SOURCE_VCSH=$DESKTOP_ENVIRONMENT_SOURCE_VCSH
+ENV DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL=$DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL
+ENV DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION=$DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION
+ENV DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM=$DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM
+ENV DESKTOP_ENVIRONMENT_SOURCE_WARNAI=$DESKTOP_ENVIRONMENT_SOURCE_WARNAI
+ENV DESKTOP_ENVIRONMENT_SOURCE_WHATFILES=$DESKTOP_ENVIRONMENT_SOURCE_WHATFILES
+ENV DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP=$DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP
+ENV DESKTOP_ENVIRONMENT_SOURCE_ZEROCLAW=$DESKTOP_ENVIRONMENT_SOURCE_ZEROCLAW
+ENV DESKTOP_ENVIRONMENT_SOURCE_ZSH=$DESKTOP_ENVIRONMENT_SOURCE_ZSH
+ENV DESKTOP_ENVIRONMENT_USER=$DESKTOP_ENVIRONMENT_USER
+
 ENV EDITOR=nano
 ENV LC_ALL=en_US.UTF-8
 ENV SHELL=/bin/zsh
@@ -203,8 +278,8 @@ RUN cargo install --locked uv --root /usr/local
 
 # Install alacritty
 RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
-  git clone --depth 1 --single-branch https://github.com/alacritty/alacritty /opt/alacritty && \
-  cd /opt/alacritty && \
+  git clone --depth 1 --single-branch https://github.com/alacritty/alacritty $DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY && \
   cargo build --release --no-default-features --features=x11 && \
   install target/release/alacritty /usr/local/bin && \
   cargo clean
@@ -219,8 +294,10 @@ RUN nala update && \
 
 # Install asciic
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
-  git clone --depth 1 --single-branch https://github.com/S0raWasTaken/bapple_player /opt/bplay && \
-  cargo install --path /opt/bplay
+  git clone --depth 1 --single-branch https://github.com/S0raWasTaken/bapple_player $DESKTOP_ENVIRONMENT_SOURCE_BPLAY && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_BPLAY && \
+  cargo install . && \
+  cargo clean
 
 # Install autorandr
 RUN uv tool install autorandr
@@ -233,8 +310,8 @@ RUN aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0
 # Install cbonsai
 RUN nala update && \
   nala install libncurses-dev && \
-  git clone --depth 1 --single-branch https://gitlab.com/jallbrit/cbonsai /opt/cbonsai && \
-  cd /opt/cbonsai && \
+  git clone --depth 1 --single-branch https://gitlab.com/jallbrit/cbonsai $DESKTOP_ENVIRONMENT_SOURCE_CBONSAI && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_CBONSAI && \
   make install
 
 # Install claude code
@@ -254,7 +331,7 @@ RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x6
 RUN curl -fsSL https://cursor.com/install | bash
 
 # Install wal chrome extension
-RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/wal-chrome-extension /opt/wal-chrome-extension
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/wal-chrome-extension $DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION
 
 # Install discord
 RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
@@ -269,8 +346,8 @@ RUN aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.
 # Install dncli
 RUN nala update && \
   nala install qtbase5-dev && \
-  git clone --depth 1 --single-branch https://github.com/Nohac/dncli /opt/dncli && \
-  cd /opt/dncli && \
+  git clone --depth 1 --single-branch https://github.com/Nohac/dncli $DESKTOP_ENVIRONMENT_SOURCE_DNCLI && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_DNCLI && \
   qmake && \
   make -j$(nproc) && \
   install dncli /usr/local/bin/drag
@@ -287,8 +364,8 @@ RUN aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2
 # Install dunst
 RUN nala update && \
   nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
-  git clone https://github.com/sabrehagen/dunst /opt/dunst && \
-  cd /opt/dunst && \
+  git clone https://github.com/sabrehagen/dunst $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
   make WAYLAND=0 all && \
   make WAYLAND=0 install
 
@@ -302,10 +379,10 @@ RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/ez
   tar -C /usr/local/bin -xzf -
 
 # Install fastfetch
-RUN git clone https://github.com/fastfetch-cli/fastfetch /opt/fastfetch && \
-  cmake -S /opt/fastfetch -B /opt/fastfetch/build -DCMAKE_BUILD_TYPE=Release && \
-  cmake --build /opt/fastfetch/build --parallel $(nproc) --target fastfetch && \
-  install /opt/fastfetch/build/fastfetch /usr/local/bin
+RUN git clone https://github.com/fastfetch-cli/fastfetch $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH && \
+  cmake -S $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH -B $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build -DCMAKE_BUILD_TYPE=Release && \
+  cmake --build $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build --parallel $(nproc) --target fastfetch && \
+  install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
 
 # Install fzf
 RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
@@ -330,8 +407,8 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
 # Install git
 RUN nala update && \
   nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
-  git clone --depth 20 --single-branch https://github.com/sabrehagen/git /opt/git && \
-  cd /opt/git && \
+  git clone --depth 20 --single-branch https://github.com/sabrehagen/git $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   make configure && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
@@ -341,25 +418,35 @@ RUN nala update && \
   git config --system init.defaultBranch master
 
 # Install github actions runner
-RUN mkdir /opt/github-actions-runner && \
+RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner && \
   aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v2.332.0/actions-runner-linux-x64-2.332.0.tar.gz && \
-  tar -C /opt/github-actions-runner -xzf actions-runner.tar.gz && \
+  tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner -xzf actions-runner.tar.gz && \
   rm actions-runner.tar.gz
 
 # Install gotop
-RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop /opt/gotop && \
-  cd /opt/gotop && \
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/gotop $DESKTOP_ENVIRONMENT_SOURCE_GOTOP && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_GOTOP && \
   VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
   DATE=$(date +%Y%m%dT%H%M%S) && \
   go build -o gotop -ldflags "-X main.Version=v$VERSION -X main.BuildDate=$DATE" ./cmd/gotop && \
   install gotop /usr/local/bin
 
 # Install gping
-RUN git clone --depth 1 --single-branch https://github.com/orf/gping /opt/gping && \
-  cd /opt/gping && \
+RUN git clone --depth 1 --single-branch https://github.com/orf/gping $DESKTOP_ENVIRONMENT_SOURCE_GPING && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_GPING && \
   cargo install --locked --path gping && \
   install target/release/gping /usr/local/bin && \
   cargo clean
+
+# Install gsimplecal
+RUN nala update && \
+  nala install libgtk2.0-dev libglib2.0-dev && \
+  git clone --depth 1 --single-branch https://github.com/dmedvinsky/gsimplecal $DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL && \
+  ./autogen.sh && \
+  ./configure --enable-gtk2 && \
+  make && \
+  make install
 
 # Install hints
 RUN nala update && \
@@ -370,8 +457,8 @@ RUN nala update && \
 # Install i3
 RUN nala update && \
   nala install dmenu libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
-  git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 /opt/i3 && \
-  cd /opt/i3 && \
+  git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
   mkdir build && \
   meson setup build && \
   meson compile -C build && \
@@ -382,8 +469,8 @@ RUN nala update && \
   make install
 
 # Install i3blocks
-RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks /opt/i3blocks && \
-  cd /opt/i3blocks && \
+RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks $DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS && \
   ./autogen.sh && \
   ./configure && \
   make && \
@@ -392,43 +479,39 @@ RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks /opt/
 # Install i3lock
 RUN nala update && \
   nala install libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
-  git clone --depth 1 --single-branch https://github.com/Raymo111/i3lock-color /opt/i3lock && \
-  cd /opt/i3lock && \
+  git clone --depth 1 --single-branch https://github.com/Raymo111/i3lock-color $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   sed -i 's/Num Lock//' i3lock.c && \
   sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
   ./build.sh && \
   ./install-i3lock-color.sh
 
+# Install i3-focus-last
+RUN git clone --depth 1 --single-branch https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
+  cd $HOME/.config/i3/i3-focus-last && \
+  go install
+
 # Install i3 extras
 RUN nala update && \
-  nala install libgtk2.0-dev libglib2.0-dev python3-dev python3-i3ipc && \
+  nala install python3-dev python3-i3ipc && \
   uv tool install i3-resurrect==1.4.2 && \
   uv tool install i3altlayout==1.1.1 && \
-  uv tool install git+https://github.com/sabrehagen/i3-workspace-names-daemon && \
-  git clone --depth 1 --single-branch https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
-  cd $HOME/.config/i3/i3-focus-last && \
-  go install && \
-  git clone --depth 1 --single-branch https://github.com/dmedvinsky/gsimplecal /opt/gsimplecal && \
-  cd /opt/gsimplecal && \
-  ./autogen.sh && \
-  ./configure --enable-gtk2 && \
-  make && \
-  make install
+  uv tool install git+https://github.com/sabrehagen/i3-workspace-names-daemon
 
 # Install jobber
 RUN nala update && \
   nala install debhelper rsync && \
-  mkdir /opt/jobber && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber /opt/jobber/jobber-src && \
-  cd /opt/jobber/jobber-src && \
+  mkdir $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONMENT_SOURCE_JOBBER/jobber-src && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_JOBBER/jobber-src && \
   sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
   make -C packaging/debian pkg-local . && \
   make && \
   make install
 
 # Install jump directory navigator
-RUN git clone --depth 1 --single-branch https://github.com/gsamokovarov/jump /opt/jump && \
-  cd /opt/jump && \
+RUN git clone --depth 1 --single-branch https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   go build -o jump && \
   install jump /usr/local/bin
 
@@ -444,8 +527,8 @@ RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/downlo
 # Install ncmpcpp
 RUN nala update && \
   nala install libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
-  git clone --depth 1 --single-branch https://github.com/ncmpcpp/ncmpcpp /opt/ncmpcpp && \
-  cd /opt/ncmpcpp && \
+  git clone --depth 1 --single-branch https://github.com/ncmpcpp/ncmpcpp $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   autoreconf -fiv && \
   ./configure --prefix=/usr --enable-outputs --enable-visualizer --enable-clock --with-fftw --with-taglib --with-lto && \
   make -j$(nproc) && \
@@ -475,8 +558,8 @@ RUN curl -fsSL https://tailscale.com/install.sh | sh && \
 # Install nicotine+
 RUN nala update && \
   nala install devscripts equivs python3-build && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/nicotine-plus /opt/nicotine-plus/src && \
-  cd /opt/nicotine-plus/src && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/nicotine-plus $DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS/src && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS/src && \
   mk-build-deps --install --remove --tool 'nala install --no-install-recommends' debian/control && \
   python3 -m build --sdist && \
   mk-origtargz dist/nicotine*.tar.gz && \
@@ -490,8 +573,8 @@ RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz |
   tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
-RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.git /opt/noVNC && \
-  git clone --depth 1 --single-branch https://github.com/novnc/websockify /opt/noVNC/utils/websockify
+RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.git $DESKTOP_ENVIRONMENT_SOURCE_NOVNC && \
+  git clone --depth 1 --single-branch https://github.com/novnc/websockify $DESKTOP_ENVIRONMENT_SOURCE_NOVNC/utils/websockify
 
 # Install nvidia driver
 RUN nala update && \
@@ -501,10 +584,10 @@ RUN nala update && \
 RUN cargo install nviwatch
 
 # Install nvm
-RUN mkdir /opt/nvm && \
+RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
-  NVM_DIR=/opt/nvm bash && \
-  . /opt/nvm/nvm.sh && \
+  NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm bash && \
+  . $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && \
   nvm install 20
 
 # Install ollama
@@ -529,8 +612,8 @@ RUN cargo install --git https://github.com/sabrehagen/oxker --branch fix/bollard
 # Install pcmanfm
 RUN nala update && \
   nala install intltool libfm-gtk3-dev libgtk-3-dev && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/pcmanfm /opt/pcmanfm && \
-  cd /opt/pcmanfm && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/pcmanfm $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
   ./autogen.sh && \
   ./configure --prefix=/usr --with-gtk=3 && \
   make -j$(nproc) && \
@@ -540,8 +623,8 @@ RUN nala update && \
 # Install picom
 RUN nala update && \
   nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
-  git clone --depth 1 --single-branch https://github.com/yshui/picom /opt/picom && \
-  cd /opt/picom && \
+  git clone --depth 1 --single-branch https://github.com/yshui/picom $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
   meson setup --buildtype=release build && \
   ninja -C build && \
   install build/src/picom /usr/local/bin
@@ -555,8 +638,8 @@ RUN uv tool install pywal
 # Install qjackctl
 RUN nala update && \
   nala install libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
-  git clone --depth 1 --single-branch https://github.com/rncbc/qjackctl /opt/qjackctl && \
-  cd /opt/qjackctl && \
+  git clone --depth 1 --single-branch https://github.com/rncbc/qjackctl $DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL && \
   cmake -DCMAKE_BUILD_TYPE=Release -B build && \
   cmake --build build --parallel $(nproc) && \
   cmake --install build
@@ -564,8 +647,8 @@ RUN nala update && \
 # Install qt5ct
 RUN nala update && \
   nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/qt5ct /opt/qt5ct && \
-  cd /opt/qt5ct && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/qt5ct $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   cp src/qt5ct-common/qt5ct.h src/qt5ct/qt5ct.h && \
   qmake && \
   make -j$(nproc) && \
@@ -574,10 +657,10 @@ RUN nala update && \
 # Install qpwgraph
 RUN nala update && \
   nala install libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
-  git clone --depth 1 --single-branch https://github.com/rncbc/qpwgraph /opt/qpwgraph && \
-  cmake -S /opt/qpwgraph -B /opt/qpwgraph/build -DCMAKE_BUILD_TYPE=Release && \
-  cmake --build /opt/qpwgraph/build --parallel $(nproc) && \
-  cmake --install /opt/qpwgraph/build
+  git clone --depth 1 --single-branch https://github.com/rncbc/qpwgraph $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH && \
+  cmake -S $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH -B $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build -DCMAKE_BUILD_TYPE=Release && \
+  cmake --build $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build --parallel $(nproc) && \
+  cmake --install $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build
 
 # Install screenpipe
 # RUN curl -fsSL get.screenpi.pe/cli | sh && \
@@ -610,9 +693,9 @@ RUN aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/downloa
 
 # Install thunderbird
 RUN aria2c -o thunderbird.tar.xz https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/148.0b3/linux-x86_64/en-US/thunderbird-148.0b3.tar.xz && \
-  tar -C /opt -xJf thunderbird.tar.xz && \
+  tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf thunderbird.tar.xz && \
   rm thunderbird.tar.xz && \
-  ln -s /opt/thunderbird/thunderbird /usr/local/bin/thunderbird
+  ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/thunderbird/thunderbird /usr/local/bin/thunderbird
 
 # Install timeago
 RUN aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
@@ -629,8 +712,8 @@ RUN aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdusha
 # Install tmux
 RUN nala update && \
   nala install libevent-dev libncurses-dev bison && \
-  git clone --depth 20 --single-branch https://github.com/tmux/tmux /opt/tmux && \
-  cd /opt/tmux && \
+  git clone --depth 20 --single-branch https://github.com/tmux/tmux $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   sh autogen.sh && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
@@ -646,13 +729,15 @@ RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexe
   tar -C /usr/local/bin -xzf - tracexec
 
 # Install walogram
-RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/walogram /opt/walogram
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/walogram $DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM && \
+  make install
 
 # Install vcsh
 RUN nala update && \
   nala install automake ronn && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/vcsh /opt/vcsh && \
-  cd /opt/vcsh && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/vcsh $DESKTOP_ENVIRONMENT_SOURCE_VCSH && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_VCSH && \
   ./bootstrap.sh && \
   ./configure \
   --prefix=/usr \
@@ -667,12 +752,13 @@ RUN nala update && \
 # Install warnai
 RUN nala update && \
   nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
-  git clone --depth 1 --single-branch https://github.com/reorr/warnai /opt/warnai && \
-  sed -i '/notify-send/d' /opt/warnai/warnai
+  git clone --depth 1 --single-branch https://github.com/reorr/warnai $DESKTOP_ENVIRONMENT_SOURCE_WARNAI && \
+  sed -i '/notify-send/d' $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai && \
+  ln -s $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai /usr/local/bin
 
 # Install whatfiles
-RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles /opt/whatfiles && \
-  cd /opt/whatfiles && \
+RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles $DESKTOP_ENVIRONMENT_SOURCE_WHATFILES && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_WHATFILES && \
   make && \
   make install
 
@@ -681,12 +767,12 @@ RUN aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/0.
   chmod +x xava.appimage && \
   ./xava.appimage --appimage-extract && \
   rm xava.appimage && \
-  mv squashfs-root /opt/xava && \
-  ln -sf /opt/xava/usr/bin/xava /usr/local/bin/xava && \
-  ln -sf /opt/xava/usr/share/xava /usr/share/xava && \
-  ln -sf /opt/xava/usr/lib/xava /usr/lib/xava && \
+  mv squashfs-root $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava && \
+  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/bin/xava /usr/local/bin/xava && \
+  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava /usr/share/xava && \
+  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/lib/xava /usr/lib/xava && \
   mkdir -p /etc/skel/.config/xava && \
-  cp -a /opt/xava/usr/share/xava/. /etc/skel/.config/xava/
+  cp -a $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava/. /etc/skel/.config/xava/
 
 # Install xcolor
 RUN cargo install xcolor
@@ -694,8 +780,8 @@ RUN cargo install xcolor
 # Install xwinwrap
 RUN nala update && \
   nala install libx11-dev libxext-dev libxrender-dev x11proto-xext-dev xorg-dev && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/xwinwrap.git /opt/xwinwrap && \
-  cd /opt/xwinwrap && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/xwinwrap.git $DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP && \
   make && \
   make install
 
@@ -723,14 +809,14 @@ RUN yarn global add \
   yarn cache clean
 
 # Install zeroclaw
-RUN git clone --depth 100 --single-branch https://github.com/zeroclaw-labs/zeroclaw.git /opt/zeroclaw && \
-  yes | /opt/zeroclaw/install.sh
+RUN git clone --depth 100 --single-branch https://github.com/zeroclaw-labs/zeroclaw.git $DESKTOP_ENVIRONMENT_SOURCE_ZEROCLAW && \
+  yes | $DESKTOP_ENVIRONMENT_SOURCE_ZEROCLAW/install.sh
 
 # Install zsh
 RUN nala update && \
   nala install libncursesw5-dev libpcre2-dev yodl && \
-  git clone --depth 1 --single-branch https://github.com/zsh-users/zsh /opt/zsh && \
-  cd /opt/zsh && \
+  git clone --depth 1 --single-branch https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   ./Util/preconfig && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
@@ -742,8 +828,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install
   yes | $HOME/.zvm/self/zvm use 0.15.2
 
 # Install vs code wal theme
-RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal /opt/vscode-wal && \
-  yarn --cwd /opt/vscode-wal
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/vscode-wal $DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL && \
+  yarn --cwd $DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
@@ -780,10 +866,10 @@ RUN --mount=type=secret,id=user_password \
   sed -i "s;^$USER:[^:]*;$USER:$(cat /run/secrets/user_password);" /etc/shadow
 
 # Take ownership of user's home directory and applications
-RUN chown -R $USER:$USER $HOME /opt
+RUN chown -R $USER:$USER $HOME $DESKTOP_ENVIRONMENT_SOURCE_HOME
 
 # Restore file ownership and file mode required for chrome-sandbox binaries
-RUN find /opt -type f -name chrome-sandbox \
+RUN find $DESKTOP_ENVIRONMENT_SOURCE_HOME -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
 
@@ -792,8 +878,8 @@ USER $USER
 WORKDIR $HOME
 
 # Clone the desktop environment
-RUN git clone https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment /opt/desktop-environment || \
-  git clone https://github.com/sabrehagen/desktop-environment /opt/desktop-environment
+RUN git clone https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment $DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT || \
+  git clone https://github.com/sabrehagen/desktop-environment $DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT
 
 # If the CACHEBUST_DOTFILES build arg is supplied, rebuild from static dotfiles onwards
 ARG CACHEBUST_DOTFILES
