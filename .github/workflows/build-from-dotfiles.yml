@@ -27,6 +27,13 @@ jobs:
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Export build args from environment configuration
+        id: build-args
+        env:
+          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
+        run: bash .github/scripts/export-build-args.sh
+
       - name: Record build start
         run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
 
@@ -36,8 +43,7 @@ jobs:
         with:
           build-args: |
             CACHEBUST_DOTFILES=${{ github.sha }}
-            DESKTOP_ENVIRONMENT_USER=${{ env.REPOSITORY_OWNER }}
-            DESKTOP_ENVIRONMENT_GITHUB_USER=${{ env.REPOSITORY_OWNER }}
+            ${{ steps.build-args.outputs.build_args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/Dockerfile
