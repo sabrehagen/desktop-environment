@@ -296,7 +296,7 @@ RUN nala update && \
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
   git clone --depth 1 --single-branch https://github.com/S0raWasTaken/bapple_player $DESKTOP_ENVIRONMENT_SOURCE_BPLAY && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_BPLAY && \
-  cargo install . && \
+  cargo install --path . && \
   cargo clean
 
 # Install autorandr
