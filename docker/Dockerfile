@@ -214,6 +214,7 @@ RUN nala update && \
   pipx \
   pkg-config \
   pulseaudio-utils \
+  pulsemixer \
   python3 \
   python3-libtmux \
   python3-pip \
