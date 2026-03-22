@@ -591,8 +591,7 @@ RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
   nvm install 20
 
 # Install ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh && \
-  uv tool install open-webui
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Install op
 RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
@@ -602,6 +601,9 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --
   curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
   nala update && \
   nala install 1password-cli
+
+# Install open-webui
+# RUN uv tool install open-webui
 
 # Install openclaw
 RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
