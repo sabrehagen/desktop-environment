@@ -9,8 +9,8 @@ docker network create $DESKTOP_ENVIRONMENT_DOCKER_NETWORK 2>/dev/null
 # Enable gpu passthrough if the nvidia container runtime is available
 DOCKER_GPUS=$(docker info --format {{.Runtimes}} 2>/dev/null | grep -q nvidia && echo --gpus all)
 
-# Enable video device passthrough if a video device is available
-DOCKER_VIDEO=$(test -e /dev/video0 && echo --device /dev/video0)
+# Enable video device passthrough if video devices are available
+DOCKER_VIDEO=$(ls /dev/video* 2>/dev/null | xargs -I@ echo --device @ | tr '\n' ' ')
 
 # Start the desktop environment container
 docker run \
