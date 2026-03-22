@@ -327,9 +327,6 @@ RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x6
   dpkg -i cursor.deb && \
   rm cursor.deb
 
-# Install cursor cli
-RUN curl -fsSL https://cursor.com/install | bash
-
 # Install wal chrome extension
 RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/wal-chrome-extension $DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION
 
