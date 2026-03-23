@@ -1,3 +1,9 @@
+# Shell scripting conventions
+
+- Always use `jq` for JSON parsing in shell scripts. Never use `python3` or `python` for JSON parsing.
+
+---
+
 # Adding a New Program to the Desktop Environment
 
 This document describes the exact steps required to add a new program that is built from source to the desktop environment. Follow every step in order. All additions must be inserted in alphabetical order within their respective file.
