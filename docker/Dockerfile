@@ -160,6 +160,7 @@ RUN nala update && \
   fonts-noto-color-emoji \
   g++ \
   gcc \
+  gdb \
   gimp \
   git \
   git-lfs \
