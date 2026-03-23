@@ -801,6 +801,7 @@ RUN yarn global add \
   clipboard-cli \
   diff-so-fancy \
   github-email \
+  grok-dev \
   http-server \
   imgur-uploader-cli \
   nodemon \
