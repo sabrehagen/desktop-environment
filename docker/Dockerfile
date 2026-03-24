@@ -261,6 +261,7 @@ RUN nala update && \
   xorg \
   xsel \
   xserver-xorg \
+  xsettingsd \
   xterm \
   yq \
   yt-dlp \
