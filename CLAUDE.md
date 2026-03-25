@@ -4,6 +4,19 @@
 
 ---
 
+# Testing changes before finishing
+
+Before telling the user a task is complete, always verify the change is correct by testing it. For Dockerfile changes:
+
+1. Add `RUN exit 123` immediately after the `RUN` step being added or modified.
+2. Run `docker/scripts/build.sh`.
+3. Confirm the build exits with code 123 — this proves the preceding step succeeded and Docker reached the sentinel.
+4. Remove the `RUN exit 123` line.
+
+Do not report a fix as complete until you have evidence the fix works.
+
+---
+
 # Adding a New Program to the Desktop Environment
 
 This document describes the exact steps required to add a new program that is built from source to the desktop environment. Follow every step in order. All additions must be inserted in alphabetical order within their respective file.
