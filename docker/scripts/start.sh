@@ -27,8 +27,6 @@ docker run \
   --detach \
   --device /dev/dri \
   --device /dev/fuse \
-  --device /dev/input \
-  --device /dev/snd \
   --device /dev/tty$DESKTOP_ENVIRONMENT_TTY \
   --device /dev/uinput \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
@@ -54,7 +52,9 @@ docker run \
   --ulimit rtprio=95 \
   --ulimit memlock=-1 \
   --volume /dev/displaylink:/dev/displaylink \
+  --volume /dev/input:/dev/input \
   --volume /dev/shm:/dev/shm \
+  --volume /dev/snd:/dev/snd \
   --volume /mnt/mmc:/mnt/mmc \
   --volume /run/udev:/run/udev \
   --volume /var/lib/docker:/var/lib/docker \
