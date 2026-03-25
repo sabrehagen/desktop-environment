@@ -308,6 +308,12 @@ RUN aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0
   dpkg -i btm.deb && \
   rm btm.deb
 
+# Install btop
+RUN aria2c -o btop.tbz https://github.com/aristocratos/btop/releases/download/v1.4.6/btop-x86_64-unknown-linux-musl.tbz && \
+  tar -xjf btop.tbz && \
+  make -C btop install && \
+  rm -rf btop btop.tbz
+
 # Install cbonsai
 RUN nala update && \
   nala install libncurses-dev && \
