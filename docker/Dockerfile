@@ -210,10 +210,6 @@ RUN nala update && \
   pavucontrol-qt \
   pciutils \
   perl \
-  pipewire \
-  pipewire-alsa \
-  pipewire-jack \
-  pipewire-pulse \
   pipx \
   pkg-config \
   pulseaudio-utils \
@@ -632,6 +628,11 @@ RUN nala update && \
   meson setup --buildtype=release build && \
   ninja -C build && \
   install build/src/picom /usr/local/bin
+
+# Install pipewire
+RUN nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
+  echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack > /etc/ld.so.conf.d/pipewire-jack.conf && \
+  ldconfig
 
 # Install posting
 RUN uv tool install posting
