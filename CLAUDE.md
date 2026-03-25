@@ -1,6 +1,16 @@
+# Environment overview
+
+- The main entrypoint for the desktop environment is `~/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `~/.config/scripts/`.
+- Each application on the system has its config files managed by `vcsh`. Use `vcsh list` to see tracked repos and `vcsh <repo> ls-files` to check what config files belong to a given program.
+- When modifying vcsh-tracked config files, always ask the user if they would like the changes committed to the program's vcsh repo.
+
+---
+
 # Shell scripting conventions
 
 - Always use `jq` for JSON parsing in shell scripts. Never use `python3` or `python` for JSON parsing.
+- Use full-name command line arguments (e.g. `--interactive`, `--recursive`, `--force`) instead of single-letter flags (e.g. `-i`, `-r`, `-f`). Long-form flags are self-documenting and easier to read, especially in scripts and Dockerfiles.
+- Maintain alphabetical ordering when adding to or modifying ordered lists such as program arguments, package installs in Dockerfiles, aliases, program start order, and config options. When inserting new entries, place them in the correct alphabetical position. If a list is not yet alphabetical, don't reorder it unless asked — but new additions should go in the correct alphabetical spot relative to neighbours.
 
 ---
 
