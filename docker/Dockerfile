@@ -166,6 +166,7 @@ RUN nala update && \
   gimp \
   git \
   git-lfs \
+  gnupg2 \
   gnuplot \
   golang-go \
   grc \
