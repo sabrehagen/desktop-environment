@@ -9,7 +9,7 @@
 # Shell scripting conventions
 
 - Always use `$HOME`, never `~`, when referring to the home directory in scripts and config files.
-- Always use kebab-case for vcsh commit messages (e.g. `"add-my-config"`, not `"add my config"`).
+- Always use terse kebab-case for commit messages (2-4 words max). Never use the word "add" — just name the thing (e.g. `my-config`, not `add-my-config`). Prefix removals with `no-` (e.g. `no-my-config`). Keep messages as short as possible (e.g. `man-colours`, not `fix-man-page-colours-groff-no-sgr`).
 - Always use `jq` for JSON parsing in shell scripts. Never use `python3` or `python` for JSON parsing.
 - Use full-name command line arguments (e.g. `--interactive`, `--recursive`, `--force`) instead of single-letter flags (e.g. `-i`, `-r`, `-f`). Long-form flags are self-documenting and easier to read, especially in scripts and Dockerfiles.
 - Maintain alphabetical ordering when adding to or modifying ordered lists such as program arguments, package installs in Dockerfiles, aliases, program start order, and config options. When inserting new entries, place them in the correct alphabetical position. If a list is not yet alphabetical, don't reorder it unless asked — but new additions should go in the correct alphabetical spot relative to neighbours.
