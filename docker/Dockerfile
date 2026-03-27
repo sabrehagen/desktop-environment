@@ -760,8 +760,7 @@ RUN nala update && \
 # Install warnai
 RUN nala update && \
   nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
-  git clone --depth 1 --single-branch https://github.com/reorr/warnai $DESKTOP_ENVIRONMENT_SOURCE_WARNAI && \
-  sed -i '/notify-send/d' $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/warnai $DESKTOP_ENVIRONMENT_SOURCE_WARNAI && \
   ln -s $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai /usr/local/bin
 
 # Install whatfiles
