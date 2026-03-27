@@ -27,10 +27,10 @@ docker run \
   --detach \
   --device /dev/dri \
   --device /dev/fuse \
-  --device /dev/tty$DESKTOP_ENVIRONMENT_TTY \
+  --device /dev/tty$DESKTOP_ENVIRONMENT_X_TTY \
   --device /dev/uinput \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
-  --env DESKTOP_ENVIRONMENT_TTY \
+  --env DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT \
   --group-add $DESKTOP_ENVIRONMENT_HOST_DOCKER_GROUP_ID \
   --group-add audio \
   --group-add docker \
@@ -38,7 +38,7 @@ docker run \
   --group-add plugdev \
   --group-add tty \
   --group-add video \
-  --hostname $(hostname) \
+  --hostname $DESKTOP_ENVIRONMENT_HOSTNAME \
   --interactive \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
