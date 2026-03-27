@@ -661,7 +661,6 @@ RUN nala update && \
   nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
   git clone --depth 1 --single-branch https://github.com/sabrehagen/qt5ct $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
-  cp src/qt5ct-common/qt5ct.h src/qt5ct/qt5ct.h && \
   qmake && \
   make -j$(nproc) && \
   make install
