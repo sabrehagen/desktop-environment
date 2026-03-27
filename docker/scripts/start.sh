@@ -16,6 +16,7 @@ DOCKER_VIDEO=$(ls /dev/video* 2>/dev/null | xargs -I@ echo --device @ | tr '\n' 
 docker run \
   $DOCKER_GPUS \
   $DOCKER_VIDEO \
+  --add-host host.docker.internal:host-gateway \
   --cap-add IPC_LOCK \
   --cap-add NET_ADMIN \
   --cap-add NET_RAW \
