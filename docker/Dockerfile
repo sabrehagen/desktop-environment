@@ -616,13 +616,12 @@ RUN cargo install --git https://github.com/sabrehagen/oxker --branch fix/bollard
 # Install pcmanfm
 RUN nala update && \
   nala install intltool libfm-gtk3-dev libgtk-3-dev && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/pcmanfm $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
+  git clone --depth 1 --single-branch https://github.com/lxde/pcmanfm $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
   ./autogen.sh && \
-  ./configure --prefix=/usr --with-gtk=3 && \
+  ./configure --disable-nls --prefix=/usr --sysconfdir=/etc --with-gtk=3 && \
   make -j$(nproc) && \
-  make install && \
-  make clean
+  make install
 
 # Install picom
 RUN nala update && \
