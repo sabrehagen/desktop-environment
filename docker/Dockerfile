@@ -6,6 +6,7 @@ ARG DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY
 ARG DESKTOP_ENVIRONMENT_SOURCE_BPLAY
 ARG DESKTOP_ENVIRONMENT_SOURCE_CBONSAI
 ARG DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT
+ARG DESKTOP_ENVIRONMENT_SOURCE_DMENU
 ARG DESKTOP_ENVIRONMENT_SOURCE_DNCLI
 ARG DESKTOP_ENVIRONMENT_SOURCE_DUNST
 ARG DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH
@@ -45,6 +46,7 @@ ENV DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY=$DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY
 ENV DESKTOP_ENVIRONMENT_SOURCE_BPLAY=$DESKTOP_ENVIRONMENT_SOURCE_BPLAY
 ENV DESKTOP_ENVIRONMENT_SOURCE_CBONSAI=$DESKTOP_ENVIRONMENT_SOURCE_CBONSAI
 ENV DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT=$DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT
+ENV DESKTOP_ENVIRONMENT_SOURCE_DMENU=$DESKTOP_ENVIRONMENT_SOURCE_DMENU
 ENV DESKTOP_ENVIRONMENT_SOURCE_DNCLI=$DESKTOP_ENVIRONMENT_SOURCE_DNCLI
 ENV DESKTOP_ENVIRONMENT_SOURCE_DUNST=$DESKTOP_ENVIRONMENT_SOURCE_DUNST
 ENV DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH=$DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH
@@ -348,6 +350,13 @@ RUN aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.
   dpkg -i dive.deb && \
   rm dive.deb
 
+# Install dmenu
+RUN nala update && \
+  nala install libfontconfig1-dev libfreetype-dev libx11-dev libxft-dev libxinerama-dev && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/dmenu $DESKTOP_ENVIRONMENT_SOURCE_DMENU && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_DMENU && \
+  make install
+
 # Install dncli
 RUN nala update && \
   nala install qtbase5-dev && \
@@ -461,7 +470,7 @@ RUN nala update && \
 
 # Install i3
 RUN nala update && \
-  nala install dmenu libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+  nala install libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 1 --single-branch --branch next https://github.com/sabrehagen/i3 $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
   mkdir build && \
