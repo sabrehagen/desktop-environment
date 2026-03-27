@@ -721,7 +721,7 @@ RUN aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdusha
 # Install tmux
 RUN nala update && \
   nala install libevent-dev libncurses-dev bison && \
-  git clone --depth 20 --single-branch https://github.com/tmux/tmux $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
+  git clone --depth 20 --single-branch https://github.com/sabrehagen/tmux $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   sh autogen.sh && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
