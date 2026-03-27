@@ -483,10 +483,8 @@ RUN git clone --depth 1 --single-branch https://github.com/vivien/i3blocks $DESK
 # Install i3lock
 RUN nala update && \
   nala install libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
-  git clone --depth 1 --single-branch https://github.com/Raymo111/i3lock-color $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
+  git clone --depth 1 --single-branch https://github.com/sabrehagen/i3lock-color $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
-  sed -i 's/Num Lock//' i3lock.c && \
-  sed -i 's/wrong!/auth failed/' unlock_indicator.c && \
   ./build.sh && \
   ./install-i3lock-color.sh
 
