@@ -1,6 +1,6 @@
 # Environment overview
 
-- The main entrypoint for the desktop environment is `~/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `~/.config/scripts/`.
+- The main entrypoint for the desktop environment is `$HOME/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `$HOME/.config/scripts/`.
 - Each application on the system has its config files managed by `vcsh`. Use `vcsh list` to see tracked repos and `vcsh <repo> ls-files` to check what config files belong to a given program.
 - When modifying vcsh-tracked config files, always ask the user if they would like the changes committed to the program's vcsh repo.
 
@@ -8,6 +8,8 @@
 
 # Shell scripting conventions
 
+- Always use `$HOME`, never `~`, when referring to the home directory in scripts and config files.
+- Always use kebab-case for vcsh commit messages (e.g. `"add-my-config"`, not `"add my config"`).
 - Always use `jq` for JSON parsing in shell scripts. Never use `python3` or `python` for JSON parsing.
 - Use full-name command line arguments (e.g. `--interactive`, `--recursive`, `--force`) instead of single-letter flags (e.g. `-i`, `-r`, `-f`). Long-form flags are self-documenting and easier to read, especially in scripts and Dockerfiles.
 - Maintain alphabetical ordering when adding to or modifying ordered lists such as program arguments, package installs in Dockerfiles, aliases, program start order, and config options. When inserting new entries, place them in the correct alphabetical position. If a list is not yet alphabetical, don't reorder it unless asked — but new additions should go in the correct alphabetical spot relative to neighbours.
@@ -121,7 +123,7 @@ RUN git clone --depth 1 --single-branch https://github.com/example/myprog $DESKT
 
 ---
 
-## Step 7 — `~/.config/scripts/startup.sh` (daemon/startup services only)
+## Step 7 — `$HOME/.config/scripts/startup.sh` (daemon/startup services only)
 
 If the program needs to run as a background daemon or startup service inside the container, add a tmux session block in alphabetical order among the other startup entries. Use `$DESKTOP_ENVIRONMENT_SOURCE_MYPROG` for any path references to the program's source directory.
 
@@ -217,10 +219,10 @@ Skip this step entirely if step 8c was skipped.
 
 ## vcsh dotfiles repos — gitconfig filter rules
 
-When adding a `diff`/`filter` driver to `~/.gitconfig` for a vcsh repo, always also track the repo's attributes file inside that same vcsh repo. The attributes file lives at:
+When adding a `diff`/`filter` driver to `$HOME/.gitconfig` for a vcsh repo, always also track the repo's attributes file inside that same vcsh repo. The attributes file lives at:
 
 ```
-~/.config/vcsh/repo.d/<repo-name>.git/info/attributes
+$HOME/.config/vcsh/repo.d/<repo-name>.git/info/attributes
 ```
 
 **Always use `**/` prefix on patterns** in the attributes file. Exact paths like `.config/i3/config` will not be matched by git — patterns must use `**/` to resolve correctly (e.g. `**/.config/i3/config`). Verify with `vcsh <repo> check-attr filter diff -- <path>` — if it returns `unspecified`, the pattern is wrong.
@@ -229,15 +231,15 @@ After the filter and attributes file are in place, you must re-stage the tracked
 
 ```sh
 vcsh <repo-name> add <file>
-vcsh <repo-name> commit -m "apply <filter-name> clean filter to <file>"
+vcsh <repo-name> commit -m "apply-<filter-name>-clean-filter-to-<file>"
 vcsh <repo-name> push
 ```
 
 After creating the attributes file, add and commit it:
 
 ```sh
-vcsh <repo-name> add ~/.config/vcsh/repo.d/<repo-name>.git/info/attributes
-vcsh <repo-name> commit -m "track attributes file"
+vcsh <repo-name> add $HOME/.config/vcsh/repo.d/<repo-name>.git/info/attributes
+vcsh <repo-name> commit -m "track-attributes-file"
 vcsh <repo-name> push
 ```
 
@@ -257,6 +259,6 @@ The attributes file wires the named drivers to specific files. Each line is a gl
 
 ```sh
 vcsh <repo-name> add <file>
-vcsh <repo-name> commit -m "apply <filter-name> clean filter to <file>"
+vcsh <repo-name> commit -m "apply-<filter-name>-clean-filter-to-<file>"
 vcsh <repo-name> push
 ```
