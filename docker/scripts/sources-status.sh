@@ -6,7 +6,7 @@ OPERATION=${1:-status}
 for repo in $DESKTOP_ENVIRONMENT_SOURCE_HOME/*/; do
   test -d $repo/.git || continue
 
-  name=$(basename $repo)
+  name=$(git -C $repo remote get-url origin 2>/dev/null | sed -E 's|.*[:/]([^/:]+/[^/:]+)$|\1|' | sed 's/\.git$//')
   dirty=$(git -C $repo status --short 2>/dev/null | grep --extended-regexp --invert-match "^\?\? .*($BUILD_ARTIFACTS)")
   unpushed=$(git -C $repo log @{u}..HEAD --oneline 2>/dev/null)
 
@@ -16,7 +16,10 @@ for repo in $DESKTOP_ENVIRONMENT_SOURCE_HOME/*/; do
   if [ "$OPERATION" = diff ]; then
     git -C $repo diff
   else
-    test -n "$dirty" && echo "$dirty"
+    test -n "$dirty" && git -C $repo -c color.ui=always status --short 2>/dev/null | \
+      while IFS= read -r line; do
+        printf '%s' "$line" | ansi2txt | grep --extended-regexp --quiet --invert-match "^\?\? .*($BUILD_ARTIFACTS)" && printf '%s\n' "$line"
+      done
   fi
   test -n "$unpushed" && echo "$unpushed" | sed 's/^/ (unpushed) /'
 done
