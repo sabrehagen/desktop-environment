@@ -744,7 +744,7 @@ RUN aria2c -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardar
   chmod +x /usr/local/bin/tormix
 
 # Install tracexec
-RUN curl -fsSL https://github.com/kxxt/tracexec/releases/download/v0.5.2/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
+RUN curl -fsSL https://github.com/kxxt/tracexec/releases/latest/download/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf - tracexec
 
 # Install walogram
