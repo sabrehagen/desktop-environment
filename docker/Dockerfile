@@ -307,7 +307,8 @@ RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
 RUN uv tool install autorandr
 
 # Install btm
-RUN aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2-1_amd64.deb && \
+RUN LATEST=$(curl -s https://api.github.com/repos/ClementTsang/bottom/releases/latest | jq -r '.tag_name') && \
+  aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/${LATEST}/bottom_${LATEST}-1_amd64.deb && \
   dpkg -i btm.deb && \
   rm btm.deb
 
@@ -348,8 +349,8 @@ RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord
   rm discord.deb
 
 # Install dive
-RUN VERSION=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
-  aria2c -o dive.deb "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_linux_amd64.deb" && \
+RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v${LATEST}/dive_${LATEST}_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
@@ -374,7 +375,8 @@ RUN aria2c -d /usr/local/bin -o docker-compose https://github.com/docker/compose
   chmod +x /usr/local/bin/docker-compose
 
 # Install dra
-RUN aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/0.6.2/dra_0.6.2-1_amd64.deb && \
+RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/latest | jq -r '.tag_name') && \
+  aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/${LATEST}/dra_${LATEST}-1_amd64.deb && \
   dpkg -i dra.deb && \
   rm dra.deb
 
@@ -387,8 +389,8 @@ RUN nala update && \
   make WAYLAND=0 install
 
 # Install elecwhat
-RUN VERSION=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
-  aria2c -o elecwhat.deb "https://github.com/piec/elecwhat/releases/download/v${VERSION}/elecwhat_${VERSION}_amd64.deb" && \
+RUN LATEST=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  aria2c -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v${LATEST}/elecwhat_${LATEST}_amd64.deb && \
   dpkg -i elecwhat.deb && \
   rm elecwhat.deb
 
@@ -403,7 +405,8 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch $DESKTOP_ENVIRONMENT_SO
   install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
 
 # Install fzf
-RUN curl -L https://github.com/junegunn/fzf/releases/latest/download/fzf-linux_amd64.tar.gz | tar -xz -C /usr/local/bin
+RUN LATEST=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  curl -L https://github.com/junegunn/fzf/releases/download/v${LATEST}/fzf-${LATEST}-linux_amd64.tar.gz | tar -xz -C /usr/local/bin
 
 # Install gcsf
 RUN nala update && \
@@ -435,9 +438,9 @@ RUN nala update && \
   git config --system init.defaultBranch master
 
 # Install github actions runner
-RUN VERSION=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+RUN LATEST=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
   mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner && \
-  aria2c -o actions-runner.tar.gz "https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz" && \
+  aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v${LATEST}/actions-runner-linux-x64-${LATEST}.tar.gz && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner -xzf actions-runner.tar.gz && \
   rm actions-runner.tar.gz
 
@@ -585,7 +588,8 @@ RUN nala update && \
   nala autoremove
 
 # Install nodejs
-RUN curl -fsSL https://nodejs.org/dist/v24.11.1/node-v24.11.1-linux-x64.tar.xz | \
+RUN LATEST=$(curl -s https://nodejs.org/dist/index.json | jq -r '[.[] | select(.lts != false)] | first | .version') && \
+  curl -fsSL https://nodejs.org/dist/${LATEST}/node-${LATEST}-linux-x64.tar.xz | \
   tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
@@ -601,7 +605,7 @@ RUN cargo install nviwatch
 
 # Install nvm
 RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | \
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r '.tag_name')/install.sh | \
   NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm bash && \
   . $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && \
   nvm install 20
@@ -692,8 +696,8 @@ RUN nala update && \
 RUN uv tool install shell-gpt
 
 # Install shfmt
-RUN VERSION=$(curl -s https://api.github.com/repos/mvdan/sh/releases/latest | jq -r '.tag_name') && \
-  aria2c -d /usr/local/bin -o shfmt "https://github.com/mvdan/sh/releases/download/${VERSION}/shfmt_${VERSION}_linux_amd64" && \
+RUN LATEST=$(curl -s https://api.github.com/repos/mvdan/sh/releases/latest | jq -r '.tag_name') && \
+  aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/${LATEST}/shfmt_${LATEST}_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install slack
@@ -710,7 +714,8 @@ RUN add-apt-repository ppa:atareao/telegram && \
   nala install telegram
 
 # Install thorium
-RUN aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M138.0.7204.300/thorium-browser_138.0.7204.300_AVX2.deb && \
+RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/latest | jq -r '.tag_name | ltrimstr("M")') && \
+  aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M${LATEST}/thorium-browser_${LATEST}_AVX2.deb && \
   dpkg -i thorium.deb && \
   rm thorium.deb
 
@@ -785,7 +790,8 @@ RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles $DE
   make install
 
 # Install xava
-RUN aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/0.7.1.1/xava-x86_64.AppImage && \
+RUN LATEST=$(curl -s https://api.github.com/repos/nikp123/xava/releases | jq -r '[.[] | select(any(.assets[]; .name == "xava-x86_64.AppImage"))][0].tag_name') && \
+  aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/${LATEST}/xava-x86_64.AppImage && \
   chmod +x xava.appimage && \
   ./xava.appimage --appimage-extract && \
   rm xava.appimage && \
