@@ -14,6 +14,9 @@
 ### Agent Plugins
 - [ ] https://github.com/jubscodes/get-shit-pretty
 
+### Product Management
+- [ ] https://github.com/crshdn/mission-control
+
 ### RAG
 - [ ] https://github.com/TKasperczyk/messenger-rag
 
@@ -46,6 +49,9 @@
 
 ## Video
 - [ ] https://github.com/hacksider/Deep-Live-Cam
+
+## Reddit Lists
+- [ ] https://www.reddit.com/r/openclaw/comments/1rmgt2m/i_went_through_218_openclaw_tools_so_you_dont
 
 # Ideas
 
