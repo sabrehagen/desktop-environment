@@ -387,7 +387,8 @@ RUN nala update && \
   make WAYLAND=0 install
 
 # Install elecwhat
-RUN aria2c -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v1.13.4/elecwhat_1.13.4_amd64.deb && \
+RUN VERSION=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  aria2c -o elecwhat.deb "https://github.com/piec/elecwhat/releases/download/v${VERSION}/elecwhat_${VERSION}_amd64.deb" && \
   dpkg -i elecwhat.deb && \
   rm elecwhat.deb
 
