@@ -434,7 +434,7 @@ RUN nala update && \
 
 # Install github actions runner
 RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner && \
-  aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v2.332.0/actions-runner-linux-x64-2.332.0.tar.gz && \
+  aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v2.333.1/actions-runner-linux-x64-2.333.1.tar.gz && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner -xzf actions-runner.tar.gz && \
   rm actions-runner.tar.gz
 
