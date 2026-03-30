@@ -391,7 +391,7 @@ RUN aria2c -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v1
   rm elecwhat.deb
 
 # Install eza
-RUN curl -fsSL https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz | \
+RUN curl -fsSL https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz | \
   tar -C /usr/local/bin -xzf -
 
 # Install fastfetch
