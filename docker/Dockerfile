@@ -153,8 +153,6 @@ RUN nala update && \
   dialog \
   dnsmasq \
   dnsutils \
-  docker-compose-v2 \
-  docker.io \
   dput \
   ethtool \
   feh \
@@ -354,6 +352,13 @@ RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest
   dpkg -i dive.deb && \
   rm dive.deb
 
+# Install docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' > /etc/apt/sources.list.d/docker.list && \
+  nala update && \
+  nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin && \
+  groupadd --system docker
+
 # Install dmenu
 RUN nala update && \
   nala install libfontconfig1-dev libfreetype-dev libx11-dev libxft-dev libxinerama-dev && \
@@ -370,9 +375,6 @@ RUN nala update && \
   make -j$(nproc) && \
   install dncli /usr/local/bin/drag
 
-# Install docker-compose
-RUN aria2c -d /usr/local/bin -o docker-compose https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 && \
-  chmod +x /usr/local/bin/docker-compose
 
 # Install dra
 RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/latest | jq -r '.tag_name') && \
