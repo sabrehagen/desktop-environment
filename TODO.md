@@ -1,5 +1,8 @@
 # Programs to Install
 
+## AI
+- https://github.com/Dicklesworthstone/agentic_coding_flywheel_setup
+
 ## Desktop Environment
 - https://github.com/collinalexbell/HackMatrix
 
