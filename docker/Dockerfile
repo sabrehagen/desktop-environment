@@ -348,7 +348,7 @@ RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord
   rm discord.deb
 
 # Install dive
-RUN aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && \
+RUN aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v0.13.1/dive_0.13.1_linux_amd64.deb && \
   dpkg -i dive.deb && \
   rm dive.deb
 
