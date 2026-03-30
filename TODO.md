@@ -5,7 +5,7 @@
 ### Agents
 - [ ] https://github.com/Dicklesworthstone/agentic_coding_flywheel_setup
 - [ ] https://github.com/badlogic/pi-mono
-- [ ] https://github.com/NousResearch/hermes-agent
+- [x] https://github.com/NousResearch/hermes-agent
 
 ### Agent Observability
 - [ ] https://github.com/PabloLION/claude-hookwatch
