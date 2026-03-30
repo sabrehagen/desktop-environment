@@ -689,7 +689,7 @@ RUN nala update && \
 RUN uv tool install shell-gpt
 
 # Install shfmt
-RUN aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64 && \
+RUN aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/v3.13.0/shfmt_v3.13.0_linux_amd64 && \
   chmod +x /usr/local/bin/shfmt
 
 # Install slack
