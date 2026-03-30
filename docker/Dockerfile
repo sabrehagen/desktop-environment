@@ -435,8 +435,9 @@ RUN nala update && \
   git config --system init.defaultBranch master
 
 # Install github actions runner
-RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner && \
-  aria2c -o actions-runner.tar.gz https://github.com/actions/runner/releases/download/v2.333.1/actions-runner-linux-x64-2.333.1.tar.gz && \
+RUN VERSION=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner && \
+  aria2c -o actions-runner.tar.gz "https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-linux-x64-${VERSION}.tar.gz" && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME/github-actions-runner -xzf actions-runner.tar.gz && \
   rm actions-runner.tar.gz
 
