@@ -369,7 +369,7 @@ RUN nala update && \
   install dncli /usr/local/bin/drag
 
 # Install docker-compose
-RUN aria2c -d /usr/local/bin -o docker-compose "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" && \
+RUN aria2c -d /usr/local/bin -o docker-compose https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 && \
   chmod +x /usr/local/bin/docker-compose
 
 # Install dra
