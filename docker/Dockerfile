@@ -401,8 +401,7 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch $DESKTOP_ENVIRONMENT_SO
   install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
 
 # Install fzf
-RUN curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.55.0/fzf-0.55.0-linux_amd64.tar.gz | \
-  tar -C /usr/local/bin -xzf - fzf
+RUN curl -L https://github.com/junegunn/fzf/releases/latest/download/fzf-linux_amd64.tar.gz | tar -xz -C /usr/local/bin
 
 # Install gcsf
 RUN nala update && \
