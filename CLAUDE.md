@@ -15,6 +15,7 @@
 - Maintain alphabetical ordering when adding to or modifying ordered lists such as program arguments, package installs in Dockerfiles, aliases, program start order, and config options. When inserting new entries, place them in the correct alphabetical position. If a list is not yet alphabetical, don't reorder it unless asked — but new additions should go in the correct alphabetical spot relative to neighbours.
 - In Dockerfiles, always use `nala` instead of `apt-get` for package installs, except for the bootstrap step that installs nala itself. Always run `nala update` before `nala install` in every `RUN` block that installs packages.
 - Never install a package that has already been installed earlier in the Dockerfile.
+- In the Dockerfile, all application `RUN` blocks after the "Install desktop environment core utilities" block must be in alphabetical order by application name. Each block must be preceded by a comment of the form `# Install <appname>` where `<appname>` is lowercase — no other wording. When adding a new install block, find the correct alphabetical position among the existing blocks.
 - Avoid using quotes where possible. When quotes are required, prefer single quotes over double quotes.
 
 ---
