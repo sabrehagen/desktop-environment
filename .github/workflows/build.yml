@@ -2,32 +2,8 @@ name: Build Desktop Environment
 on: [push, workflow_call]
 jobs:
   select-runner:
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-    outputs:
-      runner: ${{ steps.select.outputs.runner }}
-    steps:
-      - name: Check for online self-hosted runners
-        id: select
-        env:
-          GH_TOKEN: ${{ secrets.ACTIONS_RUNNER_CHECK_TOKEN != '' && secrets.ACTIONS_RUNNER_CHECK_TOKEN || github.token }}
-        run: |
-          set +e
-          ONLINE=$(gh api repos/${{ github.repository }}/actions/runners --jq '[.runners[] | select(.status == "online")] | length' 2>&1)
-          EXIT_CODE=$?
-          set -e
-          if [ $EXIT_CODE -ne 0 ] || [ -z "$ONLINE" ] || ! echo "$ONLINE" | grep -qE '^[0-9]+$'; then
-            echo "Could not query runners (exit=$EXIT_CODE), defaulting to ubuntu-latest"
-            ONLINE=0
-          fi
-          if [ "$ONLINE" -gt 0 ]; then
-            echo "Found $ONLINE online self-hosted runner(s)"
-            echo "runner=self-hosted" >> $GITHUB_OUTPUT
-          else
-            echo "No self-hosted runners available, using ubuntu-latest"
-            echo "runner=ubuntu-latest" >> $GITHUB_OUTPUT
-          fi
+    uses: ./.github/workflows/select-runner.yml
+    secrets: inherit
 
   build:
     needs: select-runner
