@@ -38,6 +38,7 @@
 - [ ] https://github.com/erikjuhani/basalt
 
 ## Security
+- [ ] https://github.com/always-further/nono
 - [ ] https://github.com/leebaird/discover
 - [ ] https://github.com/samugit83/redamon
 
