@@ -287,8 +287,9 @@ RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbco
   cargo clean
 
 # Install arc
-RUN aria2c -d /usr/local/bin -o arc https://github.com/mholt/archiver/releases/download/v3.5.0/arc_3.5.0_linux_amd64 && \
-  chmod +x /usr/local/bin/arc
+RUN git clone --depth 1 --single-branch https://github.com/jm33-m0/arc && \
+  go build -C arc/v2/cmd/arc -o /usr/local/bin/arc && \
+  rm -rf arc
 
 # Install ardour
 RUN nala update && \
