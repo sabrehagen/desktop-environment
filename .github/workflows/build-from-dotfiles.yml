@@ -19,15 +19,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx (self-hosted)
-        if: needs.select-runner.outputs.runner == 'self-hosted'
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver: docker
-
-      - name: Set up Docker Buildx (GitHub-hosted)
-        if: needs.select-runner.outputs.runner != 'self-hosted'
-        uses: docker/setup-buildx-action@v3
+          driver: ${{ needs.select-runner.outputs.runner == 'self-hosted' && 'docker' || 'docker-container' }}
 
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
@@ -49,31 +44,17 @@ jobs:
       - name: Record build start
         run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
 
-      - name: Build (self-hosted)
-        if: needs.select-runner.outputs.runner == 'self-hosted'
-        id: build-self-hosted
+      - name: Build
+        id: build
         uses: docker/build-push-action@v6
         with:
           build-args: |
             CACHEBUST_DOTFILES=${{ github.sha }}
             ${{ steps.build-args.outputs.build_args }}
-          cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+          cache-from: ${{ needs.select-runner.outputs.runner == 'self-hosted' && format('type=registry,ref=ghcr.io/{0}/desktop-environment:latest', env.REPOSITORY_OWNER) || 'type=gha' }}
+          cache-to: ${{ needs.select-runner.outputs.runner != 'self-hosted' && 'type=gha,mode=max' || '' }}
           file: docker/Dockerfile
-          push: false
-          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
-
-      - name: Build (GitHub-hosted)
-        if: needs.select-runner.outputs.runner != 'self-hosted'
-        id: build-github-hosted
-        uses: docker/build-push-action@v6
-        with:
-          build-args: |
-            CACHEBUST_DOTFILES=${{ github.sha }}
-            ${{ steps.build-args.outputs.build_args }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          file: docker/Dockerfile
-          load: true
+          load: ${{ needs.select-runner.outputs.runner != 'self-hosted' }}
           push: false
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
@@ -102,7 +83,7 @@ jobs:
       - name: Generate workflow summary
         if: always()
         env:
-          STEP_BUILD_OUTCOME: ${{ steps.build-self-hosted.outcome || steps.build-github-hosted.outcome }}
+          STEP_BUILD_OUTCOME: ${{ steps.build.outcome }}
           STEP_PUSH_OUTCOME: ${{ steps.push.outcome }}
           STEP_TEST_OUTCOME: ${{ steps.test.outcome }}
           JOB_STATUS: ${{ job.status }}
