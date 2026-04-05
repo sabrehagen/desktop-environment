@@ -715,9 +715,11 @@ RUN aria2c -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/
 RUN uv tool install speedtest-cli
 
 # Install telegram
-RUN add-apt-repository ppa:atareao/telegram && \
-  nala update && \
-  nala install telegram
+RUN LATEST=$(curl --silent https://api.github.com/repos/telegramdesktop/tdesktop/releases | jq --raw-output '[.[] | select(.prerelease == false) | select(.assets | length > 0)][0].tag_name | ltrimstr("v")') && \
+  aria2c --out telegram.tar.xz https://github.com/telegramdesktop/tdesktop/releases/download/v${LATEST}/tsetup.${LATEST}.tar.xz && \
+  tar --extract --file telegram.tar.xz && \
+  mv Telegram/Telegram /usr/local/bin/telegram-desktop && \
+  rm --recursive --force telegram.tar.xz Telegram
 
 # Install thorium
 RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/latest | jq -r '.tag_name | ltrimstr("M")') && \
