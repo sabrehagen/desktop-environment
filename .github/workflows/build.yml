@@ -19,8 +19,18 @@ jobs:
       - name: Free disk space
         if: needs.select-runner.outputs.runner != 'self-hosted'
         run: |
-          sudo rm --recursive --force /opt/hostedtoolcache /usr/local/lib/android /usr/share/dotnet
+          sudo rm --recursive --force \
+            /opt/hostedtoolcache \
+            /usr/local/.ghcup \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/boost \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
           sudo docker image prune --all --force
+          df --human-readable /
 
       - name: Check out repository
         uses: actions/checkout@v4
