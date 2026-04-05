@@ -16,6 +16,12 @@ jobs:
       - name: Record workflow start time
         run: echo "TIME_WORKFLOW_START=$(date +%s)" >> $GITHUB_ENV
 
+      - name: Free disk space
+        if: needs.select-runner.outputs.runner != 'self-hosted'
+        run: |
+          sudo rm --recursive --force /opt/hostedtoolcache /usr/local/lib/android /usr/share/dotnet
+          sudo docker image prune --all --force
+
       - name: Check out repository
         uses: actions/checkout@v4
 
