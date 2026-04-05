@@ -1,8 +1,28 @@
 name: Build Desktop Environment
 on: [push, workflow_call]
 jobs:
+  select-runner:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      runner: ${{ steps.select.outputs.runner }}
+    steps:
+      - name: Check for online self-hosted runners
+        id: select
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ONLINE=$(gh api repos/${{ github.repository }}/actions/runners --jq '[.runners[] | select(.status == "online")] | length' 2>/dev/null || echo 0)
+          if [ "$ONLINE" -gt 0 ]; then
+            echo "runner=self-hosted" >> $GITHUB_OUTPUT
+          else
+            echo "runner=ubuntu-latest" >> $GITHUB_OUTPUT
+          fi
+
   build:
-    runs-on: self-hosted
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
     permissions:
       actions: read
       packages: write
@@ -14,10 +34,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker Buildx (self-hosted)
+        if: needs.select-runner.outputs.runner == 'self-hosted'
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker
+
+      - name: Set up Docker Buildx (GitHub-hosted)
+        if: needs.select-runner.outputs.runner != 'self-hosted'
+        uses: docker/setup-buildx-action@v3
 
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
@@ -39,13 +64,27 @@ jobs:
       - name: Record build start
         run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
 
-      - name: Build
-        id: build
+      - name: Build (self-hosted)
+        if: needs.select-runner.outputs.runner == 'self-hosted'
+        id: build-self-hosted
         uses: docker/build-push-action@v6
         with:
           build-args: ${{ steps.build-args.outputs.build_args }}
           cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
           file: docker/Dockerfile
+          push: false
+          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+
+      - name: Build (GitHub-hosted)
+        if: needs.select-runner.outputs.runner != 'self-hosted'
+        id: build-github-hosted
+        uses: docker/build-push-action@v6
+        with:
+          build-args: ${{ steps.build-args.outputs.build_args }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          file: docker/Dockerfile
+          load: true
           push: false
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 
@@ -74,7 +113,7 @@ jobs:
       - name: Generate workflow summary
         if: always()
         env:
-          STEP_BUILD_OUTCOME: ${{ steps.build.outcome }}
+          STEP_BUILD_OUTCOME: ${{ steps.build-self-hosted.outcome || steps.build-github-hosted.outcome }}
           STEP_PUSH_OUTCOME: ${{ steps.push.outcome }}
           STEP_TEST_OUTCOME: ${{ steps.test.outcome }}
           JOB_STATUS: ${{ job.status }}
