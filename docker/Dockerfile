@@ -276,7 +276,7 @@ RUN nala update && \
   ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
 # Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -fsSL https://astral.sh/uv/install.sh | UV_UNMANAGED_INSTALL=/usr/local/bin sh
 
 # Install alacritty
 RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
