@@ -1,8 +1,13 @@
 name: Build Desktop Environment From Dotfiles
 on: [workflow_dispatch]
 jobs:
+  select-runner:
+    uses: ./.github/workflows/select-runner.yml
+    secrets: inherit
+
   build:
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
     permissions:
       actions: read
       packages: write
@@ -11,11 +16,29 @@ jobs:
       - name: Record workflow start time
         run: echo "TIME_WORKFLOW_START=$(date +%s)" >> $GITHUB_ENV
 
+      - name: Free disk space
+        if: needs.select-runner.outputs.runner != 'self-hosted'
+        run: |
+          sudo rm --recursive --force \
+            /opt/hostedtoolcache \
+            /usr/local/.ghcup \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/boost \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          sudo docker image prune --all --force
+          df --human-readable /
+
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: ${{ needs.select-runner.outputs.runner == 'self-hosted' && 'docker' || 'docker-container' }}
 
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
@@ -44,10 +67,10 @@ jobs:
           build-args: |
             CACHEBUST_DOTFILES=${{ github.sha }}
             ${{ steps.build-args.outputs.build_args }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: ${{ needs.select-runner.outputs.runner == 'self-hosted' && format('type=registry,ref=ghcr.io/{0}/desktop-environment:latest', env.REPOSITORY_OWNER) || 'type=gha' }}
+          cache-to: ${{ needs.select-runner.outputs.runner != 'self-hosted' && 'type=gha,mode=max' || '' }}
           file: docker/Dockerfile
-          load: true
+          load: ${{ needs.select-runner.outputs.runner != 'self-hosted' }}
           push: false
           tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
 

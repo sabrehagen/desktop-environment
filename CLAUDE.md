@@ -20,6 +20,14 @@
 
 ---
 
+# GitHub Actions workflow conventions
+
+- In GitHub Actions expressions, `||` already handles falsy/empty values. Do not use redundant `!= ''` checks — write `${{ secrets.MY_SECRET || github.token }}`, not `${{ secrets.MY_SECRET != '' && secrets.MY_SECRET || github.token }}`.
+- Prefer ternary expressions (`${{ condition && 'a' || 'b' }}`) over duplicate conditional steps when only a parameter value differs between runner types.
+- Keep reusable logic (e.g. runner selection) in standalone `workflow_call` workflows under `.github/workflows/` so it can be shared across all workflow files.
+
+---
+
 # Testing changes before finishing
 
 Before telling the user a task is complete, always verify the change is correct by testing it. For Dockerfile changes:
