@@ -319,6 +319,9 @@ RUN nala update && \
   make CXX=g++-14 -j$(nproc) && \
   make install
 
+# Install bun
+RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash
+
 # Install cbonsai
 RUN nala update && \
   nala install libncurses-dev && \
