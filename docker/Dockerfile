@@ -183,6 +183,7 @@ RUN nala update && \
   ksnip \
   libappindicator3-dev \
   libasound2-dev \
+  libasound2-plugins \
   libgtk-3-0t64 \
   libnotify-bin \
   libnss3-tools \
