@@ -666,6 +666,14 @@ RUN nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
   echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack > /etc/ld.so.conf.d/pipewire-jack.conf && \
   ldconfig
 
+# Install postgres
+RUN nala update && \
+  nala install postgresql && \
+  pg_ctlcluster 16 main start && \
+  runuser --user postgres -- createuser --superuser $DESKTOP_ENVIRONMENT_USER && \
+  runuser --user postgres -- createdb --owner $DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_USER && \
+  pg_ctlcluster 16 main stop
+
 # Install posting
 RUN uv tool install posting
 
