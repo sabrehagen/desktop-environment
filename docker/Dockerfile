@@ -335,6 +335,9 @@ RUN nala update && \
 # Install claude code
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
+# Install claude-history
+RUN curl -fsSL https://raw.githubusercontent.com/raine/claude-history/main/scripts/install.sh | bash
+
 # Install cloudflare
 RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && \
   dpkg -i cloudflare.deb && \
