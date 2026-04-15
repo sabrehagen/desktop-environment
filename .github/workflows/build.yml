@@ -83,4 +83,4 @@ jobs:
           STEP_PUSH_OUTCOME: ${{ steps.push.outcome }}
           STEP_TEST_OUTCOME: ${{ steps.test.outcome }}
           JOB_STATUS: ${{ job.status }}
-        run: bash .github/scripts/generate-summary.sh
+        run: .github/scripts/generate-summary.sh
