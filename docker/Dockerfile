@@ -818,6 +818,9 @@ RUN git clone --depth 1 --single-branch https://github.com/spieglt/whatfiles $DE
   make && \
   make install
 
+# Install workmux
+RUN curl -fsSL https://raw.githubusercontent.com/raine/workmux/main/scripts/install.sh | bash
+
 # Install xava
 RUN LATEST=$(curl -s https://api.github.com/repos/nikp123/xava/releases | jq -r '[.[] | select(any(.assets[]; .name == "xava-x86_64.AppImage"))][0].tag_name') && \
   aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/${LATEST}/xava-x86_64.AppImage && \
