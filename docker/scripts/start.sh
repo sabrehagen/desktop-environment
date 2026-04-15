@@ -32,6 +32,7 @@ docker run \
   --device /dev/uinput \
   --env DESKTOP_ENVIRONMENT_GITHUB_TOKEN \
   --env DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT \
+  --env DESKTOP_ENVIRONMENT_X_HEADLESS \
   --group-add $DESKTOP_ENVIRONMENT_HOST_DOCKER_GROUP_ID \
   --group-add audio \
   --group-add docker \
