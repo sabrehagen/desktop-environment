@@ -29,6 +29,7 @@ echo export DESKTOP_ENVIRONMENT_HOSTNAME=${DESKTOP_ENVIRONMENT_HOSTNAME-$(hostna
 
 # Desktop environment x server configuration
 echo export DESKTOP_ENVIRONMENT_X_DISPLAY=${DESKTOP_ENVIRONMENT_X_DISPLAY-:1}
+echo export DESKTOP_ENVIRONMENT_X_HEADLESS=${DESKTOP_ENVIRONMENT_X_HEADLESS-false}
 echo export DESKTOP_ENVIRONMENT_X_TTY=${DESKTOP_ENVIRONMENT_X_TTY-3}
 
 # Desktop environment application cache volumes
