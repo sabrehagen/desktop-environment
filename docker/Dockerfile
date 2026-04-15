@@ -529,13 +529,8 @@ RUN nala update && \
   uv tool install git+https://github.com/sabrehagen/i3-workspace-names-daemon
 
 # Install jobber
-RUN nala update && \
-  nala install debhelper rsync && \
-  mkdir $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
-  git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONMENT_SOURCE_JOBBER/jobber-src && \
-  cd $DESKTOP_ENVIRONMENT_SOURCE_JOBBER/jobber-src && \
-  sed -i 's/dh-system[^,]*,//' packaging/debian/debian-pkg/control && \
-  make -C packaging/debian pkg-local . && \
+RUN git clone --depth 1 --single-branch https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
   make && \
   make install
 
