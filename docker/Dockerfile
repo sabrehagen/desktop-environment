@@ -617,7 +617,7 @@ RUN cargo install nviwatch
 # Install nvm
 RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r '.tag_name')/install.sh | \
-  NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm bash && \
+  NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm PROFILE=/dev/null bash && \
   . $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && \
   nvm install 20
 
