@@ -478,7 +478,7 @@ RUN nala update && \
 
 # Install hermes-agent
 RUN git clone --depth 1 --single-branch https://github.com/nousresearch/hermes-agent $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT && \
-  HERMES_INSTALL_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT/scripts/install.sh --skip-setup
+  PATH=$HOME/.local/bin:$PATH HERMES_INSTALL_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT/scripts/install.sh --skip-setup
 
 # Install hints
 RUN nala update && \
