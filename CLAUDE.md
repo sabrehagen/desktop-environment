@@ -17,6 +17,9 @@
 - Never install a package that has already been installed earlier in the Dockerfile.
 - In the Dockerfile, all application `RUN` blocks after the "Install desktop environment core utilities" block must be in alphabetical order by application name. Each block must be preceded by a comment of the form `# Install <appname>` where `<appname>` is lowercase — no other wording. When adding a new install block, find the correct alphabetical position among the existing blocks.
 - Avoid using quotes where possible. When quotes are required, prefer single quotes over double quotes.
+- Never prefix `bash` (or any interpreter) when invoking a script that already has a shebang (`#!/bin/bash`, etc.). Just call the script directly (e.g. `./script.sh`, not `bash script.sh`).
+- Never add `set -o pipefail`, `set -e`, or similar shell options that the execution environment already sets. GitHub Actions `run:` steps use `bash -e -o pipefail` by default — do not duplicate these.
+- Never use parenthetical asides in comments. Write one clear statement instead (e.g. `# Build step timings for each Dockerfile RUN instruction`, not `# Build step timings (per Dockerfile RUN instruction)`).
 
 ---
 
