@@ -3,6 +3,7 @@
 - The main entrypoint for the desktop environment is `$HOME/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `$HOME/.config/scripts/`.
 - Each application on the system has its config files managed by `vcsh`. Use `vcsh list` to see tracked repos and `vcsh <repo> ls-files` to check what config files belong to a given program.
 - When modifying vcsh-tracked config files, always ask the user if they would like the changes committed to the program's vcsh repo.
+- After committing to a vcsh dotfiles repo, always push immediately.
 
 ---
 
