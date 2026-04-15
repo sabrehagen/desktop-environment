@@ -41,17 +41,22 @@ jobs:
 
       - name: Build
         id: build
-        uses: docker/build-push-action@v6
-        with:
-          build-args: ${{ steps.build-args.outputs.build_args }}
-          cache-from: type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
-          file: docker/Dockerfile
-          push: false
-          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+        run: |
+          docker buildx build \
+            ${{ steps.build-args.outputs.build_args }} \
+            --cache-from type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest \
+            --file docker/Dockerfile \
+            --progress=plain \
+            --tag ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest \
+            docker 2>&1 | tee /tmp/build.log
 
       - name: Record build end
         if: always()
         run: echo "TIME_BUILD_END=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Parse build step timings
+        if: always()
+        run: .github/scripts/parse-build-timings.sh /tmp/build.log docker/Dockerfile > /tmp/build-timings.tsv
 
       - name: Record push start
         run: echo "TIME_PUSH_START=$(date +%s)" >> $GITHUB_ENV

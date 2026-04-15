@@ -58,6 +58,31 @@ fi
 [ -n "$STEP_HEADLESS_OUTCOME" ] && echo "| Headless desktop | — | $STEP_HEADLESS_OUTCOME |" >> $GITHUB_STEP_SUMMARY
 echo "| **Total** | **$TOTAL_FMT** | **$JOB_STATUS** |" >> $GITHUB_STEP_SUMMARY
 
+# Build step timings for each Dockerfile RUN instruction
+BUILD_TIMINGS=/tmp/build-timings.tsv
+if [ -s "$BUILD_TIMINGS" ]; then
+  echo "" >> $GITHUB_STEP_SUMMARY
+  echo "## Build Step Timings" >> $GITHUB_STEP_SUMMARY
+  echo "" >> $GITHUB_STEP_SUMMARY
+  echo "<details><summary>Per-step breakdown</summary>" >> $GITHUB_STEP_SUMMARY
+  echo "" >> $GITHUB_STEP_SUMMARY
+  echo "| Step | Duration |" >> $GITHUB_STEP_SUMMARY
+  echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+  while IFS=$'\t' read -r LABEL DURATION; do
+    if [ "$DURATION" = "cached" ]; then
+      DURATION_FMT="cached"
+    elif [ "$DURATION" != "unknown" ]; then
+      SECS=${DURATION%.*}
+      DURATION_FMT=$(fmt ${SECS:-0})
+    else
+      DURATION_FMT="—"
+    fi
+    echo "| $LABEL | $DURATION_FMT |" >> $GITHUB_STEP_SUMMARY
+  done < "$BUILD_TIMINGS"
+  echo "" >> $GITHUB_STEP_SUMMARY
+  echo "</details>" >> $GITHUB_STEP_SUMMARY
+fi
+
 # Fetch build step logs via GitHub API on failure
 [ "$STEP_BUILD_OUTCOME" != "failure" ] && exit 0
 
