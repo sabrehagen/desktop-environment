@@ -18,6 +18,7 @@
 - [ ] https://github.com/shreyas-s-rao/claude-code-narrator
 - [ ] https://github.com/bfly123/claude_code_bridge
 - [ ] https://github.com/raine/claude-history
+
 ### Computer Use
 - [ ] https://github.com/huseyinstif/oculos
 
@@ -36,6 +37,9 @@
 - [ ] https://github.com/AshBuk/speak-to-ai
 - [ ] https://github.com/QuantiusBenignus/BlahST
 - [ ] https://github.com/cjpais/handy
+
+## CI
+- [ ] https://github.com/rshelekhov/lazymake
 
 ## Desktop Environment
 - [ ] https://github.com/collinalexbell/HackMatrix
