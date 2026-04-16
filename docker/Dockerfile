@@ -416,6 +416,11 @@ RUN git clone https://github.com/fastfetch-cli/fastfetch $DESKTOP_ENVIRONMENT_SO
   cmake --build $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build --parallel $(nproc) --target fastfetch && \
   install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
 
+# Install fd
+RUN LATEST=$(curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq -r '.tag_name') && \
+  curl -fsSL https://github.com/sharkdp/fd/releases/download/${LATEST}/fd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz | \
+  tar -xz --strip-components=1 -C /usr/local/bin fd-${LATEST}-x86_64-unknown-linux-gnu/fd
+
 # Install fzf
 RUN LATEST=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
   curl -L https://github.com/junegunn/fzf/releases/download/v${LATEST}/fzf-${LATEST}-linux_amd64.tar.gz | tar -xz -C /usr/local/bin
