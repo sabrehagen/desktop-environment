@@ -75,7 +75,7 @@ jobs:
         run: ./docker/scripts/test.sh
         env:
           DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
-          DESKTOP_ENVIRONMENT_X_HEADLESS: true
+          DESKTOP_ENVIRONMENT_X_HEADLESS: 1
         continue-on-error: true
 
       - name: Generate workflow summary
