@@ -201,6 +201,7 @@ RUN nala update && \
   mpd \
   mpv \
   nano \
+  nasm \
   ncat \
   ncdu \
   neovim \
