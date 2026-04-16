@@ -40,6 +40,7 @@
 
 ## CI
 - [ ] https://github.com/rshelekhov/lazymake
+- [ ] https://github.com/gitsocial-org/gitsocial
 
 ## Desktop Environment
 - [ ] https://github.com/collinalexbell/HackMatrix
