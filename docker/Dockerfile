@@ -585,8 +585,10 @@ RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/tru
   nala install ngrok
 
 # Install tailscale
-RUN curl -fsSL https://tailscale.com/install.sh | sh && \
-  nala remove resolvconf
+RUN curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
+  curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
+  nala update && \
+  nala install tailscale
 
 # Install nicotine+
 RUN nala update && \
