@@ -45,6 +45,9 @@
 ## Desktop Environment
 - [ ] https://github.com/collinalexbell/HackMatrix
 
+## Finance
+- [ ] https://github.com/siddhantac/puffin
+
 ## Git
 - [ ] https://github.com/dlvhdr/diffnav
 
@@ -68,6 +71,7 @@
 - [ ] https://github.com/Harry-kp/vortix
 - [ ] https://github.com/vlimki/tuillama
 - [ ] https://github.com/tsowell/wiremix
+- [ ] https://github.com/llehouerou/waves
 
 ## Video
 - [ ] https://github.com/hacksider/Deep-Live-Cam
