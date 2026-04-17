@@ -197,6 +197,7 @@ RUN nala update && \
   maim \
   make \
   man-db \
+  mesa-utils \
   mpc \
   mpd \
   mpv \
@@ -910,8 +911,8 @@ RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.co
   mkdir -p /etc/X11/xorg.conf.d && \
   echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
 
-# Configure nvidia fan control and allow headless operation
-RUN echo 'Section "Device"\n Identifier "nvidia"\n Driver "nvidia"\n Option "Coolbits" "4"\n Option "AllowEmptyInitialConfiguration" "true"\nEndSection' > /etc/X11/xorg.conf.d/20-nvidia.conf
+# Configure nvidia as primary gpu, enable fan control, and allow headless operation
+RUN echo 'Section "OutputClass"\n Identifier "nvidia"\n MatchDriver "nvidia-drm"\n Driver "nvidia"\n Option "AllowEmptyInitialConfiguration" "true"\n Option "Coolbits" "4"\n Option "PrimaryGPU" "yes"\nEndSection' > /etc/X11/xorg.conf.d/20-nvidia.conf
 
 # Allow input group access to uinput
 RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' > /etc/udev/rules.d/80-hints.rules
