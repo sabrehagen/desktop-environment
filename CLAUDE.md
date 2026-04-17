@@ -21,6 +21,7 @@
 - Never prefix `bash` (or any interpreter) when invoking a script that already has a shebang (`#!/bin/bash`, etc.). Just call the script directly (e.g. `./script.sh`, not `bash script.sh`).
 - Never add `set -o pipefail`, `set -e`, or similar shell options that the execution environment already sets. GitHub Actions `run:` steps use `bash -e -o pipefail` by default — do not duplicate these.
 - Never use parenthetical asides in comments. Write one clear statement instead (e.g. `# Build step timings for each Dockerfile RUN instruction`, not `# Build step timings (per Dockerfile RUN instruction)`).
+- Keep shell script comments short and high-level — describe the intent of the step in a single terse phrase, not the mechanics. Match the brevity of surrounding comments in files like `environment.sh`, `start.sh`, `build.sh` (e.g. `# Copy local state to desktop environment state volume`, not `# Stream a tar of the source path out of the running container and extract it into the named volume, preserving ownership and overwriting existing files`).
 
 ---
 
