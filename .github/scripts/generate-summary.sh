@@ -64,8 +64,6 @@ if [ -s "$BUILD_TIMINGS" ]; then
   echo "" >> $GITHUB_STEP_SUMMARY
   echo "## Build Step Timings" >> $GITHUB_STEP_SUMMARY
   echo "" >> $GITHUB_STEP_SUMMARY
-  echo "<details><summary>Per-step breakdown</summary>" >> $GITHUB_STEP_SUMMARY
-  echo "" >> $GITHUB_STEP_SUMMARY
   echo "| Step | Duration |" >> $GITHUB_STEP_SUMMARY
   echo "|---|---|" >> $GITHUB_STEP_SUMMARY
   while IFS=$'\t' read -r LABEL DURATION; do
@@ -79,8 +77,6 @@ if [ -s "$BUILD_TIMINGS" ]; then
     fi
     echo "| $LABEL | $DURATION_FMT |" >> $GITHUB_STEP_SUMMARY
   done < "$BUILD_TIMINGS"
-  echo "" >> $GITHUB_STEP_SUMMARY
-  echo "</details>" >> $GITHUB_STEP_SUMMARY
 fi
 
 # Fetch build step logs via GitHub API on failure
