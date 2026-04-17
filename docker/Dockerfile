@@ -620,7 +620,9 @@ RUN git clone --depth 1 --single-branch https://github.com/cloud-computer/noVNC.
   git clone --depth 1 --single-branch https://github.com/novnc/websockify $DESKTOP_ENVIRONMENT_SOURCE_NOVNC/utils/websockify
 
 # Install nvidia driver
-RUN aria2c -o nvidia.run https://download.nvidia.com/XFree86/Linux-x86_64/595.58.03/NVIDIA-Linux-x86_64-595.58.03.run && \
+RUN nala update && \
+  nala install nvidia-prime && \
+  aria2c -o nvidia.run https://download.nvidia.com/XFree86/Linux-x86_64/595.58.03/NVIDIA-Linux-x86_64-595.58.03.run && \
   chmod +x nvidia.run && \
   ./nvidia.run --no-kernel-modules --silent && \
   rm nvidia.run
