@@ -218,6 +218,7 @@ RUN nala update && \
   perl \
   pipx \
   pkg-config \
+  psmisc \
   pulseaudio-utils \
   pulsemixer \
   python3 \
