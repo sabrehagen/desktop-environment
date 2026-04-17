@@ -1,3 +1,9 @@
+# No cargo culting
+
+Before finalising any change, review every modification and remove anything that is not strictly necessary to accomplish the task. Include only code changes that are absolutely essential — nothing that is merely "safe," defensive, idiomatic-by-habit, or copied from surrounding patterns without a concrete reason. Do not add flags, arguments, error handling, comments, fallbacks, abstractions, or refactors that the task does not require. If a line is not load-bearing for the requested outcome, delete it.
+
+---
+
 # Environment overview
 
 - The main entrypoint for the desktop environment is `$HOME/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `$HOME/.config/scripts/`.
