@@ -2,6 +2,8 @@
 
 Before finalising any change, review every modification and remove anything that is not strictly necessary to accomplish the task. Include only code changes that are absolutely essential — nothing that is merely "safe," defensive, idiomatic-by-habit, or copied from surrounding patterns without a concrete reason. Do not add flags, arguments, error handling, comments, fallbacks, abstractions, or refactors that the task does not require. If a line is not load-bearing for the requested outcome, delete it.
 
+Apply this rule at write-time, not just review-time. Before writing any guard, check, fallback, error handler, edge-case branch, or extra flag, you must be able to name a concrete scenario in the current project where its absence would cause a real failure. "Seems safer", "more robust", "handles the edge case", or "just in case" are not valid justifications — if that is the only reason, omit the code. If pushed to reconsider a piece of logic, do not default to making it more defensive; the correct response is usually to make it simpler, not more guarded.
+
 ---
 
 # Environment overview
