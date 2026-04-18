@@ -14,11 +14,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker
-
       - name: Sanitise repository owner
         run: echo REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
@@ -29,26 +24,21 @@ jobs:
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Export build args from environment configuration
-        id: build-args
-        env:
-          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
-          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
-        run: bash .github/scripts/export-build-args.sh
-
       - name: Record build start
         run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Build
         id: build
+        env:
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: latest
+          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
         run: |
-          docker buildx build \
-            ${{ steps.build-args.outputs.build_args }} \
+          ./docker/scripts/build.sh \
             --cache-from type=registry,ref=ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest \
-            --file docker/Dockerfile \
-            --progress=plain \
-            --tag ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest \
-            docker 2>&1 | tee /tmp/build.log
+            --progress=plain 2>&1 | tee /tmp/build.log
 
       - name: Record build end
         if: always()
@@ -63,7 +53,12 @@ jobs:
 
       - name: Push to GitHub Container Registry
         id: push
-        run: docker push ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+        env:
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: latest
+          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
+        run: ./docker/scripts/push.sh
 
       - name: Record push end
         if: always()

@@ -27,29 +27,24 @@ jobs:
           username: ${{ env.REPOSITORY_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Export build args from environment configuration
-        id: build-args
-        env:
-          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
-          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
-        run: bash .github/scripts/export-build-args.sh
-
       - name: Record build start
         run: echo "TIME_BUILD_START=$(date +%s)" >> $GITHUB_ENV
 
       - name: Build
         id: build
+        env:
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: latest
+          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_HOST_USER_PASSWORD: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
         run: |
-          docker buildx build \
+          ./docker/scripts/build.sh \
             --build-arg CACHEBUST_DOTFILES=${{ github.sha }} \
-            ${{ steps.build-args.outputs.build_args }} \
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
-            --file docker/Dockerfile \
             --load \
-            --progress=plain \
-            --tag ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest \
-            docker 2>&1 | tee /tmp/build.log
+            --progress=plain 2>&1 | tee /tmp/build.log
 
       - name: Record build end
         if: always()
@@ -64,7 +59,12 @@ jobs:
 
       - name: Push to GitHub Container Registry
         id: push
-        run: docker push ghcr.io/${{ env.REPOSITORY_OWNER }}/desktop-environment:latest
+        env:
+          DESKTOP_ENVIRONMENT_CONTAINER_TAG: latest
+          DESKTOP_ENVIRONMENT_GITHUB_USER: ${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_REGISTRY: ghcr.io/${{ env.REPOSITORY_OWNER }}
+          DESKTOP_ENVIRONMENT_USER: ${{ env.REPOSITORY_OWNER }}
+        run: ./docker/scripts/push.sh
 
       - name: Record push end
         if: always()
