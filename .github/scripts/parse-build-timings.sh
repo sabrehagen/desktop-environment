@@ -52,7 +52,7 @@ declare -A STEP_TIME
 
 while IFS= read -r line; do
   # Match step command: "#12 [stage-0 5/42] RUN apt-get update ..."
-  if [[ $line =~ ^'#'([0-9]+)' [stage-0 '([0-9]+)'/'[0-9]+'] RUN '(.*) ]]; then
+  if [[ $line =~ ^'#'([0-9]+)[[:space:]]+\[stage-0[[:space:]]+([0-9]+)/[0-9]+\][[:space:]]+RUN[[:space:]]+(.*) ]]; then
     STEP_ID=${BASH_REMATCH[1]}
     STEP_INDEX[$STEP_ID]=${BASH_REMATCH[2]}
     STEP_CMD[$STEP_ID]=$(echo "${BASH_REMATCH[3]}" | cut -c1-60)
