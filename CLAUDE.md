@@ -9,7 +9,7 @@ Apply this rule at write-time, not just review-time. Before writing any guard, c
 # Environment overview
 
 - The main entrypoint for the desktop environment is `$HOME/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `$HOME/.config/scripts/`.
-- Each application on the system has its config files managed by `vcsh`. Use `vcsh list` to see tracked repos and `vcsh <repo> ls-files $HOME` to check what config files belong to a given program, as dotfiles live under `$HOME`. To find which repo tracks a given file, pass the path relative to `$HOME` (with no leading `$HOME/` or `~/`) to `vcsh which`, e.g. `vcsh which .ssh/config`.
+- Each application on the system has its config files managed by `vcsh`. Use `vcsh list` to see tracked repos and `vcsh <repo> ls-files $HOME` to check what config files belong to a given program, as dotfiles live under `$HOME`. To find which repo tracks a given file, use `vcsh which <path>`, e.g. `vcsh which ~/.ssh/config`. A leading `~/` or `$HOME/` is stripped automatically, so `vcsh which .ssh/config` works equivalently.
 - When modifying vcsh-tracked config files, always ask the user if they would like the changes committed to the program's vcsh repo.
 - After committing to a vcsh dotfiles repo or this repository, always push immediately.
 
