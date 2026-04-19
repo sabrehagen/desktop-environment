@@ -747,7 +747,9 @@ RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRON
   go build -o /usr/local/bin/slack-tui .
 
 # Install speedtest
-RUN uv tool install speedtest-cli
+RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
+  nala update && \
+  nala install speedtest
 
 # Install telegram
 RUN add-apt-repository ppa:atareao/telegram && \
