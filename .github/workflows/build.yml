@@ -6,6 +6,9 @@ jobs:
     permissions:
       actions: read
       packages: write
+    defaults:
+      run:
+        shell: bash -eo pipefail {0}
     steps:
 
       - name: Record workflow start time
