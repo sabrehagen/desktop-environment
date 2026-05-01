@@ -51,6 +51,7 @@ docker run \
   --security-opt apparmor:unconfined \
   --ulimit rtprio=95 \
   --ulimit memlock=-1 \
+  --volume /dev/bus/usb:/dev/bus/usb \
   --volume /dev/displaylink:/dev/displaylink \
   --volume /dev/input:/dev/input \
   --volume /dev/shm:/dev/shm \
