@@ -131,6 +131,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 # Upgrade base system
 RUN nala upgrade -y
 
+# Purge systemd-resolved
+RUN nala purge systemd-resolved
+
 # Install desktop environment core utilities
 RUN nala update && \
   DEBIAN_FRONTEND=noninteractive nala install \
