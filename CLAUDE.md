@@ -13,6 +13,7 @@ Apply this rule at write-time, not just review-time. Before writing any guard, c
 - When modifying vcsh-tracked config files, always ask the user if they would like the changes committed to the program's vcsh repo.
 - Before staging a commit, inspect the diff (`vcsh <repo> diff` or `git diff`) and stage only the hunks made in the current task. Do not use `git add --patch` (or `vcsh <repo> add --patch`) — it is interactive and will block in this environment. When a file contains modifications you did not make, hard-reset it to a clean baseline commit (`git checkout <commit> -- <file>` or `vcsh <repo> reset --hard <commit>`), re-apply each set of changes via a surgical-edit mechanism (Edit in Claude Code, or `git apply` with a heredoc'd unified diff in any shell-based harness), and commit each separately. Never run `vcsh <repo> add <file>` or `git add <file>` without first confirming the file contains only your changes — bundling unrelated modifications into a commit pollutes the history and produces misleading commit messages.
 - After committing to a vcsh dotfiles repo or this repository, always push immediately.
+- Never use `git push --force`. Use `git push --force-with-lease` instead — it refuses to push if the remote ref has moved since your last fetch, preventing accidental clobbering of work pushed from elsewhere. Before any force-push, run `git fetch` so the lease check has accurate state, and run `git log origin/<branch>..HEAD` and `git log HEAD..origin/<branch>` to inspect exactly what you're about to keep and replace.
 
 ---
 
