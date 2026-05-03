@@ -131,7 +131,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 # Upgrade base system
 RUN nala upgrade -y
 
-# Purge systemd-resolved so tailscaled doesn't pick its resolvectl helper, which fails without systemd
+# Purge systemd-resolved so resolv.conf is used directly
 RUN nala purge systemd-resolved
 
 # Install desktop environment core utilities
