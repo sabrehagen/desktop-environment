@@ -874,6 +874,7 @@ RUN yarn global add \
   @mariozechner/pi-coding-agent \
   @sourcegraph/amp \
   aicommit2 \
+  carbonyl \
   clipboard-cli \
   diff-so-fancy \
   github-email \
