@@ -753,9 +753,10 @@ RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRON
 RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | tar -C /usr/local/bin -xzf - speedtest
 
 # Install telegram
-RUN add-apt-repository ppa:atareao/telegram && \
-  nala update && \
-  nala install telegram
+RUN aria2c -o telegram.tar.xz https://telegram.org/dl/desktop/linux && \
+  tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf telegram.tar.xz && \
+  rm telegram.tar.xz && \
+  ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/Telegram/Telegram /usr/local/bin/telegram
 
 # Install thorium
 RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/latest | jq -r '.tag_name | ltrimstr("M")') && \
