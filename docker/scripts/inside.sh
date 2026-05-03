@@ -1,0 +1,1 @@
+test ${DESKTOP_ENVIRONMENT_USER:+inside}
