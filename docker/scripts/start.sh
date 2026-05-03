@@ -47,7 +47,7 @@ docker run \
   --privileged \
   --publish 8085-8099:8085-8099 \
   --publish 8822:22 \
-  --rm \
+  --restart always \
   --security-opt apparmor:unconfined \
   --ulimit rtprio=95 \
   --ulimit memlock=-1 \
