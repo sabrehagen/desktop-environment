@@ -877,6 +877,7 @@ RUN yarn global add \
   diff-so-fancy \
   github-email \
   grok-dev \
+  gsd-pi \
   http-server \
   imgur-uploader-cli \
   nodemon \
