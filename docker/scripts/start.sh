@@ -35,7 +35,6 @@ docker run \
   --env DESKTOP_ENVIRONMENT_X_HEADLESS \
   --group-add $DESKTOP_ENVIRONMENT_HOST_DOCKER_GROUP_ID \
   --group-add audio \
-  --group-add docker \
   --group-add input \
   --group-add plugdev \
   --group-add tty \
