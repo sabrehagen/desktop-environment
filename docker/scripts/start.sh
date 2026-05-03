@@ -45,7 +45,7 @@ docker run \
   --name $DESKTOP_ENVIRONMENT_CONTAINER_NAME \
   --network $DESKTOP_ENVIRONMENT_DOCKER_NETWORK \
   --privileged \
-  --publish 8080-8099:8080-8099 \
+  --publish 8085-8099:8085-8099 \
   --publish 8822:22 \
   --rm \
   --security-opt apparmor:unconfined \
