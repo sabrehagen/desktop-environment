@@ -92,6 +92,9 @@ ENV USER=$DESKTOP_ENVIRONMENT_USER
 
 ENV HOME=/home/$USER
 
+# Use au apt mirror
+RUN sed -i -E 's|(archive|security)\.ubuntu\.com|au.archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources
+
 # Install nala
 RUN apt-get update -qq && \
   DEBIAN_FRONTEND=noninteractive apt-get install -qq nala && \
