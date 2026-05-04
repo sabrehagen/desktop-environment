@@ -767,12 +767,6 @@ RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/la
   dpkg -i thorium.deb && \
   rm thorium.deb
 
-# Install thunderbird
-RUN aria2c -o thunderbird.tar.xz https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/148.0b3/linux-x86_64/en-US/thunderbird-148.0b3.tar.xz && \
-  tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf thunderbird.tar.xz && \
-  rm thunderbird.tar.xz && \
-  ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/thunderbird/thunderbird /usr/local/bin/thunderbird
-
 # Install timeago
 RUN aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
   chmod +x /usr/local/bin/timeago
