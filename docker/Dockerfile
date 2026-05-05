@@ -890,7 +890,7 @@ RUN nala update && \
   git clone --depth 1 --branch zsh-5.9 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   ./Util/preconfig && \
-  ./configure --prefix=/usr --sysconfdir=/etc && \
+  ./configure --prefix=/usr --sysconfdir=/etc --with-tcsetpgrp && \
   make -j$(nproc) && \
   make install && \
   make clean
