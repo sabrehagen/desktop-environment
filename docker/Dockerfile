@@ -887,7 +887,7 @@ RUN yarn global add \
 # Install zsh
 RUN nala update && \
   nala install libncursesw5-dev libpcre2-dev yodl && \
-  git clone --depth 100 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
+  git clone --depth 1 --branch zsh-5.9 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   ./Util/preconfig && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
