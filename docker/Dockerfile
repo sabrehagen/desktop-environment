@@ -495,6 +495,13 @@ RUN nala update && \
   make && \
   make install
 
+# Install handy
+RUN nala update && \
+  nala install libgtk-layer-shell0 libwebkit2gtk-4.1-0 && \
+  aria2c -o handy.deb https://github.com/cjpais/Handy/releases/download/v0.8.3/Handy_0.8.3_amd64.deb && \
+  dpkg -i handy.deb && \
+  rm handy.deb
+
 # Install hermes-agent
 RUN git clone --depth 100 https://github.com/nousresearch/hermes-agent $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT && \
   PATH=$HOME/.local/bin:$PATH HERMES_INSTALL_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT/scripts/install.sh --skip-setup
