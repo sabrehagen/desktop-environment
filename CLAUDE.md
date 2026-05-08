@@ -46,6 +46,7 @@ Before telling the user a task is complete, always verify the change is correct 
 2. Run `docker/scripts/build.sh`.
 3. Confirm the build exits with code 123 — this proves the preceding step succeeded and Docker reached the sentinel.
 4. Remove the `RUN exit 123` line.
+5. Ask the user if they want to commit the changes, and quote the exact commit message you will use (kebab-case, 2-4 words per the shell scripting conventions). Do not commit without confirmation.
 
 Do not report a fix as complete until you have evidence the fix works.
 
