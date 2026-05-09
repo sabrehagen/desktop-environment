@@ -48,6 +48,7 @@ docker run \
   --publish 8822:22 \
   --restart always \
   --security-opt apparmor:unconfined \
+  --tmpfs /tmp \
   --ulimit rtprio=95 \
   --ulimit memlock=-1 \
   --volume /dev/bus/usb:/dev/bus/usb \
