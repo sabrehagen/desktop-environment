@@ -292,7 +292,7 @@ RUN curl -fsSL https://astral.sh/uv/install.sh | UV_UNMANAGED_INSTALL=/usr/local
 
 # Install alacritty
 RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
-  git clone --depth 100 https://github.com/alacritty/alacritty $DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY && \
+  git clone --depth 100 --branch graphics https://github.com/ayosec/alacritty $DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_ALACRITTY && \
   cargo build --release --no-default-features --features=x11 && \
   install target/release/alacritty /usr/local/bin && \
