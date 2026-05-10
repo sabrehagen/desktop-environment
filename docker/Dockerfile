@@ -324,8 +324,8 @@ RUN LATEST=$(curl -s https://api.github.com/repos/ClementTsang/bottom/releases/l
 # Install btop
 RUN nala update && \
   nala install g++-14 && \
-  git clone --depth 100 https://github.com/aristocratos/btop.git /opt/btop && \
-  cd /opt/btop && \
+  git clone --depth 100 https://github.com/aristocratos/btop.git $DESKTOP_ENVIRONMENT_SOURCE_HOME/btop && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_HOME/btop && \
   make CXX=g++-14 -j$(nproc) && \
   make install
 
