@@ -790,7 +790,7 @@ RUN nala update && \
   git clone --depth 100 https://github.com/sabrehagen/tmux $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   sh autogen.sh && \
-  ./configure --prefix=/usr --sysconfdir=/etc && \
+  ./configure --prefix=/usr --sysconfdir=/etc --enable-sixel && \
   make -j$(nproc) && \
   make install && \
   make clean
