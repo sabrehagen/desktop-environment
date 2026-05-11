@@ -6,6 +6,14 @@ Apply this rule at write-time, not just review-time. Before writing any guard, c
 
 ---
 
+# Inferring state from the running system
+
+Never write a state file when the state can be inferred on demand from the running state of the system. If what you would persist — which corner a floating window sits at, which workspace is focused, whether a service is running — can be queried from the kernel, window manager, systemd, the filesystem, or any process's observable state, query it on every invocation instead of caching it to disk. Only persist when the truth lives nowhere else.
+
+A read from the live system is current by definition; a cached file is not. Stale state files cause silent desync bugs — the cache claims the window is at corner 2 while it was dragged elsewhere with the mouse, or claims a daemon is alive when it has crashed. The cost of one query at invocation time is almost always negligible compared to debugging drift.
+
+---
+
 # Environment overview
 
 - The main entrypoint for the desktop environment is `$HOME/.config/scripts/startup.sh`. Scripts for interrogating and controlling the environment are located at `$HOME/.config/scripts/`.
