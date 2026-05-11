@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ARG DESKTOP_ENVIRONMENT_GITHUB_USER
 ARG DESKTOP_ENVIRONMENT_SOURCE_HOME
@@ -176,7 +176,6 @@ RUN nala update && \
   gnuplot \
   golang-go \
   grc \
-  gtk-theme-switch \
   htop \
   id3v2 \
   iftop \
@@ -494,6 +493,14 @@ RUN nala update && \
   make && \
   make install
 
+# Install gtk-theme-switch
+RUN nala update && \
+  nala install libgtk2.0-dev && \
+  git clone --depth 1 https://github.com/sabrehagen/gtk-theme-switch /opt/gtk-theme-switch && \
+  cd /opt/gtk-theme-switch && \
+  make && \
+  install --mode 755 switch2 /usr/local/bin/gtk-theme-switch2
+
 # Install handy
 RUN nala update && \
   nala install libgtk-layer-shell0 libwebkit2gtk-4.1-0 && \
@@ -583,7 +590,7 @@ RUN nala update && \
   git clone --depth 100 https://github.com/ncmpcpp/ncmpcpp $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   autoreconf -fiv && \
-  ./configure --prefix=/usr --enable-outputs --enable-visualizer --enable-clock --with-fftw --with-taglib --with-lto && \
+  CXXFLAGS='-include boost/type_traits/add_const.hpp' ./configure --prefix=/usr --enable-outputs --enable-visualizer --enable-clock --with-fftw --with-taglib --with-lto && \
   make -j$(nproc) && \
   make install && \
   make clean
@@ -680,7 +687,7 @@ RUN nala update && \
 
 # Install picom
 RUN nala update && \
-  nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre3-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
+  nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
   git clone --depth 100 https://github.com/yshui/picom $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
   meson setup --buildtype=release build && \
@@ -695,10 +702,10 @@ RUN nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
 # Install postgres
 RUN nala update && \
   nala install postgresql && \
-  pg_ctlcluster 16 main start && \
+  pg_ctlcluster 18 main start && \
   runuser --user postgres -- createuser --superuser $DESKTOP_ENVIRONMENT_USER && \
   runuser --user postgres -- createdb --owner $DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_USER && \
-  pg_ctlcluster 16 main stop
+  pg_ctlcluster 18 main stop
 
 # Install posting
 RUN uv tool install posting
@@ -862,8 +869,8 @@ RUN nala update && \
   make install
 
 # Install yarn
-RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-  echo 'deb https://dl.yarnpkg.com/debian stable main' | tee /etc/apt/sources.list.d/yarn.list && \
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor --output /etc/apt/keyrings/yarn.gpg && \
+  echo 'deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main' | tee /etc/apt/sources.list.d/yarn.list && \
   nala update && \
   nala install yarn
 
@@ -890,7 +897,7 @@ RUN yarn global add \
 # Install zsh
 RUN nala update && \
   nala install libncursesw5-dev libpcre2-dev yodl && \
-  git clone --depth 1 --branch zsh-5.9 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
+  git clone --depth 1 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   ./Util/preconfig && \
   ./configure --prefix=/usr --sysconfdir=/etc --with-tcsetpgrp && \
