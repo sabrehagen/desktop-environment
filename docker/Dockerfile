@@ -102,6 +102,7 @@ RUN nala update && \
   nala install sudo && \
   groupadd --system docker && \
   groupadd --system i2c && \
+  groupadd --system input && \
   userdel -r ubuntu && \
   useradd \
   --create-home \
