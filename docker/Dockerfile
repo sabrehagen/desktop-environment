@@ -112,14 +112,14 @@ RUN nala update && \
   --shell /usr/bin/zsh \
   $USER && \
   cp --preserve=all --recursive --update=none /etc/skel/. $HOME/ && \
-  touch $HOME/.hushlogin
+  runuser -u $USER -- touch $HOME/.hushlogin
 
 # Set non-root user password
 RUN --mount=type=secret,id=user_password \
   sed -i "s;^$USER:[^:]*;$USER:$(cat /run/secrets/user_password);" /etc/shadow
 
-# Take ownership of user's home directory and applications
-RUN chown -R $USER:$USER $HOME $DESKTOP_ENVIRONMENT_SOURCE_HOME
+# Take ownership of desktop environment application source root
+RUN chown -R $USER:$USER $DESKTOP_ENVIRONMENT_SOURCE_HOME
 
 # Become desktop environment user
 USER $USER
