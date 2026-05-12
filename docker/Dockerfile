@@ -694,9 +694,6 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo g
   sudo nala update && \
   sudo nala install 1password-cli
 
-# Install openclaw
-RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
-
 # Install oxker
 RUN cargo install --git https://github.com/sabrehagen/oxker --branch fix/bollard-secret-to-models
 
