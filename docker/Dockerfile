@@ -109,7 +109,6 @@ RUN nala update && \
   --groups audio,docker,i2c,input,shadow,sudo,tty,video \
   --shell /usr/bin/zsh \
   $USER && \
-  cp --preserve=all --recursive --update=none /etc/skel/. $HOME/ && \
   runuser -u $USER -- touch $HOME/.hushlogin
 
 # Configure password-less sudo for the sudo group
