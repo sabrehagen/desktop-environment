@@ -880,8 +880,8 @@ RUN LATEST=$(curl -s https://api.github.com/repos/nikp123/xava/releases | jq -r 
   sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/bin/xava /usr/local/bin/xava && \
   sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava /usr/share/xava && \
   sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/lib/xava /usr/lib/xava && \
-  sudo mkdir -p /etc/skel/.config/xava && \
-  sudo cp -a $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava/. /etc/skel/.config/xava/
+  mkdir -p $HOME/.config/xava && \
+  cp -a $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava/. $HOME/.config/xava/
 
 # Install xcolor
 RUN cargo install xcolor
