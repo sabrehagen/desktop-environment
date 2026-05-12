@@ -228,6 +228,7 @@ RUN nala update && \
   python3 \
   python3-libtmux \
   python3-pip \
+  python3-xlib \
   qjackctl \
   ranger \
   redshift \
