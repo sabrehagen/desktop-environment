@@ -662,9 +662,6 @@ RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --
   nala update && \
   nala install 1password-cli
 
-# Install open-webui
-# RUN uv tool install open-webui
-
 # Install openclaw
 RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
 
