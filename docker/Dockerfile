@@ -97,10 +97,15 @@ RUN apt-get update -qq && \
   sed -i 's/^assume_yes =.*/assume_yes = true/' /etc/nala/nala.conf && \
   printf '\n\n%s' 'parallel_downloads = 16' >> /etc/nala/nala.conf
 
-# Create a non-root user for safe operation
+# Install sudo
 RUN nala update && \
-  nala install sudo && \
-  groupadd --system docker && \
+  nala install sudo
+
+# Configure password-less sudo for the sudo group
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers
+
+# Create a non-root user for safe operation
+RUN groupadd --system docker && \
   groupadd --system i2c && \
   groupadd --system input && \
   userdel -r ubuntu && \
@@ -110,9 +115,6 @@ RUN nala update && \
   --shell /usr/bin/zsh \
   $USER && \
   runuser -u $USER -- touch $HOME/.hushlogin
-
-# Configure password-less sudo for the sudo group
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers
 
 # Set non-root user password
 RUN --mount=type=secret,id=user_password \
