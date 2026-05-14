@@ -465,7 +465,7 @@ RUN sudo nala update && \
   sudo nala install fuse3 libfuse-dev libssl-dev pkg-config && \
   cargo install gcsf && \
   echo 'user_allow_other' | sudo tee --append /etc/fuse.conf >/dev/null && \
-  sudo chmod 644 /etc/fuse.conf && \
+  sudo chmod u=rw,go=r /etc/fuse.conf && \
   sudo chown root:root /etc/fuse.conf && \
   mkdir $HOME/gdrive
 
