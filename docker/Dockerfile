@@ -522,18 +522,18 @@ RUN sudo nala update && \
   sudo make install
 
 # Install gtk-theme-switch
-RUN nala update && \
-  nala install libgtk2.0-dev && \
+RUN sudo nala update && \
+  sudo nala install libgtk2.0-dev && \
   git clone --depth 1 https://github.com/sabrehagen/gtk-theme-switch /opt/gtk-theme-switch && \
   cd /opt/gtk-theme-switch && \
   make && \
-  install --mode 755 switch2 /usr/local/bin/gtk-theme-switch2
+  sudo install --mode 755 switch2 /usr/local/bin/gtk-theme-switch2
 
 # Install handy
-RUN nala update && \
-  nala install libgtk-layer-shell0 libwebkit2gtk-4.1-0 && \
+RUN sudo nala update && \
+  sudo nala install libgtk-layer-shell0 libwebkit2gtk-4.1-0 && \
   aria2c -o handy.deb https://github.com/cjpais/Handy/releases/download/v0.8.3/Handy_0.8.3_amd64.deb && \
-  dpkg -i handy.deb && \
+  sudo dpkg -i handy.deb && \
   rm handy.deb
 
 # Install hermes-agent
