@@ -38,7 +38,6 @@ ARG DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM
 ARG DESKTOP_ENVIRONMENT_SOURCE_WARNAI
 ARG DESKTOP_ENVIRONMENT_SOURCE_WHATFILES
 ARG DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP
-ARG DESKTOP_ENVIRONMENT_SOURCE_ZSH
 ARG DESKTOP_ENVIRONMENT_USER
 
 ENV DESKTOP_ENVIRONMENT_SOURCE_HOME=$DESKTOP_ENVIRONMENT_SOURCE_HOME
@@ -78,7 +77,6 @@ ENV DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM=$DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM
 ENV DESKTOP_ENVIRONMENT_SOURCE_WARNAI=$DESKTOP_ENVIRONMENT_SOURCE_WARNAI
 ENV DESKTOP_ENVIRONMENT_SOURCE_WHATFILES=$DESKTOP_ENVIRONMENT_SOURCE_WHATFILES
 ENV DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP=$DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP
-ENV DESKTOP_ENVIRONMENT_SOURCE_ZSH=$DESKTOP_ENVIRONMENT_SOURCE_ZSH
 ENV DESKTOP_ENVIRONMENT_USER=$DESKTOP_ENVIRONMENT_USER
 
 ENV EDITOR=nano
@@ -272,7 +270,8 @@ RUN nala update && \
   xterm \
   yq \
   yt-dlp \
-  zathura && \
+  zathura \
+  zsh && \
   apt-file update
 
 # If the CACHEBUST_APPS build arg is supplied, rebuild from apps onwards
@@ -893,17 +892,6 @@ RUN yarn global add \
   rebase-editor \
   vercel && \
   yarn cache clean
-
-# Install zsh
-RUN nala update && \
-  nala install libncursesw5-dev libpcre2-dev yodl && \
-  git clone --depth 1 --branch zsh-5.9 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
-  cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
-  ./Util/preconfig && \
-  CFLAGS='-DHAVE_BOOLCODES -DHAVE_BOOLNAMES -DHAVE_NUMCODES -DHAVE_NUMNAMES -DHAVE_STRCODES -DHAVE_STRNAMES' ./configure --prefix=/usr --sysconfdir=/etc --with-tcsetpgrp && \
-  make -j$(nproc) && \
-  make install && \
-  make clean
 
 # Install zvm and zig
 RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
