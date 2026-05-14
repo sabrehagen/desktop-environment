@@ -97,9 +97,39 @@ RUN apt-get update -qq && \
   sed -i 's/^assume_yes =.*/assume_yes = true/' /etc/nala/nala.conf && \
   printf '\n\n%s' 'parallel_downloads = 16' >> /etc/nala/nala.conf
 
-# Install aria2
+# Install sudo
 RUN nala update && \
-  nala install aria2 && \
+  nala install sudo
+
+# Configure password-less sudo for the sudo group
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers
+
+# Create a non-root user for safe operation
+RUN groupadd --system docker && \
+  groupadd --system i2c && \
+  groupadd --system input && \
+  userdel -r ubuntu && \
+  useradd \
+  --create-home \
+  --groups audio,docker,i2c,input,shadow,sudo,tty,video \
+  --shell /usr/bin/zsh \
+  $USER && \
+  runuser -u $USER -- touch $HOME/.hushlogin
+
+# Set non-root user password
+RUN --mount=type=secret,id=user_password \
+  sed -i "s;^$USER:[^:]*;$USER:$(cat /run/secrets/user_password);" /etc/shadow
+
+# Take ownership of desktop environment application source root
+RUN chown -R $USER:$USER $DESKTOP_ENVIRONMENT_SOURCE_HOME
+
+# Become desktop environment user
+USER $USER
+WORKDIR $HOME
+
+# Install aria2
+RUN sudo nala update && \
+  sudo nala install aria2 && \
   mkdir -p $HOME/.config/aria2 && \
   printf '%s\n' \
     'quiet=true' \
@@ -108,34 +138,34 @@ RUN nala update && \
     > $HOME/.config/aria2/aria2.conf
 
 # Restore minimized distribution content e.g. man pages
-RUN nala update && \
-  nala install unminimize && \
-  yes | unminimize
+RUN sudo nala update && \
+  sudo nala install unminimize && \
+  yes | sudo unminimize
 
 # Install locales and timezone data
-RUN nala update && \
-  nala install \
+RUN sudo nala update && \
+  sudo nala install \
   locales \
   tzdata
 
 # Generate locales
-RUN locale-gen $LC_ALL && \
-  update-locale LC_ALL=$LC_ALL && \
-  dpkg-reconfigure --frontend=noninteractive locales
+RUN sudo locale-gen $LC_ALL && \
+  sudo update-locale LC_ALL=$LC_ALL && \
+  sudo dpkg-reconfigure --frontend=noninteractive locales
 
 # Set timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-  echo $TZ > /etc/timezone
+RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+  echo $TZ | sudo tee /etc/timezone >/dev/null
 
 # Upgrade base system
-RUN nala upgrade -y
+RUN sudo nala upgrade -y
 
 # Purge systemd-resolved so resolv.conf is used directly
-RUN nala purge systemd-resolved
+RUN sudo nala purge systemd-resolved
 
 # Install desktop environment core utilities
-RUN nala update && \
-  DEBIAN_FRONTEND=noninteractive nala install \
+RUN sudo nala update && \
+  sudo env DEBIAN_FRONTEND=noninteractive nala install \
   acpi \
   alsa-base \
   alsa-utils \
@@ -272,37 +302,37 @@ RUN nala update && \
   yt-dlp \
   zathura \
   zsh && \
-  apt-file update
+  sudo apt-file update
 
 # If the CACHEBUST_APPS build arg is supplied, rebuild from apps onwards
 ARG CACHEBUST_APPS
 RUN echo 'Building from apps onwards...'
 
 # Install rust
-RUN nala update && \
+RUN sudo nala update && \
   curl -fsSL https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly --no-modify-path --profile minimal && \
-  ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
-  ln -s $HOME/.cargo/bin/rustup /usr/local/bin
+  sudo ln -s $HOME/.cargo/bin/cargo /usr/local/bin && \
+  sudo ln -s $HOME/.cargo/bin/rustup /usr/local/bin
 
 # Install uv
-RUN curl -fsSL https://astral.sh/uv/install.sh | UV_UNMANAGED_INSTALL=/usr/local/bin sh
+RUN curl -fsSL https://astral.sh/uv/install.sh | sudo env UV_UNMANAGED_INSTALL=/usr/local/bin sh
 
 # Install alacritty
-RUN nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
+RUN sudo nala install libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 && \
   git clone --depth 100 --branch graphics https://github.com/ayosec/alacritty $DESKTOP_ENVIRONMENT_SOURCE_HOME/alacritty && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_HOME/alacritty && \
   cargo build --release --no-default-features --features=x11 && \
-  install target/release/alacritty /usr/local/bin && \
+  sudo install target/release/alacritty /usr/local/bin && \
   rm -rf $DESKTOP_ENVIRONMENT_SOURCE_HOME/alacritty
 
 # Install arc
 RUN git clone --depth 100 https://github.com/jm33-m0/arc && \
-  go build -C arc/v2/cmd/arc -o /usr/local/bin/arc && \
+  sudo go build -C arc/v2/cmd/arc -o /usr/local/bin/arc && \
   rm -rf arc
 
 # Install ardour
-RUN nala update && \
-  nala install a2jmidid ardour
+RUN sudo nala update && \
+  sudo nala install a2jmidid ardour
 
 # Install asciic
 RUN cargo install --git https://github.com/S0raWasTaken/bad_apple asciic && \
@@ -317,26 +347,26 @@ RUN uv tool install autorandr
 # Install btm
 RUN LATEST=$(curl -s https://api.github.com/repos/ClementTsang/bottom/releases/latest | jq -r '.tag_name') && \
   aria2c -o btm.deb https://github.com/ClementTsang/bottom/releases/download/${LATEST}/bottom_${LATEST}-1_amd64.deb && \
-  dpkg -i btm.deb && \
+  sudo dpkg -i btm.deb && \
   rm btm.deb
 
 # Install btop
-RUN nala update && \
-  nala install g++-14 && \
+RUN sudo nala update && \
+  sudo nala install g++-14 && \
   git clone --depth 100 https://github.com/aristocratos/btop.git $DESKTOP_ENVIRONMENT_SOURCE_HOME/btop && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_HOME/btop && \
   make CXX=g++-14 -j$(nproc) && \
-  make install
+  sudo make install
 
 # Install bun
-RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash
+RUN curl -fsSL https://bun.sh/install | sudo env BUN_INSTALL=/usr/local bash
 
 # Install cbonsai
-RUN nala update && \
-  nala install libncurses-dev && \
+RUN sudo nala update && \
+  sudo nala install libncurses-dev && \
   git clone --depth 100 https://gitlab.com/jallbrit/cbonsai $DESKTOP_ENVIRONMENT_SOURCE_CBONSAI && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_CBONSAI && \
-  make install
+  sudo make install
 
 # Install claude code
 RUN curl -fsSL https://claude.ai/install.sh | bash
@@ -346,12 +376,12 @@ RUN curl -fsSL https://raw.githubusercontent.com/raine/claude-history/main/scrip
 
 # Install cloudflare
 RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && \
-  dpkg -i cloudflare.deb && \
+  sudo dpkg -i cloudflare.deb && \
   rm cloudflare.deb
 
 # Install cursor
 RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
-  dpkg -i cursor.deb && \
+  sudo dpkg -i cursor.deb && \
   rm cursor.deb
 
 # Install wal chrome extension
@@ -359,106 +389,105 @@ RUN git clone --depth 100 https://github.com/sabrehagen/wal-chrome-extension $DE
 
 # Install discord
 RUN aria2c --header='User-Agent: Mozilla/5.0' --header='Referer: https://discord.com/' -o discord.deb 'https://discord.com/api/download?platform=linux&format=deb' && \
-  dpkg -i discord.deb && \
+  sudo dpkg -i discord.deb && \
   rm discord.deb
 
 # Install dive
 RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
   aria2c -o dive.deb https://github.com/wagoodman/dive/releases/download/v${LATEST}/dive_${LATEST}_linux_amd64.deb && \
-  dpkg -i dive.deb && \
+  sudo dpkg -i dive.deb && \
   rm dive.deb
 
 # Install docker
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
-  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' > /etc/apt/sources.list.d/docker.list && \
-  nala update && \
-  nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin && \
-  groupadd --system docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc >/dev/null && \
+  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null && \
+  sudo nala update && \
+  sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin
 
 # Install dmenu
-RUN nala update && \
-  nala install libfontconfig1-dev libfreetype-dev libx11-dev libxft-dev libxinerama-dev && \
+RUN sudo nala update && \
+  sudo nala install libfontconfig1-dev libfreetype-dev libx11-dev libxft-dev libxinerama-dev && \
   git clone --depth 100 https://github.com/sabrehagen/dmenu $DESKTOP_ENVIRONMENT_SOURCE_DMENU && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_DMENU && \
-  make install
+  sudo make install
 
 # Install dncli
-RUN nala update && \
-  nala install qtbase5-dev && \
+RUN sudo nala update && \
+  sudo nala install qtbase5-dev && \
   git clone --depth 100 https://github.com/Nohac/dncli $DESKTOP_ENVIRONMENT_SOURCE_DNCLI && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_DNCLI && \
   qmake && \
   make -j$(nproc) && \
-  install dncli /usr/local/bin/drag
+  sudo install dncli /usr/local/bin/drag
 
 
 # Install dra
 RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/latest | jq -r '.tag_name') && \
   aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/${LATEST}/dra_${LATEST}-1_amd64.deb && \
-  dpkg -i dra.deb && \
+  sudo dpkg -i dra.deb && \
   rm dra.deb
 
 # Install dunst
-RUN nala update && \
-  nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
+RUN sudo nala update && \
+  sudo nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
   git clone --depth 100 https://github.com/sabrehagen/dunst $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
   make WAYLAND=0 all && \
-  make WAYLAND=0 install
+  sudo make WAYLAND=0 install
 
 # Install elecwhat
 RUN LATEST=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
   aria2c -o elecwhat.deb https://github.com/piec/elecwhat/releases/download/v${LATEST}/elecwhat_${LATEST}_amd64.deb && \
-  dpkg -i elecwhat.deb && \
+  sudo dpkg -i elecwhat.deb && \
   rm elecwhat.deb
 
 # Install eza
 RUN curl -fsSL https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz | \
-  tar -C /usr/local/bin -xzf -
+  sudo tar -C /usr/local/bin -xzf -
 
 # Install fastfetch
 RUN git clone --depth 100 https://github.com/fastfetch-cli/fastfetch $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH && \
   cmake -S $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH -B $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build -DCMAKE_BUILD_TYPE=Release && \
   cmake --build $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build --parallel $(nproc) --target fastfetch && \
-  install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
+  sudo install $DESKTOP_ENVIRONMENT_SOURCE_FASTFETCH/build/fastfetch /usr/local/bin
 
 # Install fd
 RUN LATEST=$(curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq -r '.tag_name') && \
   curl -fsSL https://github.com/sharkdp/fd/releases/download/${LATEST}/fd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz | \
-  tar -xz --strip-components=1 -C /usr/local/bin fd-${LATEST}-x86_64-unknown-linux-gnu/fd
+  sudo tar -xz --strip-components=1 -C /usr/local/bin fd-${LATEST}-x86_64-unknown-linux-gnu/fd
 
 # Install fzf
 RUN LATEST=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
-  curl -L https://github.com/junegunn/fzf/releases/download/v${LATEST}/fzf-${LATEST}-linux_amd64.tar.gz | tar -xz -C /usr/local/bin
+  curl -L https://github.com/junegunn/fzf/releases/download/v${LATEST}/fzf-${LATEST}-linux_amd64.tar.gz | sudo tar -xz -C /usr/local/bin
 
 # Install gcsf
-RUN nala update && \
-  nala install fuse3 libfuse-dev libssl-dev pkg-config && \
+RUN sudo nala update && \
+  sudo nala install fuse3 libfuse-dev libssl-dev pkg-config && \
   cargo install gcsf && \
-  echo 'user_allow_other' >> /etc/fuse.conf && \
-  chmod 644 /etc/fuse.conf && \
-  chown root:root /etc/fuse.conf && \
+  echo 'user_allow_other' | sudo tee --append /etc/fuse.conf >/dev/null && \
+  sudo chmod u=rw,go=r /etc/fuse.conf && \
+  sudo chown root:root /etc/fuse.conf && \
   mkdir $HOME/gdrive
 
 # Install gh
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | tee /etc/apt/sources.list.d/github-cli.list && \
-  nala update && \
-  nala install gh
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
+  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | sudo tee /etc/apt/sources.list.d/github-cli.list && \
+  sudo nala update && \
+  sudo nala install gh
 
 # Install git
-RUN nala update && \
-  nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
+RUN sudo nala update && \
+  sudo nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 50 https://github.com/sabrehagen/git $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   make configure && \
   ./configure --prefix=/usr --sysconfdir=/etc && \
   make -j$(nproc) && \
-  make install && \
-  install git /usr/local/bin && \
-  touch /etc/gitconfig && \
-  git config --system init.defaultBranch master
+  sudo make install && \
+  sudo install git /usr/local/bin && \
+  sudo touch /etc/gitconfig && \
+  sudo git config --system init.defaultBranch master
 
 # Install github actions runner
 RUN LATEST=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
@@ -473,24 +502,24 @@ RUN git clone --depth 100 https://github.com/sabrehagen/gotop $DESKTOP_ENVIRONME
   VERSION="$(git tag -l --sort=-v:refname | sed 's/v\([^-].*\)/\1/g' | head -1 | tr -d '-' ).$(git describe --long --tags | sed 's/\([^-].*\)-\([0-9]*\)-\(g.*\)/r\2.\3/g' | tr -d '-')" && \
   DATE=$(date +%Y%m%dT%H%M%S) && \
   go build -o gotop -ldflags "-X main.Version=v$VERSION -X main.BuildDate=$DATE" ./cmd/gotop && \
-  install gotop /usr/local/bin
+  sudo install gotop /usr/local/bin
 
 # Install gping
 RUN git clone --depth 100 https://github.com/orf/gping $DESKTOP_ENVIRONMENT_SOURCE_GPING && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_GPING && \
   cargo install --locked --path gping && \
-  install target/release/gping /usr/local/bin && \
+  sudo install target/release/gping /usr/local/bin && \
   cargo clean
 
 # Install gsimplecal
-RUN nala update && \
-  nala install libgtk2.0-dev libglib2.0-dev && \
+RUN sudo nala update && \
+  sudo nala install libgtk2.0-dev libglib2.0-dev && \
   git clone --depth 100 https://github.com/dmedvinsky/gsimplecal $DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_GSIMPLECAL && \
   ./autogen.sh && \
   ./configure --enable-gtk2 && \
   make && \
-  make install
+  sudo make install
 
 # Install gtk-theme-switch
 RUN nala update && \
@@ -512,24 +541,24 @@ RUN git clone --depth 100 https://github.com/nousresearch/hermes-agent $DESKTOP_
   PATH=$HOME/.local/bin:$PATH HERMES_INSTALL_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT $DESKTOP_ENVIRONMENT_SOURCE_HERMES_AGENT/scripts/install.sh --skip-setup
 
 # Install hints
-RUN nala update && \
-  nala install gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
+RUN sudo nala update && \
+  sudo nala install gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
   HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin uv tool install git+https://github.com/AlfredoSequeida/hints.git && \
-  echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' >> /etc/environment
+  echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' | sudo tee --append /etc/environment >/dev/null
 
 # Install i3
-RUN nala update && \
-  nala install libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
+RUN sudo nala update && \
+  sudo nala install libanyevent-perl libev-dev libpango1.0-dev libstartup-notification0-dev libxcb-cursor-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-util0-dev libxcb-xinerama0-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-xrm0 libxcb1-dev libxkbcommon-dev libxkbcommon-x11-dev libyajl-dev meson ninja-build && \
   git clone --depth 100 --branch next https://github.com/sabrehagen/i3 $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_I3 && \
   mkdir build && \
   meson setup build && \
   meson compile -C build && \
-  meson install -C build && \
+  sudo meson install -C build && \
   cd AnyEvent-I3 && \
   perl Makefile.PL && \
   make && \
-  make install
+  sudo make install
 
 # Install i3blocks
 RUN git clone --depth 100 https://github.com/vivien/i3blocks $DESKTOP_ENVIRONMENT_SOURCE_I3BLOCKS && \
@@ -537,15 +566,15 @@ RUN git clone --depth 100 https://github.com/vivien/i3blocks $DESKTOP_ENVIRONMEN
   ./autogen.sh && \
   ./configure && \
   make && \
-  make install
+  sudo make install
 
 # Install i3lock
-RUN nala update && \
-  nala install libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
+RUN sudo nala update && \
+  sudo nala install libcairo2-dev libfontconfig1-dev libgif-dev libjpeg-dev libpam0g-dev libx11-xcb-dev libxcb-composite0-dev && \
   git clone --depth 100 https://github.com/sabrehagen/i3lock-color $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   ./build.sh && \
-  ./install-i3lock-color.sh
+  sudo ./install-i3lock-color.sh
 
 # Install i3-focus-last
 RUN git clone --depth 100 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
@@ -553,8 +582,8 @@ RUN git clone --depth 100 https://github.com/s-urbaniak/i3-focus-last $HOME/.con
   go install
 
 # Install i3 extras
-RUN nala update && \
-  nala install python3-dev python3-i3ipc && \
+RUN sudo nala update && \
+  sudo nala install python3-dev python3-i3ipc && \
   uv tool install i3-resurrect==1.4.2 && \
   uv tool install i3altlayout==1.1.1 && \
   uv tool install git+https://github.com/sabrehagen/i3-workspace-names-daemon
@@ -563,87 +592,87 @@ RUN nala update && \
 RUN git clone --depth 100 https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_JOBBER && \
   make && \
-  make install
+  sudo make install
 
 # Install jump directory navigator
 RUN git clone --depth 100 https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   go build -o jump && \
-  install jump /usr/local/bin
+  sudo install jump /usr/local/bin
 
 # Install kdenlive
-RUN nala update && \
-  nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
+RUN sudo nala update && \
+  sudo nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
 # Install mise
 RUN curl https://mise.run | sh
 
 # Install musikcube
 RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
-  dpkg -i musikcube.deb && \
+  sudo dpkg -i musikcube.deb && \
   rm musikcube.deb
 
 # Install ncmpcpp
-RUN nala update && \
-  nala install libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
+RUN sudo nala update && \
+  sudo nala install libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
   git clone --depth 100 https://github.com/ncmpcpp/ncmpcpp $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   autoreconf -fiv && \
   CXXFLAGS='-include boost/type_traits/add_const.hpp' ./configure --prefix=/usr --enable-outputs --enable-visualizer --enable-clock --with-fftw --with-taglib --with-lto && \
   make -j$(nproc) && \
-  make install && \
+  sudo make install && \
   make clean
 
 # Install nerd fonts
 RUN aria2c -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
-  mkdir -p /usr/share/fonts/truetype/dejavu && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf > /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf && \
+  sudo mkdir -p /usr/share/fonts/truetype/dejavu && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf >/dev/null && \
   rm DejaVuSansMono.zip && \
-  nala install fonts-noto-core
+  sudo nala install fonts-noto-core
 
 # Install ngrok
-RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
-  echo 'deb https://ngrok-agent.s3.amazonaws.com buster main' | tee /etc/apt/sources.list.d/ngrok.list && \
-  nala update && \
-  nala install ngrok
+RUN curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
+  echo 'deb https://ngrok-agent.s3.amazonaws.com buster main' | sudo tee /etc/apt/sources.list.d/ngrok.list && \
+  sudo nala update && \
+  sudo nala install ngrok
 
 # Install tailscale
-RUN curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
-  curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
-  nala update && \
-  nala install tailscale
+RUN curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
+  curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list && \
+  sudo nala update && \
+  sudo nala install tailscale
 
 # Install nicotine+
-RUN nala update && \
-  nala install devscripts equivs python3-build && \
+RUN sudo nala update && \
+  sudo nala install devscripts equivs python3-build && \
   git clone --depth 100 https://github.com/sabrehagen/nicotine-plus $DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS/src && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_NICOTINE_PLUS/src && \
-  mk-build-deps --install --remove --tool 'nala install --no-install-recommends' debian/control && \
+  sudo mk-build-deps --install --remove --tool 'nala install --no-install-recommends' debian/control && \
   python3 -m build --sdist && \
   mk-origtargz dist/nicotine*.tar.gz && \
   DEB_BUILD_OPTIONS=nocheck debuild -sa -us -uc && \
-  dpkg -i ../nicotine*.deb && \
-  nala purge devscripts equivs && \
-  nala autoremove
+  sudo dpkg -i ../nicotine*.deb && \
+  sudo nala purge devscripts equivs && \
+  sudo nala autoremove
 
 # Install nodejs
 RUN LATEST=$(curl -s https://nodejs.org/dist/index.json | jq -r '[.[] | select(.lts != false)] | first | .version') && \
   curl -fsSL https://nodejs.org/dist/${LATEST}/node-${LATEST}-linux-x64.tar.xz | \
-  tar -C /usr/local -Jx --strip-components=1
+  sudo tar -C /usr/local -Jx --strip-components=1
 
 # Install novnc
 RUN git clone --depth 100 https://github.com/cloud-computer/noVNC.git $DESKTOP_ENVIRONMENT_SOURCE_NOVNC && \
   git clone --depth 100 https://github.com/novnc/websockify $DESKTOP_ENVIRONMENT_SOURCE_NOVNC/utils/websockify
 
 # Install nvidia driver
-RUN nala update && \
-  nala install nvidia-prime && \
+RUN sudo nala update && \
+  sudo nala install nvidia-prime && \
   aria2c -o nvidia.run https://download.nvidia.com/XFree86/Linux-x86_64/595.58.03/NVIDIA-Linux-x86_64-595.58.03.run && \
   chmod +x nvidia.run && \
-  ./nvidia.run --no-kernel-modules --silent && \
+  sudo ./nvidia.run --no-kernel-modules --silent && \
   rm nvidia.run
 
 # Install nviwatch
@@ -653,58 +682,54 @@ RUN cargo install nviwatch
 RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r '.tag_name')/install.sh | \
   NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm PROFILE=/dev/null bash && \
-  . $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && \
-  nvm install 20
+  bash -c '. $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && nvm install 20'
 
 # Install ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Install op
-RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
-  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | tee /etc/apt/sources.list.d/1password.list && \
-  mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
-  curl -fsSL https://downloads.1password.com/linux/debian/debsig/1password.pol | tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
-  curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
-  nala update && \
-  nala install 1password-cli
-
-# Install openclaw
-RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
+RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+  echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list && \
+  sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22 /usr/share/debsig/keyrings/AC2D62742012EA22 && \
+  curl -fsSL https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
+  curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+  sudo nala update && \
+  sudo nala install 1password-cli
 
 # Install oxker
 RUN cargo install --git https://github.com/sabrehagen/oxker --branch fix/bollard-secret-to-models
 
 # Install pcmanfm
-RUN nala update && \
-  nala install intltool libfm-gtk3-dev libgtk-3-dev && \
+RUN sudo nala update && \
+  sudo nala install intltool libfm-gtk3-dev libgtk-3-dev && \
   git clone --depth 100 https://github.com/lxde/pcmanfm $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_PCMANFM && \
   ./autogen.sh && \
   ./configure --disable-nls --prefix=/usr --sysconfdir=/etc --with-gtk=3 && \
   make -j$(nproc) && \
-  make install
+  sudo make install
 
 # Install picom
-RUN nala update && \
-  nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
+RUN sudo nala update && \
+  sudo nala install libconfig-dev libdbus-1-dev libegl-dev libepoxy-dev libev-dev libgl-dev libpcre2-dev libpixman-1-dev libx11-xcb-dev libxcb1-dev libxcb-composite0-dev libxcb-damage0-dev libxcb-dpms0-dev libxcb-glx0-dev libxcb-image0-dev libxcb-present-dev libxcb-randr0-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-shape0-dev libxcb-util-dev libxcb-xfixes0-dev libxext-dev meson ninja-build uthash-dev && \
   git clone --depth 100 https://github.com/yshui/picom $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_PICOM && \
   meson setup --buildtype=release build && \
   ninja -C build && \
-  install build/src/picom /usr/local/bin
+  sudo install build/src/picom /usr/local/bin
 
 # Install pipewire
-RUN nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
-  echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack > /etc/ld.so.conf.d/pipewire-jack.conf && \
-  ldconfig
+RUN sudo nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
+  echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack | sudo tee /etc/ld.so.conf.d/pipewire-jack.conf >/dev/null && \
+  sudo ldconfig
 
 # Install postgres
-RUN nala update && \
-  nala install postgresql && \
-  pg_ctlcluster 18 main start && \
-  runuser --user postgres -- createuser --superuser $DESKTOP_ENVIRONMENT_USER && \
-  runuser --user postgres -- createdb --owner $DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_USER && \
-  pg_ctlcluster 18 main stop
+RUN sudo nala update && \
+  sudo nala install postgresql && \
+  sudo pg_ctlcluster 18 main start && \
+  sudo runuser --user postgres -- createuser --superuser $DESKTOP_ENVIRONMENT_USER && \
+  sudo runuser --user postgres -- createdb --owner $DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_USER && \
+  sudo pg_ctlcluster 18 main stop
 
 # Install posting
 RUN uv tool install posting
@@ -714,30 +739,30 @@ RUN git clone --depth 100 https://github.com/sabrehagen/pywal $DESKTOP_ENVIRONME
   uv tool install $DESKTOP_ENVIRONMENT_SOURCE_PYWAL
 
 # Install qjackctl
-RUN nala update && \
-  nala install libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
+RUN sudo nala update && \
+  sudo nala install libasound2-dev libjack-jackd2-dev libqt5svg5-dev portaudio19-dev qtbase5-dev qttools5-dev && \
   git clone --depth 100 https://github.com/rncbc/qjackctl $DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_QJACKCTL && \
   cmake -DCMAKE_BUILD_TYPE=Release -B build && \
   cmake --build build --parallel $(nproc) && \
-  cmake --install build
+  sudo cmake --install build
 
 # Install qt5ct
-RUN nala update && \
-  nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
+RUN sudo nala update && \
+  sudo nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
   git clone --depth 100 https://github.com/sabrehagen/qt5ct $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   qmake && \
   make -j$(nproc) && \
-  make install
+  sudo make install
 
 # Install qpwgraph
-RUN nala update && \
-  nala install libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
+RUN sudo nala update && \
+  sudo nala install libasound2-dev libpipewire-0.3-dev libqt6svg6-dev libspa-0.2-dev qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-wayland && \
   git clone --depth 100 https://github.com/rncbc/qpwgraph $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH && \
   cmake -S $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH -B $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build -DCMAKE_BUILD_TYPE=Release && \
   cmake --build $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build --parallel $(nproc) && \
-  cmake --install $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build
+  sudo cmake --install $DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH/build
 
 # Install screenpipe
 # RUN curl -fsSL get.screenpi.pe/cli | sh && \
@@ -748,73 +773,73 @@ RUN uv tool install shell-gpt
 
 # Install shfmt
 RUN LATEST=$(curl -s https://api.github.com/repos/mvdan/sh/releases/latest | jq -r '.tag_name') && \
-  aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/${LATEST}/shfmt_${LATEST}_linux_amd64 && \
-  chmod +x /usr/local/bin/shfmt
+  sudo aria2c -d /usr/local/bin -o shfmt https://github.com/mvdan/sh/releases/download/${LATEST}/shfmt_${LATEST}_linux_amd64 && \
+  sudo chmod +x /usr/local/bin/shfmt
 
 # Install slack
 RUN aria2c -o slack.deb https://downloads.slack-edge.com/desktop-releases/linux/x64/4.46.101/slack-desktop-4.46.101-amd64.deb && \
-  dpkg -i slack.deb && \
+  sudo dpkg -i slack.deb && \
   rm slack.deb
 
 # Install slack-tui
 RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRONMENT_SOURCE_SLACK_TUI && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_SLACK_TUI && \
-  go build -o /usr/local/bin/slack-tui .
+  sudo go build -o /usr/local/bin/slack-tui .
 
 # Install speedtest
-RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | tar -C /usr/local/bin -xzf - speedtest
+RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | sudo tar -C /usr/local/bin -xzf - speedtest
 
 # Install telegram
 RUN aria2c -o telegram.tar.xz https://telegram.org/dl/desktop/linux && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf telegram.tar.xz && \
   rm telegram.tar.xz && \
-  ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/Telegram/Telegram /usr/local/bin/telegram
+  sudo ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/Telegram/Telegram /usr/local/bin/telegram
 
 # Install thorium
 RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/latest | jq -r '.tag_name | ltrimstr("M")') && \
   aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M${LATEST}/thorium-browser_${LATEST}_AVX2.deb && \
-  dpkg -i thorium.deb && \
+  sudo dpkg -i thorium.deb && \
   rm thorium.deb
 
 # Install timeago
-RUN aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
-  chmod +x /usr/local/bin/timeago
+RUN sudo aria2c -d /usr/local/bin -o timeago https://raw.githubusercontent.com/sabrehagen/timeago/master/timeago && \
+  sudo chmod +x /usr/local/bin/timeago
 
 # Install tldr
 RUN uv tool install tldr && \
   uv tool run tldr --update
 
 # Install tmpmail
-RUN aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
-  chmod +x /usr/local/bin/tmpmail
+RUN sudo aria2c -d /usr/local/bin -o tmpmail https://raw.githubusercontent.com/sdushantha/tmpmail/master/tmpmail && \
+  sudo chmod +x /usr/local/bin/tmpmail
 
 # Install tmux
-RUN nala update && \
-  nala install libevent-dev libncurses-dev bison && \
+RUN sudo nala update && \
+  sudo nala install libevent-dev libncurses-dev bison && \
   git clone --depth 100 https://github.com/sabrehagen/tmux $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_TMUX && \
   sh autogen.sh && \
   ./configure --prefix=/usr --sysconfdir=/etc --enable-sixel && \
   make -j$(nproc) && \
-  make install && \
+  sudo make install && \
   make clean
 
 # Install tormix
-RUN aria2c -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
-  chmod +x /usr/local/bin/tormix
+RUN sudo aria2c -d /usr/local/bin -o tormix https://raw.githubusercontent.com/ckardaris/tormix/master/tormix && \
+  sudo chmod +x /usr/local/bin/tormix
 
 # Install tracexec
 RUN curl -fsSL https://github.com/kxxt/tracexec/releases/latest/download/tracexec-x86_64-unknown-linux-gnu.tar.gz | \
-  tar -C /usr/local/bin -xzf - tracexec
+  sudo tar -C /usr/local/bin -xzf - tracexec
 
 # Install walogram
 RUN git clone --depth 100 https://github.com/sabrehagen/walogram $DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_WALOGRAM && \
-  make install
+  sudo make install
 
 # Install vcsh
-RUN nala update && \
-  nala install automake ronn && \
+RUN sudo nala update && \
+  sudo nala install automake ronn && \
   git clone --depth 100 https://github.com/sabrehagen/vcsh $DESKTOP_ENVIRONMENT_SOURCE_VCSH && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_VCSH && \
   ./bootstrap.sh && \
@@ -825,20 +850,20 @@ RUN nala update && \
   --with-man-page=yes \
   --with-zsh-completion-dir=/usr/share/zsh/vendor-completions && \
   make -j$(nproc) && \
-  make install && \
+  sudo make install && \
   make clean
 
 # Install warnai
-RUN nala update && \
-  nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
+RUN sudo nala update && \
+  sudo nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
   git clone --depth 100 https://github.com/sabrehagen/warnai $DESKTOP_ENVIRONMENT_SOURCE_WARNAI && \
-  ln -s $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai /usr/local/bin
+  sudo ln -s $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai /usr/local/bin
 
 # Install whatfiles
 RUN git clone --depth 100 https://github.com/spieglt/whatfiles $DESKTOP_ENVIRONMENT_SOURCE_WHATFILES && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_WHATFILES && \
   make && \
-  make install
+  sudo make install
 
 # Install workmux
 RUN curl -fsSL https://raw.githubusercontent.com/raine/workmux/main/scripts/install.sh | bash
@@ -850,28 +875,28 @@ RUN LATEST=$(curl -s https://api.github.com/repos/nikp123/xava/releases | jq -r 
   ./xava.appimage --appimage-extract && \
   rm xava.appimage && \
   mv squashfs-root $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava && \
-  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/bin/xava /usr/local/bin/xava && \
-  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava /usr/share/xava && \
-  ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/lib/xava /usr/lib/xava && \
-  mkdir -p /etc/skel/.config/xava && \
-  cp -a $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava/. /etc/skel/.config/xava/
+  sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/bin/xava /usr/local/bin/xava && \
+  sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava /usr/share/xava && \
+  sudo ln -sf $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/lib/xava /usr/lib/xava && \
+  mkdir -p $HOME/.config/xava && \
+  cp -a $DESKTOP_ENVIRONMENT_SOURCE_HOME/xava/usr/share/xava/. $HOME/.config/xava/
 
 # Install xcolor
 RUN cargo install xcolor
 
 # Install xwinwrap
-RUN nala update && \
-  nala install libx11-dev libxext-dev libxrender-dev x11proto-xext-dev xorg-dev && \
+RUN sudo nala update && \
+  sudo nala install libx11-dev libxext-dev libxrender-dev x11proto-xext-dev xorg-dev && \
   git clone --depth 100 https://github.com/sabrehagen/xwinwrap.git $DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_XWINWRAP && \
   make && \
-  make install
+  sudo make install
 
 # Install yarn
-RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor --output /etc/apt/keyrings/yarn.gpg && \
-  echo 'deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main' | tee /etc/apt/sources.list.d/yarn.list && \
-  nala update && \
-  nala install yarn
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor --output /etc/apt/keyrings/yarn.gpg && \
+  echo 'deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main' | sudo tee /etc/apt/sources.list.d/yarn.list && \
+  sudo nala update && \
+  sudo nala install yarn
 
 # Install yarn based utilities
 RUN yarn global add \
@@ -903,49 +928,26 @@ RUN git clone --depth 100 https://github.com/sabrehagen/vscode-wal $DESKTOP_ENVI
 
 # Configure openvpn
 RUN mkdir -p $HOME/.config/openvpn && \
-  mknod -m u=rw,go= $HOME/.config/openvpn/tun c 10 200
-
-# Configure password-less sudo for the sudo group
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers
+  sudo mknod -m u=rw,go= $HOME/.config/openvpn/tun c 10 200 && \
+  sudo chown $USER:$USER $HOME/.config/openvpn/tun
 
 # Configure x11 permissions and touchpad tap to click
-RUN sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
-  echo needs_root_rights=yes >> /etc/X11/Xwrapper.config && \
-  chmod u+s /usr/bin/xinit && \
-  mkdir -p /etc/X11/xorg.conf.d && \
-  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' > /etc/X11/xorg.conf.d/90-touchpad.conf
+RUN sudo sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
+  echo needs_root_rights=yes | sudo tee --append /etc/X11/Xwrapper.config >/dev/null && \
+  sudo chmod u+s /usr/bin/xinit && \
+  sudo mkdir -p /etc/X11/xorg.conf.d && \
+  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/90-touchpad.conf >/dev/null
 
 # Configure nvidia as on-demand offload gpu, enable fan control, and allow headless operation
-RUN echo 'Section "OutputClass"\n Identifier "nvidia"\n MatchDriver "nvidia-drm"\n Driver "nvidia"\n Option "AllowEmptyInitialConfiguration" "true"\n Option "Coolbits" "4"\n Option "PrimaryGPU" "no"\nEndSection' > /etc/X11/xorg.conf.d/20-nvidia.conf
+RUN echo 'Section "OutputClass"\n Identifier "nvidia"\n MatchDriver "nvidia-drm"\n Driver "nvidia"\n Option "AllowEmptyInitialConfiguration" "true"\n Option "Coolbits" "4"\n Option "PrimaryGPU" "no"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/20-nvidia.conf >/dev/null
 
 # Allow input group access to uinput
-RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' > /etc/udev/rules.d/80-hints.rules
-
-# Create a non-root user for safe operation
-RUN userdel -r ubuntu && \
-  useradd \
-  --create-home \
-  --groups audio,docker,i2c,input,shadow,sudo,tty,video \
-  --shell /usr/bin/zsh \
-  $USER && \
-  cp --preserve=all --recursive --update=none /etc/skel/. $HOME/ && \
-  touch $HOME/.hushlogin
-
-# Set non-root user password
-RUN --mount=type=secret,id=user_password \
-  sed -i "s;^$USER:[^:]*;$USER:$(cat /run/secrets/user_password);" /etc/shadow
-
-# Take ownership of user's home directory and applications
-RUN chown -R $USER:$USER $HOME $DESKTOP_ENVIRONMENT_SOURCE_HOME
+RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee /etc/udev/rules.d/80-hints.rules >/dev/null
 
 # Restore file ownership and file mode required for chrome-sandbox binaries
-RUN find $DESKTOP_ENVIRONMENT_SOURCE_HOME -type f -name chrome-sandbox \
+RUN sudo find $DESKTOP_ENVIRONMENT_SOURCE_HOME -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
-
-# Become desktop environment user
-USER $USER
-WORKDIR $HOME
 
 # Clone the desktop environment
 RUN git clone https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment $DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT || \
