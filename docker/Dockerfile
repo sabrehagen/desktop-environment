@@ -155,7 +155,7 @@ RUN sudo locale-gen $LC_ALL && \
 
 # Set timezone
 RUN sudo ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-  echo $TZ | sudo tee /etc/timezone > /dev/null
+  echo $TZ | sudo tee /etc/timezone >/dev/null
 
 # Upgrade base system
 RUN sudo nala upgrade -y
@@ -399,8 +399,8 @@ RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest
   rm dive.deb
 
 # Install docker
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null && \
-  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc >/dev/null && \
+  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null && \
   sudo nala update && \
   sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin
 
@@ -464,7 +464,7 @@ RUN LATEST=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest |
 RUN sudo nala update && \
   sudo nala install fuse3 libfuse-dev libssl-dev pkg-config && \
   cargo install gcsf && \
-  echo 'user_allow_other' | sudo tee --append /etc/fuse.conf > /dev/null && \
+  echo 'user_allow_other' | sudo tee --append /etc/fuse.conf >/dev/null && \
   sudo chmod 644 /etc/fuse.conf && \
   sudo chown root:root /etc/fuse.conf && \
   mkdir $HOME/gdrive
@@ -544,7 +544,7 @@ RUN git clone --depth 100 https://github.com/nousresearch/hermes-agent $DESKTOP_
 RUN sudo nala update && \
   sudo nala install gir1.2-gtk-4.0 libcairo2-dev libdbus-1-dev libgirepository1.0-dev gcc libwnck-3-dev && \
   HINTS_EXPECTED_BIN_DIR=$HOME/.local/bin uv tool install git+https://github.com/AlfredoSequeida/hints.git && \
-  echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' | sudo tee --append /etc/environment > /dev/null
+  echo 'ACCESSIBILITY_ENABLED=1\nGNOME_ACCESSIBILITY=1\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nQT_LINUX_ACCESSIBILITY_ALWAYS_ON=1' | sudo tee --append /etc/environment >/dev/null
 
 # Install i3
 RUN sudo nala update && \
@@ -626,10 +626,10 @@ RUN sudo nala update && \
 # Install nerd fonts
 RUN aria2c -o DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/DejaVuSansMono.zip && \
   sudo mkdir -p /usr/share/fonts/truetype/dejavu && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf > /dev/null && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf > /dev/null && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf > /dev/null && \
-  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf > /dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Regular.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Regular.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Bold.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Bold.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-Oblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-Oblique.ttf >/dev/null && \
+  unzip -p DejaVuSansMono.zip DejaVuSansMNerdFont-BoldOblique.ttf | sudo tee /usr/share/fonts/truetype/dejavu/DejaVuSansMNerdFont-BoldOblique.ttf >/dev/null && \
   rm DejaVuSansMono.zip && \
   sudo nala install fonts-noto-core
 
@@ -720,7 +720,7 @@ RUN sudo nala update && \
 
 # Install pipewire
 RUN sudo nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
-  echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack | sudo tee /etc/ld.so.conf.d/pipewire-jack.conf > /dev/null && \
+  echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack | sudo tee /etc/ld.so.conf.d/pipewire-jack.conf >/dev/null && \
   sudo ldconfig
 
 # Install postgres
@@ -933,16 +933,16 @@ RUN mkdir -p $HOME/.config/openvpn && \
 
 # Configure x11 permissions and touchpad tap to click
 RUN sudo sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config && \
-  echo needs_root_rights=yes | sudo tee --append /etc/X11/Xwrapper.config > /dev/null && \
+  echo needs_root_rights=yes | sudo tee --append /etc/X11/Xwrapper.config >/dev/null && \
   sudo chmod u+s /usr/bin/xinit && \
   sudo mkdir -p /etc/X11/xorg.conf.d && \
-  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/90-touchpad.conf > /dev/null
+  echo 'Section "InputClass"\n Identifier "touchpad"\n MatchIsTouchpad "on"\n Driver "libinput"\n Option "Tapping" "on"\n Option "libinput Accel Speed" "0.5"\n Option "Natural Scrolling" "true"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/90-touchpad.conf >/dev/null
 
 # Configure nvidia as on-demand offload gpu, enable fan control, and allow headless operation
-RUN echo 'Section "OutputClass"\n Identifier "nvidia"\n MatchDriver "nvidia-drm"\n Driver "nvidia"\n Option "AllowEmptyInitialConfiguration" "true"\n Option "Coolbits" "4"\n Option "PrimaryGPU" "no"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/20-nvidia.conf > /dev/null
+RUN echo 'Section "OutputClass"\n Identifier "nvidia"\n MatchDriver "nvidia-drm"\n Driver "nvidia"\n Option "AllowEmptyInitialConfiguration" "true"\n Option "Coolbits" "4"\n Option "PrimaryGPU" "no"\nEndSection' | sudo tee /etc/X11/xorg.conf.d/20-nvidia.conf >/dev/null
 
 # Allow input group access to uinput
-RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee /etc/udev/rules.d/80-hints.rules > /dev/null
+RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee /etc/udev/rules.d/80-hints.rules >/dev/null
 
 # Restore file ownership and file mode required for chrome-sandbox binaries
 RUN sudo find $DESKTOP_ENVIRONMENT_SOURCE_HOME -type f -name chrome-sandbox \
