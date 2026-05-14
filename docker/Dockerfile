@@ -897,10 +897,10 @@ RUN yarn global add \
 # Install zsh
 RUN nala update && \
   nala install libncursesw5-dev libpcre2-dev yodl && \
-  git clone --depth 1 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
+  git clone --depth 1 --branch zsh-5.9 https://github.com/zsh-users/zsh $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_ZSH && \
   ./Util/preconfig && \
-  ./configure --prefix=/usr --sysconfdir=/etc --with-tcsetpgrp && \
+  CFLAGS='-DHAVE_BOOLCODES -DHAVE_BOOLNAMES -DHAVE_NUMCODES -DHAVE_NUMNAMES -DHAVE_STRCODES -DHAVE_STRNAMES' ./configure --prefix=/usr --sysconfdir=/etc --with-tcsetpgrp && \
   make -j$(nproc) && \
   make install && \
   make clean
