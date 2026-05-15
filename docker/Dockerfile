@@ -105,13 +105,12 @@ RUN nala update && \
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers
 
 # Create a non-root user for safe operation
-RUN groupadd --system docker && \
-  groupadd --system i2c && \
+RUN groupadd --system i2c && \
   groupadd --system input && \
   userdel -r ubuntu && \
   useradd \
   --create-home \
-  --groups audio,docker,i2c,input,shadow,sudo,tty,video \
+  --groups audio,i2c,input,shadow,sudo,tty,video \
   --shell /usr/bin/zsh \
   $USER && \
   runuser -u $USER -- touch $HOME/.hushlogin
@@ -402,7 +401,8 @@ RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc >/dev/null && \
   echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null && \
   sudo nala update && \
-  sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin
+  sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin && \
+  sudo usermod --append --groups docker $USER
 
 # Install dmenu
 RUN sudo nala update && \
