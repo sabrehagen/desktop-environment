@@ -574,7 +574,8 @@ RUN sudo nala update && \
   git clone --depth 100 https://github.com/sabrehagen/i3lock-color $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_I3LOCK && \
   ./build.sh && \
-  sudo ./install-i3lock-color.sh
+  cd build && \
+  sudo make install
 
 # Install i3-focus-last
 RUN git clone --depth 100 https://github.com/s-urbaniak/i3-focus-last $HOME/.config/i3/i3-focus-last && \
