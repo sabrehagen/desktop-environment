@@ -797,8 +797,8 @@ RUN aria2c -o telegram.tar.xz https://telegram.org/dl/desktop/linux && \
   sudo ln -s $DESKTOP_ENVIRONMENT_SOURCE_HOME/Telegram/Telegram /usr/local/bin/telegram
 
 # Install thorium
-RUN LATEST=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases/latest | jq -r '.tag_name | ltrimstr("M")') && \
-  aria2c -o thorium.deb https://github.com/Alex313031/thorium/releases/download/M${LATEST}/thorium-browser_${LATEST}_AVX2.deb && \
+RUN URL=$(curl -s https://api.github.com/repos/Alex313031/thorium/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("_AVX2.deb"))] | first | .browser_download_url') && \
+  aria2c -o thorium.deb $URL && \
   sudo dpkg -i thorium.deb && \
   rm thorium.deb
 
