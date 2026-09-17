@@ -595,7 +595,7 @@ RUN git clone --depth 100 https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONM
   make && \
   sudo make install
 
-# Install jump
+# Install jump directory navigator
 RUN git clone --depth 100 https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   go build -o jump && \
