@@ -429,11 +429,11 @@ RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/lates
 
 # Install dunst
 RUN sudo nala update && \
-  sudo nala install libxss-dev && \
+  sudo nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
   git clone --depth 100 https://github.com/sabrehagen/dunst $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
-  make DUNSTIFY=0 WAYLAND=0 all && \
-  sudo make DUNSTIFY=0 WAYLAND=0 install
+  make WAYLAND=0 all && \
+  sudo make WAYLAND=0 install
 
 # Install elecwhat
 RUN LATEST=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
@@ -478,7 +478,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
 
 # Install git
 RUN sudo nala update && \
-  sudo nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-gnutls-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
+  sudo nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 50 https://github.com/sabrehagen/git $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   make configure && \
