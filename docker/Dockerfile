@@ -605,9 +605,6 @@ RUN git clone --depth 100 https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONM
 RUN sudo nala update && \
   sudo nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
-# Install mise
-RUN curl https://mise.run | sh
-
 # Install musikcube
 RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
   sudo dpkg -i musikcube.deb && \
