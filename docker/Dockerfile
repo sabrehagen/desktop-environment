@@ -421,7 +421,6 @@ RUN sudo nala update && \
   make -j$(nproc) && \
   sudo install dncli /usr/local/bin/drag
 
-
 # Install dra
 RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/latest | jq -r '.tag_name') && \
   aria2c -o dra.deb https://github.com/devmatteini/dra/releases/download/${LATEST}/dra_${LATEST}-1_amd64.deb && \
