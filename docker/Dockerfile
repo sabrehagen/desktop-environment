@@ -429,11 +429,11 @@ RUN LATEST=$(curl -s https://api.github.com/repos/devmatteini/dra/releases/lates
 
 # Install dunst
 RUN sudo nala update && \
-  sudo nala install libdbus-1-dev libnotify-dev libsdl-pango-dev libxinerama-dev libxrandr-dev libxss-dev && \
+  sudo nala install libxss-dev && \
   git clone --depth 100 https://github.com/sabrehagen/dunst $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_DUNST && \
-  make WAYLAND=0 all && \
-  sudo make WAYLAND=0 install
+  make DUNSTIFY=0 WAYLAND=0 all && \
+  sudo make DUNSTIFY=0 WAYLAND=0 install
 
 # Install elecwhat
 RUN LATEST=$(curl -s https://api.github.com/repos/piec/elecwhat/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
@@ -478,7 +478,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | s
 
 # Install git
 RUN sudo nala update && \
-  sudo nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-openssl-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
+  sudo nala install asciidoc docbook-xsl-ns gettext libauthen-sasl-perl libcgi-pm-perl libcurl4-gnutls-dev libdbd-sqlite3-perl libemail-valid-perl liberror-perl libexpat-dev libio-pty-perl libio-socket-ssl-perl libnet-smtp-ssl-perl libpcre2-dev libsecret-1-dev libssl-dev tcl tk xmlto zlib1g-dev && \
   git clone --depth 50 https://github.com/sabrehagen/git $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_GIT && \
   make configure && \
@@ -595,7 +595,7 @@ RUN git clone --depth 100 https://github.com/sabrehagen/jobber $DESKTOP_ENVIRONM
   make && \
   sudo make install
 
-# Install jump directory navigator
+# Install jump
 RUN git clone --depth 100 https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_JUMP && \
   go build -o jump && \
@@ -605,9 +605,6 @@ RUN git clone --depth 100 https://github.com/gsamokovarov/jump $DESKTOP_ENVIRONM
 RUN sudo nala update && \
   sudo nala install frei0r-plugins kde-style-breeze kdenlive knewstuff-dialog mediainfo --no-install-recommends
 
-# Install mise
-RUN curl https://mise.run | sh
-
 # Install musikcube
 RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/download/3.0.5/musikcube_3.0.5_linux_x86_64.deb && \
   sudo dpkg -i musikcube.deb && \
@@ -615,7 +612,7 @@ RUN aria2c -o musikcube.deb https://github.com/clangen/musikcube/releases/downlo
 
 # Install ncmpcpp
 RUN sudo nala update && \
-  sudo nala install libboost-all-dev libcurl4-openssl-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
+  sudo nala install libboost-all-dev libcurl4-gnutls-dev libfftw3-dev libmpdclient-dev libncursesw5-dev libreadline-dev libtag1-dev && \
   git clone --depth 100 https://github.com/ncmpcpp/ncmpcpp $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_NCMPCPP && \
   autoreconf -fiv && \
@@ -685,9 +682,6 @@ RUN mkdir $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm && \
   NVM_DIR=$DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm PROFILE=/dev/null bash && \
   bash -c '. $DESKTOP_ENVIRONMENT_SOURCE_HOME/nvm/nvm.sh && nvm install 20'
 
-# Install ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
 # Install op
 RUN curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
   echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list && \
@@ -724,17 +718,6 @@ RUN sudo nala install pipewire pipewire-alsa pipewire-jack pipewire-pulse && \
   echo /usr/lib/x86_64-linux-gnu/pipewire-0.3/jack | sudo tee /etc/ld.so.conf.d/pipewire-jack.conf >/dev/null && \
   sudo ldconfig
 
-# Install postgres
-RUN sudo nala update && \
-  sudo nala install postgresql && \
-  sudo pg_ctlcluster 18 main start && \
-  sudo runuser --user postgres -- createuser --superuser $DESKTOP_ENVIRONMENT_USER && \
-  sudo runuser --user postgres -- createdb --owner $DESKTOP_ENVIRONMENT_USER $DESKTOP_ENVIRONMENT_USER && \
-  sudo pg_ctlcluster 18 main stop
-
-# Install posting
-RUN uv tool install posting
-
 # Install pywal
 RUN git clone --depth 100 https://github.com/sabrehagen/pywal $DESKTOP_ENVIRONMENT_SOURCE_PYWAL && \
   uv tool install $DESKTOP_ENVIRONMENT_SOURCE_PYWAL
@@ -750,7 +733,7 @@ RUN sudo nala update && \
 
 # Install qt5ct
 RUN sudo nala update && \
-  sudo nala install g++ libqt5svg5-dev qt5-qmake qtbase5-dev qtbase5-dev-tools qtbase5-private-dev qttools5-dev qttools5-dev-tools && \
+  sudo nala install qtbase5-private-dev && \
   git clone --depth 100 https://github.com/sabrehagen/qt5ct $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   cd $DESKTOP_ENVIRONMENT_SOURCE_QT5CT && \
   qmake && \
@@ -866,9 +849,6 @@ RUN git clone --depth 100 https://github.com/spieglt/whatfiles $DESKTOP_ENVIRONM
   make && \
   sudo make install
 
-# Install workmux
-RUN curl -fsSL https://raw.githubusercontent.com/raine/workmux/main/scripts/install.sh | bash
-
 # Install xava
 RUN LATEST=$(curl -s https://api.github.com/repos/nikp123/xava/releases | jq -r '[.[] | select(any(.assets[]; .name == "xava-x86_64.AppImage"))][0].tag_name') && \
   aria2c -o xava.appimage https://github.com/nikp123/xava/releases/download/${LATEST}/xava-x86_64.AppImage && \
@@ -899,8 +879,8 @@ RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor --o
   sudo nala update && \
   sudo nala install yarn
 
-# Install yarn based utilities
-RUN yarn global add \
+# Install npm global utilities
+RUN sudo npm install --global \
   @google/gemini-cli \
   @openai/codex \
   @mariozechner/pi-coding-agent \
@@ -916,8 +896,7 @@ RUN yarn global add \
   imgur-uploader-cli \
   nodemon \
   rebase-editor \
-  vercel && \
-  yarn cache clean
+  vercel
 
 # Install zvm and zig
 RUN curl -fsSL https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash -s - -- --no-env && \
@@ -949,6 +928,10 @@ RUN echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee /etc/udev/ru
 RUN sudo find $DESKTOP_ENVIRONMENT_SOURCE_HOME -type f -name chrome-sandbox \
   -exec chown root:root {} \; \
   -exec chmod u=srwx,go=rx {} \;
+
+# Make bwrap setuid-root so glycin loaders (used by GTK) can create sandboxes inside the container
+RUN sudo chown root:root /usr/bin/bwrap 2>/dev/null || true && \
+  sudo chmod u+s /usr/bin/bwrap 2>/dev/null || true
 
 # Clone the desktop environment
 RUN git clone https://github.com/$DESKTOP_ENVIRONMENT_GITHUB_USER/desktop-environment $DESKTOP_ENVIRONMENT_SOURCE_DESKTOP_ENVIRONMENT || \
