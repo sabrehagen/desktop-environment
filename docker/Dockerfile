@@ -379,9 +379,10 @@ RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/
   rm cloudflare.deb
 
 # Install cursor
-RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/latest && \
-  sudo dpkg -i cursor.deb && \
-  rm cursor.deb
+RUN curl -fsSL https://downloads.cursor.com/keys/anysphere.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/cursor.gpg >/dev/null && \
+  echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/cursor.gpg] https://downloads.cursor.com/aptrepo stable main' | sudo tee /etc/apt/sources.list.d/cursor.list >/dev/null && \
+  sudo nala update && \
+  sudo nala install cursor
 
 # Install wal chrome extension
 RUN git clone --depth 100 https://github.com/sabrehagen/wal-chrome-extension $DESKTOP_ENVIRONMENT_SOURCE_WAL_CHROME_EXTENSION
