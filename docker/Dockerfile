@@ -379,7 +379,7 @@ RUN aria2c -o cloudflare.deb https://github.com/cloudflare/cloudflared/releases/
   rm cloudflare.deb
 
 # Install cursor
-RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/2.6 && \
+RUN aria2c -o cursor.deb https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/latest && \
   sudo dpkg -i cursor.deb && \
   rm cursor.deb
 
