@@ -511,6 +511,9 @@ RUN git clone --depth 100 https://github.com/orf/gping $DESKTOP_ENVIRONMENT_SOUR
   sudo install target/release/gping /usr/local/bin && \
   cargo clean
 
+# Install grok
+RUN curl -fsSL https://x.ai/cli/install.sh | bash
+
 # Install gsimplecal
 RUN sudo nala update && \
   sudo nala install libgtk2.0-dev libglib2.0-dev && \
@@ -890,7 +893,6 @@ RUN sudo npm install --global \
   clipboard-cli \
   diff-so-fancy \
   github-email \
-  grok-dev \
   gsd-pi \
   http-server \
   imgur-uploader-cli \
