@@ -841,7 +841,7 @@ RUN sudo nala update && \
 
 # Install warnai
 RUN sudo nala update && \
-  sudo nala install inkscape optipng xfconf libegl-dev libwayland-dev && \
+  sudo nala install xfconf && \
   git clone --depth 100 https://github.com/sabrehagen/warnai $DESKTOP_ENVIRONMENT_SOURCE_WARNAI && \
   sudo ln -s $DESKTOP_ENVIRONMENT_SOURCE_WARNAI/warnai /usr/local/bin
 
