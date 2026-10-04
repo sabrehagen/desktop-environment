@@ -402,8 +402,7 @@ RUN LATEST=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc >/dev/null && \
   echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null && \
   sudo nala update && \
-  sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin && \
-  sudo usermod --append --groups docker $USER
+  sudo nala install docker-buildx-plugin docker-ce-cli docker-compose-plugin
 
 # Install dmenu
 RUN sudo nala update && \
