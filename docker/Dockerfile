@@ -775,6 +775,12 @@ RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRON
 # Install speedtest
 RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | sudo tar -C /usr/local/bin -xzf - speedtest
 
+# Install t3code
+RUN URL=$(curl -s https://api.github.com/repos/pingdotgg/t3code/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("-amd64.deb"))] | first | .browser_download_url') && \
+  aria2c -o t3code.deb $URL && \
+  sudo dpkg -i t3code.deb && \
+  rm t3code.deb
+
 # Install telegram
 RUN aria2c -o telegram.tar.xz https://telegram.org/dl/desktop/linux && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf telegram.tar.xz && \
