@@ -191,7 +191,6 @@ RUN sudo nala update && \
   feh \
   ffmpeg \
   figlet \
-  fonts-font-awesome \
   fonts-noto-color-emoji \
   g++ \
   gcc \
