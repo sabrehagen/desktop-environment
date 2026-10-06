@@ -455,6 +455,13 @@ RUN LATEST=$(curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | j
   curl -fsSL https://github.com/sharkdp/fd/releases/download/${LATEST}/fd-${LATEST}-x86_64-unknown-linux-gnu.tar.gz | \
   sudo tar -xz --strip-components=1 -C /usr/local/bin fd-${LATEST}-x86_64-unknown-linux-gnu/fd
 
+# Install fontawesome
+RUN aria2c -o fontawesome.zip https://github.com/FortAwesome/Font-Awesome/releases/download/5.15.4/fontawesome-free-5.15.4-desktop.zip && \
+  sudo mkdir -p /usr/share/fonts/opentype/font-awesome-5 && \
+  unzip -p fontawesome.zip 'fontawesome-free-5.15.4-desktop/otfs/Font Awesome 5 Brands-Regular-400.otf' | sudo tee /usr/share/fonts/opentype/font-awesome-5/brands.otf >/dev/null && \
+  rm fontawesome.zip && \
+  sudo aria2c --dir /usr/share/fonts/opentype/font-awesome-5 -o solid-thin-25.otf https://github.com/sabrehagen/fontawesome-thin/releases/download/v1/FA5-Solid-Thin-25.otf
+
 # Install fzf
 RUN LATEST=$(curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
   curl -L https://github.com/junegunn/fzf/releases/download/v${LATEST}/fzf-${LATEST}-linux_amd64.tar.gz | sudo tar -xz -C /usr/local/bin
