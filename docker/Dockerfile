@@ -539,8 +539,9 @@ RUN sudo nala update && \
 
 # Install handy
 RUN sudo nala update && \
-  sudo nala install libgtk-layer-shell0 libwebkit2gtk-4.1-0 && \
-  aria2c -o handy.deb https://github.com/cjpais/Handy/releases/download/v0.8.3/Handy_0.8.3_amd64.deb && \
+  sudo nala install libgtk-layer-shell0 libopenblas0 libwebkit2gtk-4.1-0 && \
+  LATEST=$(curl -s https://api.github.com/repos/cjpais/Handy/releases/latest | jq -r '.tag_name | ltrimstr("v")') && \
+  aria2c -o handy.deb https://github.com/cjpais/Handy/releases/download/v${LATEST}/Handy_${LATEST}_amd64.deb && \
   sudo dpkg -i handy.deb && \
   rm handy.deb
 
