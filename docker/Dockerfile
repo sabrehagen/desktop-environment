@@ -786,6 +786,7 @@ RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux
 RUN URL=$(curl -s https://api.github.com/repos/pingdotgg/t3code/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("-amd64.deb"))] | first | .browser_download_url') && \
   aria2c -o t3code.deb $URL && \
   sudo dpkg -i t3code.deb && \
+  sudo sed -i 's/ %U/ --no-sandbox %U/' /usr/share/applications/t3code.desktop && \
   rm t3code.deb
 
 # Install telegram
