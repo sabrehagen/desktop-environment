@@ -789,6 +789,10 @@ RUN URL=$(curl -s https://api.github.com/repos/pingdotgg/t3code/releases?per_pag
   sudo sed -i 's/ %U/ --no-sandbox %U/' /usr/share/applications/t3code.desktop && \
   rm t3code.deb
 
+# Install t3code-wal
+RUN sudo aria2c -d /usr/local/bin -o t3code-wal https://raw.githubusercontent.com/sabrehagen/t3code-wal/main/t3code-wal && \
+  sudo chmod +x /usr/local/bin/t3code-wal
+
 # Install telegram
 RUN aria2c -o telegram.tar.xz https://telegram.org/dl/desktop/linux && \
   tar -C $DESKTOP_ENVIRONMENT_SOURCE_HOME -xJf telegram.tar.xz && \
