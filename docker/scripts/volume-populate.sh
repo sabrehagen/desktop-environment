@@ -16,5 +16,4 @@ docker cp $DESKTOP_ENVIRONMENT_CONTAINER_NAME:$VOLUME_PATH - | docker run \
   alpine tar \
   --extract \
   --file - \
-  --directory $(dirname $VOLUME_PATH) \
-  --overwrite
+  --directory $(dirname $VOLUME_PATH)
