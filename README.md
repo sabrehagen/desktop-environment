@@ -74,12 +74,17 @@ Vim-style bindings for focusing and moving windows.
 
 ### Application Launching
 
-- Launch alacritty terminal: `$mod+return`
-- Launch google chrome: `$mod+b`
-- Launch vs code: `$mod+c`
-- Launch discord: `$mod+d`
-- Launch pcmanfm file manager: `$mod+e`
-- Launch telegram: `$mod+t`
+Focus an application, or launch it if it is not running. Add `Shift` to launch a new instance, or `$alt` to cycle backwards.
+
+- Alacritty terminal: `$mod+return`
+- Beekeeper studio: `$mod+g`
+- Browser: `$mod+b`
+- Cursor: `$mod+c`
+- Discord: `$mod+d`
+- Pcmanfm file manager: `$mod+e`
+- Slack: `$mod+m`
+- T3 code: `$mod+a`
+- Telegram: `$mod+t`
 - Launch screenshot: `$mod+x`
 
 ### Monitor Management
