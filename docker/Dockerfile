@@ -786,8 +786,8 @@ RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRON
 # Install speedtest
 RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | sudo tar -C /usr/local/bin -xzf - speedtest
 
-# Install t3code
-RUN URL=$(curl -s https://api.github.com/repos/pingdotgg/t3code/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("-amd64.deb"))] | first | .browser_download_url') && \
+# Install t3code from the fork, whose desktop app takes themes from its paired server
+RUN URL=$(curl -s https://api.github.com/repos/sabrehagen/t3code/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("-amd64.deb"))] | first | .browser_download_url') && \
   aria2c -o t3code.deb $URL && \
   sudo dpkg -i t3code.deb && \
   sudo sed -i 's/ %U/ --no-sandbox %U/' /usr/share/applications/t3code.desktop && \
