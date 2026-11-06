@@ -30,6 +30,7 @@ ARG DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH
 ARG DESKTOP_ENVIRONMENT_SOURCE_QT5CT
 ARG DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE
 ARG DESKTOP_ENVIRONMENT_SOURCE_SLACK_TUI
+ARG DESKTOP_ENVIRONMENT_SOURCE_T3CODE
 ARG DESKTOP_ENVIRONMENT_SOURCE_TMUX
 ARG DESKTOP_ENVIRONMENT_SOURCE_VCSH
 ARG DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL
@@ -69,6 +70,7 @@ ENV DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH=$DESKTOP_ENVIRONMENT_SOURCE_QPWGRAPH
 ENV DESKTOP_ENVIRONMENT_SOURCE_QT5CT=$DESKTOP_ENVIRONMENT_SOURCE_QT5CT
 ENV DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE=$DESKTOP_ENVIRONMENT_SOURCE_SCREENPIPE
 ENV DESKTOP_ENVIRONMENT_SOURCE_SLACK_TUI=$DESKTOP_ENVIRONMENT_SOURCE_SLACK_TUI
+ENV DESKTOP_ENVIRONMENT_SOURCE_T3CODE=$DESKTOP_ENVIRONMENT_SOURCE_T3CODE
 ENV DESKTOP_ENVIRONMENT_SOURCE_TMUX=$DESKTOP_ENVIRONMENT_SOURCE_TMUX
 ENV DESKTOP_ENVIRONMENT_SOURCE_VCSH=$DESKTOP_ENVIRONMENT_SOURCE_VCSH
 ENV DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL=$DESKTOP_ENVIRONMENT_SOURCE_VSCODE_WAL
@@ -786,12 +788,13 @@ RUN git clone --depth 100 https://github.com/jonnonz1/slack-tui $DESKTOP_ENVIRON
 # Install speedtest
 RUN curl -fsSL https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-x86_64.tgz | sudo tar -C /usr/local/bin -xzf - speedtest
 
-# Install t3code from the fork, whose desktop app takes themes from its paired server
-RUN URL=$(curl -s https://api.github.com/repos/sabrehagen/t3code/releases?per_page=20 | jq -r '[.[] | .assets[] | select(.name | endswith("-amd64.deb"))] | first | .browser_download_url') && \
-  aria2c -o t3code.deb $URL && \
-  sudo dpkg -i t3code.deb && \
-  sudo sed -i 's/ %U/ --no-sandbox %U/' /usr/share/applications/t3code.desktop && \
-  rm t3code.deb
+# Install t3code
+RUN git clone --depth 100 --branch feat/paired-environment-themes https://github.com/sabrehagen/t3code $DESKTOP_ENVIRONMENT_SOURCE_T3CODE && \
+  cd $DESKTOP_ENVIRONMENT_SOURCE_T3CODE && \
+  npx pnpm install && \
+  T3CODE_DESKTOP_TARGET=deb T3CODE_DESKTOP_VERSION=0.1.8-nightly.20261106.9001 npx vp run dist:desktop:artifact && \
+  sudo dpkg --install release/*.deb && \
+  sudo sed -i 's/ %U/ --no-sandbox %U/' /usr/share/applications/t3code.desktop
 
 # Install t3code-wal
 RUN sudo aria2c -d /usr/local/bin -o t3code-wal https://raw.githubusercontent.com/sabrehagen/t3code-wal/main/t3code-wal && \
